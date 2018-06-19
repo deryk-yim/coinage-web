@@ -1,7 +1,7 @@
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
-import Transaction from './Transaction';
-import LoginForm from './LoginForm';
-import Dashboard from './Dashboard';
+import Transaction from '../containers/Transaction/Transaction';
+import LoginForm from '../containers/LoginForm/LoginForm';
+import Dashboard from '../containers/Dashboard/Dashboard';
 import React from 'react';
 
 
