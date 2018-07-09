@@ -1,13 +1,7 @@
 import React from 'react';
 import { withRouter} from 'react-router-dom';
 import { Button, Table, Icon } from 'antd';
-import '../Transaction/Transaction.css';
-import AddTransactionPage from '../AddTransaction/AddTransactionPage';
-
-const Validator = require('jsonschema').Validator;
-const Json2csvParser = require('json2csv').Parser;
-const fields = ['Transaction Date', 'Category', 'Description', 'Amount'];
-const moment = require('moment');
+import CsvParse from '@vtex/react-csv-parse';
 
 const columns = [
     {title: 'Transaction Date', dataIndex: 'transactionDate', key: 'transactionDate'},
@@ -15,19 +9,23 @@ const columns = [
     {title: 'Description', dataIndex: 'description', key: 'description'},
     {title: 'Amount', dataIndex: 'amount', key: 'amount'}
 ];
+const moment = require('moment');
+const Json2csvParser = require('json2csv').Parser;
+const fields = ['Transaction Date', 'Category', 'Description', 'Amount'];
+const fs = require('fs');
 
-class Transaction extends React.Component {
+
+class Export extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            isOpenAddTrans: false,
-            isOpenEditTrans: false,
-            response: false,
+            uploadData: {},
             data: []
         };
     }
 
-    componentDidMount() {
+    onExportClick = () => {
+        alert('Exporting Clicked');
         const endpoint = 'http://localhost:3000/transaction/5aa43585955a2561e0935cdb';
         fetch(endpoint, {
             method: 'post'
@@ -54,15 +52,19 @@ class Transaction extends React.Component {
                     response: true
                 })
             })
+            .then(jsonData => {
+                const json2csvParser = new Json2csvParser({ fields });
+                const data = json2csvParser.parse(jsonData);
+                console.log(data);
+                return data;
+            })
+            
+     }
+
+
+    backToTransactionComponent = () => {
+        this.props.history.push('/transaction');
     }
-
-   onImportClick = () => {
-    this.props.history.push('/transaction/import');
-   }
-
-   onExportClick = () => {
-    this.props.history.push('/transaction/export');
-   }
 
     render() {
         const keys = [
@@ -74,17 +76,16 @@ class Transaction extends React.Component {
 
         return (
             <div>
-               <AddTransactionPage/>
-                <Button onClick={this.onImportClick}>
-                    <Icon type="upload" /> Import
-                </Button>
+                 <p> <a onClick={this.backToTransactionComponent}>Transactions </a> > Export Transactions </p>
+                <h1>Export Transactions </h1> 
                 <Button onClick={this.onExportClick}>
-                    <Icon type="download" />Export
+                    <Icon type="upload" /> Export
                 </Button>
-                <Table dataSource={this.state.data} columns={columns} />
+                {this.state.data.length > 0 ? (<Table dataSource={this.state.data} columns={columns} />) : 
+                (<p> Log of previous Exports </p>)}     
             </div>
         )
     }
 }
 
-export default withRouter(Transaction);
+export default withRouter(Export);
