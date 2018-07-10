@@ -16,6 +16,7 @@ const columns = [
     {title: 'Amount', dataIndex: 'amount', key: 'amount'}
 ];
 
+
 class Transaction extends React.Component {
     constructor(props) {
         super(props)
@@ -23,11 +24,92 @@ class Transaction extends React.Component {
             isOpenAddTrans: false,
             isOpenEditTrans: false,
             response: false,
-            data: []
+            data: [],
+            selectedRows: [],
+            selectedRowKeys: []
         };
     }
 
+    
+    
+    
+    onDeleteRecord = () => {
+        
+        const dataSet = [...this.state.data];
+        const remove = [...this.state.selectedRowKeys];
+        for(var j = 0; j < remove.length > 0; j++) {
+            const index = remove.indexOf(j);
+            dataSet.splice(index, 1);
+            this.setState({
+                data: dataSet
+            })
+        }
+
+
+        
+        const endpoint = 'http://localhost:3000/transaction/delete/5aa43585955a2561e0935cdb';
+ 
+        for(let i = 0; i < this.state.selectedRows.length > 0; i++) {
+            const endpointDelete = endpoint + '/' + this.state.selectedRows[i]._id;
+            fetch(endpointDelete, {
+                method: 'delete'
+            })
+            .then(res => {
+                if (res.status >= 200 && res.status < 300) {
+                    alert('it worked!');
+                    return res.json();
+                }
+                else {
+                    alert('FAILEDs!');
+                    throw new Error('Try Again Later');
+                }
+            })
+            .then(jsonData => {
+                console.log(jsonData);
+            })
+
+  
+                
+        }
+
+        
+        
+      
+        
+    }
+
     componentDidMount() {
+        const endpoint = 'http://localhost:3000/transaction/5aa43585955a2561e0935cdb';
+        fetch(endpoint, {
+            method: 'post'
+        })
+            .then(res => {
+                if (res.status >= 200 && res.status < 300) {
+                    return res.json();
+                }
+                else {
+                    throw new Error('Try Again Later');
+                }
+            })
+            .then(jsonData => {
+                console.log(jsonData);
+                for(let i = 0; i < jsonData.length; i++) {
+                    jsonData[i].amount = parseFloat(jsonData[i].amount).toFixed(2);
+                    jsonData[i].transactionDate = moment(new Date(jsonData[i].transactionDate)).utc().format('MMM DD, YYYY');
+                }
+                return jsonData;
+            })
+            .then(jsonData => {
+
+                this.setState({
+                    data: jsonData,
+                    response: true
+                })
+            })
+    }
+
+    updateTable = () => {
+        alert('running updateable Table');
         const endpoint = 'http://localhost:3000/transaction/5aa43585955a2561e0935cdb';
         fetch(endpoint, {
             method: 'post'
@@ -71,7 +153,15 @@ class Transaction extends React.Component {
             "description",
             "amount"
         ]
-
+        const rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+              console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+              this.setState({
+                selectedRows: selectedRows,
+                selectedRowKeys: selectedRowKeys
+              })
+            },
+          };
         return (
             <div>
                <AddTransactionPage/>
@@ -81,7 +171,10 @@ class Transaction extends React.Component {
                 <Button onClick={this.onExportClick}>
                     <Icon type="download" />Export
                 </Button>
-                <Table dataSource={this.state.data} columns={columns} />
+                <Button onClick={this.onDeleteRecord}>
+                    <Icon type="delete" /> Delete
+                </Button>
+                <Table rowSelection={rowSelection} dataSource={this.state.data} columns={columns} />
             </div>
         )
     }

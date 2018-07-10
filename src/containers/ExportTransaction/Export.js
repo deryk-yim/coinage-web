@@ -52,11 +52,14 @@ class Export extends React.Component {
                     response: true
                 })
             })
+            // should massage and pick out specific items in the json data
             .then(jsonData => {
                 const json2csvParser = new Json2csvParser({ fields });
                 const data = json2csvParser.parse(jsonData);
                 console.log(data);
                 return data;
+
+                //then call 
             })
             
      }
