@@ -4,25 +4,21 @@ import { InputNumber } from 'antd';
 
 const Option = Select.Option;
 const { TextArea } = Input;
+const moment = require('moment');
 
 
 const AddTransactionForm = Form.create()(
+
     class extends React.Component {
-
-        
-
-        
-   
         handleCategoryChange = (value) => {
-            this.props.getCategory(value['label']);            
+            this.props.getCategory(value['label']);
         }
-        
 
         render() {
             const { visible, onCancel, onCreate, form } = this.props;
 
             const { getFieldDecorator } = this.props.form;
-            
+
             const dateConfig = {
                 rules: [{ required: true, message: 'Please select a date!' },]
             };
@@ -30,9 +26,9 @@ const AddTransactionForm = Form.create()(
                 rules: [{ required: true, message: 'Describe Transaction!' },]
             };
             const amountConfig = {
-                rules: [{required: true, message: 'Please input amount!' },]
+                rules: [{ required: true, message: 'Please input amount!' },]
             };
-           
+
             return (
                 <Modal
                     visible={visible}
@@ -62,11 +58,11 @@ const AddTransactionForm = Form.create()(
                         <Form.Item label='Amount'>
                             {getFieldDecorator('amount-InputNumber', amountConfig)(
                                 <InputNumber
-                                formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                max={1000000}
-                                min={0}
-                              />
+                                    formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                    parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                    max={1000000}
+                                    min={0}
+                                />
                             )}
                         </Form.Item>
 
@@ -88,21 +84,26 @@ class AddTransactionPage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            optionValue: ''
+            optionValue: '',
+            newRecord: {}
         };
     }
     getCategory = (category) => {
         this.setState({
             optionValue: category
         })
-       
+
+    }
+
+    handlePassNewRecord = (newRecord) => {
+        this.props.addRecordToState(newRecord);
     }
 
     createJSONObject = (formInputs) => {
         const jsonData = {
-            transactionDate: formInputs['date-picker'],
+            transactionDate: moment(new Date(formInputs['date-picker'])).format('MMM DD, YYYY'),
             category: this.state.optionValue,
-            amount: formInputs['amount-InputNumber'],
+            amount: parseFloat(formInputs['amount-InputNumber']).toFixed(2),
             description: formInputs['description-textarea'],
             _id: '5ac8615a3e351c3dccba5607',
             _pid: '5aa43585955a2561e0935cdb'
@@ -112,7 +113,7 @@ class AddTransactionPage extends React.Component {
 
     addTransaction = (transaction) => {
         const endpoint = 'http://localhost:3000/transaction/create/1/5aa43585955a2561e0935cdb';
-        
+
         fetch(endpoint, {
             method: 'POST',
             body: JSON.stringify(transaction),
@@ -120,20 +121,17 @@ class AddTransactionPage extends React.Component {
                 'Content-Type': 'application/json'
             }
         })
-        .then (
-            res => {
-                if(res.status === 201) {
-                    console.log('Success');
+            .then(
+                res => {
+                    if (res.status === 201) {
+                        console.log('Success');
+                    }
+                    return res.json();
                 }
-                return res.json();
-            }
-        )
+            )
             .catch(error => console.error('Error:', error))
             .then(response => console.log('Success: ', response))
-        };
-
-    
-
+    };
 
     state = {
         visible: false,
@@ -143,12 +141,11 @@ class AddTransactionPage extends React.Component {
         this.setState({ visible: true });
     }
 
-    // gets hit
     handleCancel = () => {
         this.setState({ visible: false });
     }
 
-    handleCreate = () => {   
+    handleCreate = () => {
         const form = this.formRef.props.form;
         form.validateFields((err, values) => {
             //error was hitting because category was manditory and type was array.
@@ -161,21 +158,13 @@ class AddTransactionPage extends React.Component {
             // create the json object
             // add to transactions
             this.addTransaction(this.createJSONObject(values));
+            this.handlePassNewRecord(this.createJSONObject(values));
 
             form.resetFields();
             this.setState({ visible: false });
             // do addToTransaction
         });
     }
-
-    
-
-    
-
-
-
-
-
 
     saveFormRef = (formRef) => {
         this.formRef = formRef;
@@ -191,6 +180,7 @@ class AddTransactionPage extends React.Component {
                     onCancel={this.handleCancel}
                     onCreate={this.handleCreate}
                     getCategory={this.getCategory}
+
                 />
             </div>
         );

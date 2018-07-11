@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Button, Table, Icon } from 'antd';
 import '../Transaction/Transaction.css';
 import AddTransactionPage from '../AddTransaction/AddTransactionPage';
@@ -10,12 +10,11 @@ const fields = ['Transaction Date', 'Category', 'Description', 'Amount'];
 const moment = require('moment');
 
 const columns = [
-    {title: 'Transaction Date', dataIndex: 'transactionDate', key: 'transactionDate'},
-    {title: 'Category', dataIndex: 'category', key: 'category'}, 
-    {title: 'Description', dataIndex: 'description', key: 'description'},
-    {title: 'Amount', dataIndex: 'amount', key: 'amount'}
+    { title: 'Transaction Date', dataIndex: 'transactionDate', key: 'transactionDate' },
+    { title: 'Category', dataIndex: 'category', key: 'category' },
+    { title: 'Description', dataIndex: 'description', key: 'description' },
+    { title: 'Amount', dataIndex: 'amount', key: 'amount' }
 ];
-
 
 class Transaction extends React.Component {
     constructor(props) {
@@ -30,52 +29,39 @@ class Transaction extends React.Component {
         };
     }
 
-    
-    
-    
     onDeleteRecord = () => {
-        
         const dataSet = [...this.state.data];
-        const remove = [...this.state.selectedRowKeys];
-        for(var j = 0; j < remove.length > 0; j++) {
-            const index = remove.indexOf(j);
+        const removeSet = [...this.state.selectedRowKeys];
+        for (var j = 0; j < removeSet.length > 0; j++) {
+            const index = removeSet.indexOf(j);
             dataSet.splice(index, 1);
             this.setState({
                 data: dataSet
             })
         }
 
-
-        
         const endpoint = 'http://localhost:3000/transaction/delete/5aa43585955a2561e0935cdb';
- 
-        for(let i = 0; i < this.state.selectedRows.length > 0; i++) {
+
+        for (let i = 0; i < this.state.selectedRows.length > 0; i++) {
             const endpointDelete = endpoint + '/' + this.state.selectedRows[i]._id;
             fetch(endpointDelete, {
                 method: 'delete'
             })
-            .then(res => {
-                if (res.status >= 200 && res.status < 300) {
-                    alert('it worked!');
-                    return res.json();
-                }
-                else {
-                    alert('FAILEDs!');
-                    throw new Error('Try Again Later');
-                }
-            })
-            .then(jsonData => {
-                console.log(jsonData);
-            })
-
-  
-                
+                .then(res => {
+                    if (res.status >= 200 && res.status < 300) {
+                        return res.json();
+                    }
+                    else {
+                        throw new Error('Try Again Later');
+                    }
+                })
+                .then(jsonData => {
+                    console.log(jsonData);
+                })
         }
-
-        
-        
-      
-        
+        this.setState({
+            selectedRowKeys: []
+        })
     }
 
     componentDidMount() {
@@ -93,7 +79,7 @@ class Transaction extends React.Component {
             })
             .then(jsonData => {
                 console.log(jsonData);
-                for(let i = 0; i < jsonData.length; i++) {
+                for (let i = 0; i < jsonData.length; i++) {
                     jsonData[i].amount = parseFloat(jsonData[i].amount).toFixed(2);
                     jsonData[i].transactionDate = moment(new Date(jsonData[i].transactionDate)).utc().format('MMM DD, YYYY');
                 }
@@ -108,43 +94,33 @@ class Transaction extends React.Component {
             })
     }
 
-    updateTable = () => {
-        alert('running updateable Table');
-        const endpoint = 'http://localhost:3000/transaction/5aa43585955a2561e0935cdb';
-        fetch(endpoint, {
-            method: 'post'
+    addRecordToState = (newRecord) => {
+        alert('gets hit');
+        const dataSet = [...this.state.data];
+
+        dataSet.push(newRecord);
+
+        this.setState({
+            data: dataSet
         })
-            .then(res => {
-                if (res.status >= 200 && res.status < 300) {
-                    return res.json();
-                }
-                else {
-                    throw new Error('Try Again Later');
-                }
-            })
-            .then(jsonData => {
-                console.log(jsonData);
-                for(let i = 0; i < jsonData.length; i++) {
-                    jsonData[i].amount = parseFloat(jsonData[i].amount).toFixed(2);
-                    jsonData[i].transactionDate = moment(new Date(jsonData[i].transactionDate)).utc().format('MMM DD, YYYY');
-                }
-                return jsonData;
-            })
-            .then(jsonData => {
-                this.setState({
-                    data: jsonData,
-                    response: true
-                })
-            })
+
     }
 
-   onImportClick = () => {
-    this.props.history.push('/transaction/import');
-   }
+    onSelectChange = (selectedRowKeys, selectedRows) => {
+        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        this.setState({
+            selectedRowKeys: selectedRowKeys,
+            selectedRows: selectedRows
+        });
+    }
 
-   onExportClick = () => {
-    this.props.history.push('/transaction/export');
-   }
+    onImportClick = () => {
+        this.props.history.push('/transaction/import');
+    }
+
+    onExportClick = () => {
+        this.props.history.push('/transaction/export');
+    }
 
     render() {
         const keys = [
@@ -153,25 +129,24 @@ class Transaction extends React.Component {
             "description",
             "amount"
         ]
+
+        const { selectedRowKeys } = this.state;
+        const hasSelected = this.state.selectedRowKeys.length > 0;
         const rowSelection = {
-            onChange: (selectedRowKeys, selectedRows) => {
-              console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-              this.setState({
-                selectedRows: selectedRows,
-                selectedRowKeys: selectedRowKeys
-              })
-            },
-          };
+            selectedRowKeys,
+            onChange: this.onSelectChange
+        };
+
         return (
             <div>
-               <AddTransactionPage/>
+                <AddTransactionPage addRecordToState={this.addRecordToState} />
                 <Button onClick={this.onImportClick}>
                     <Icon type="upload" /> Import
                 </Button>
                 <Button onClick={this.onExportClick}>
                     <Icon type="download" />Export
                 </Button>
-                <Button onClick={this.onDeleteRecord}>
+                <Button onClick={this.onDeleteRecord} disabled={!hasSelected}>
                     <Icon type="delete" /> Delete
                 </Button>
                 <Table rowSelection={rowSelection} dataSource={this.state.data} columns={columns} />
