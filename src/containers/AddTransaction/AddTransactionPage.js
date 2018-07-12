@@ -16,7 +16,6 @@ const AddTransactionForm = Form.create()(
 
         render() {
             const { visible, onCancel, onCreate, form } = this.props;
-
             const { getFieldDecorator } = this.props.form;
 
             const dateConfig = {
@@ -28,6 +27,9 @@ const AddTransactionForm = Form.create()(
             const amountConfig = {
                 rules: [{ required: true, message: 'Please input amount!' },]
             };
+            const optionItems = this.props.categoryOptions.map((item) =>
+                <Option value={item['name']}>{item['name']}</Option>
+            );
 
             return (
                 <Modal
@@ -38,23 +40,17 @@ const AddTransactionForm = Form.create()(
                     onOk={onCreate}
                 >
                     <Form layout="vertical">
-
-
                         <Form.Item label='Transaction Date'>
-
                             {getFieldDecorator('date-picker', dateConfig)(
                                 <DatePicker placeholder="Select Transaction Date" />
                             )}
 
                         </Form.Item>
-
                         <Form.Item label='Description'>
-
                             {getFieldDecorator('description-textarea', descConfig)(
                                 <TextArea rows={4} placeholder="Description" />
                             )}
                         </Form.Item>
-
                         <Form.Item label='Amount'>
                             {getFieldDecorator('amount-InputNumber', amountConfig)(
                                 <InputNumber
@@ -65,11 +61,10 @@ const AddTransactionForm = Form.create()(
                                 />
                             )}
                         </Form.Item>
-
                         <Form.Item>
                             {getFieldDecorator('select-Category')}
-                            <Select labelInValue defaultValue={{ key: 'Category' }} style={{ width: 200 }} onChange={this.handleCategoryChange}>
-                                <Option value="5ab9de687fa8cebf1e3c44e6">5ab9de687fa8cebf1e3c44e6</Option>
+                            <Select labelInValue defaultValue={{ key: 'New Category' }} style={{ width: 200 }} onChange={this.handleCategoryChange}>
+                                {optionItems}
                             </Select>
                         </Form.Item>
                     </Form>
@@ -175,12 +170,12 @@ class AddTransactionPage extends React.Component {
             <div>
                 <Button onClick={this.showModal}>+ Add Transaction</Button>
                 <AddTransactionForm
+                    categoryOptions={this.props.categories}
                     wrappedComponentRef={this.saveFormRef}
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     onCreate={this.handleCreate}
                     getCategory={this.getCategory}
-
                 />
             </div>
         );

@@ -16,6 +16,7 @@ const columns = [
     { title: 'Amount', dataIndex: 'amount', key: 'amount' }
 ];
 
+
 class Transaction extends React.Component {
     constructor(props) {
         super(props)
@@ -25,7 +26,8 @@ class Transaction extends React.Component {
             response: false,
             data: [],
             selectedRows: [],
-            selectedRowKeys: []
+            selectedRowKeys: [],
+            categories: []
         };
     }
 
@@ -35,10 +37,11 @@ class Transaction extends React.Component {
         for (var j = 0; j < removeSet.length > 0; j++) {
             const index = removeSet.indexOf(j);
             dataSet.splice(index, 1);
-            this.setState({
-                data: dataSet
-            })
         }
+        this.setState({
+            data: dataSet,
+            selectedRowKeys: []
+        })
 
         const endpoint = 'http://localhost:3000/transaction/delete/5aa43585955a2561e0935cdb';
 
@@ -55,16 +58,15 @@ class Transaction extends React.Component {
                         throw new Error('Try Again Later');
                     }
                 })
-                .then(jsonData => {
-                    console.log(jsonData);
-                })
+                .catch((err => {
+                    error: err
+                }))
         }
-        this.setState({
-            selectedRowKeys: []
-        })
     }
 
     componentDidMount() {
+        this.getCategories();
+
         const endpoint = 'http://localhost:3000/transaction/5aa43585955a2561e0935cdb';
         fetch(endpoint, {
             method: 'post'
@@ -86,14 +88,43 @@ class Transaction extends React.Component {
                 return jsonData;
             })
             .then(jsonData => {
-
                 this.setState({
                     data: jsonData,
                     response: true
                 })
             })
+            .catch((err) => {
+                console.log('handled the error');
+              });
     }
 
+    getCategories = () => {
+        const categoryEndpoint = 'http://localhost:3000/category/5aa43585955a2561e0935cdb';
+        fetch(categoryEndpoint, {
+            method: 'get'
+        })
+            .then(res => {
+                if (res.status >= 200 && res.status < 300) {
+                    return res.json();
+                }
+                else {
+                    throw new Error('Try Again Later');
+                }
+            })
+            .then(categoryData => {
+                console.log(categoryData);
+                return categoryData;
+            })
+            .then(categoryData => {
+                this.setState({
+                    categories: categoryData
+                })
+            })
+            .catch((err) => {
+                console.log('handled the error');
+              });
+    }
+    
     addRecordToState = (newRecord) => {
         alert('gets hit');
         const dataSet = [...this.state.data];
@@ -132,23 +163,31 @@ class Transaction extends React.Component {
 
         const { selectedRowKeys } = this.state;
         const hasSelected = this.state.selectedRowKeys.length > 0;
+        const hasRecords = this.state.data.length > 0;
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange
         };
 
+        // passs down categories array to AddTransactionPage then AddTransactionPage down to AddTransactionForm
+
         return (
             <div>
-                <AddTransactionPage addRecordToState={this.addRecordToState} />
+                <AddTransactionPage categories = {this.state.categories} addRecordToState={this.addRecordToState}
+                />
                 <Button onClick={this.onImportClick}>
                     <Icon type="upload" /> Import
                 </Button>
-                <Button onClick={this.onExportClick}>
+                <Button onClick={this.onExportClick} disabled={!hasRecords}>
                     <Icon type="download" />Export
                 </Button>
+
                 <Button onClick={this.onDeleteRecord} disabled={!hasSelected}>
                     <Icon type="delete" /> Delete
                 </Button>
+                <span style={{ marginLeft: 8 }}>
+                    {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
+                </span>
                 <Table rowSelection={rowSelection} dataSource={this.state.data} columns={columns} />
             </div>
         )
