@@ -11,7 +11,7 @@ const AddTransactionForm = Form.create()(
 
     class extends React.Component {
         handleCategoryChange = (value) => {
-            this.props.getCategory(value['label']);
+            this.props.getCategory(value['key']);
         }
 
         render() {
@@ -28,7 +28,7 @@ const AddTransactionForm = Form.create()(
                 rules: [{ required: true, message: 'Please input amount!' },]
             };
             const optionItems = this.props.categoryOptions.map((item) =>
-                <Option value={item['name']}>{item['name']}</Option>
+                <Option value={item['_id']}>{item['name']}</Option>
             );
 
             return (

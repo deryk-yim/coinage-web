@@ -81,9 +81,16 @@ class Transaction extends React.Component {
             })
             .then(jsonData => {
                 console.log(jsonData);
+                console.log(jsonData[0].category['name']);
+
                 for (let i = 0; i < jsonData.length; i++) {
                     jsonData[i].amount = parseFloat(jsonData[i].amount).toFixed(2);
                     jsonData[i].transactionDate = moment(new Date(jsonData[i].transactionDate)).utc().format('MMM DD, YYYY');
+                    jsonData[i].category = jsonData[i].category['name'];
+
+
+
+
                 }
                 return jsonData;
             })
