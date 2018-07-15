@@ -6,7 +6,6 @@ const Option = Select.Option;
 const { TextArea } = Input;
 const moment = require('moment');
 
-
 const AddTransactionForm = Form.create()(
 
     class extends React.Component {
@@ -153,8 +152,12 @@ class AddTransactionPage extends React.Component {
             // create the json object
             // add to transactions
             this.addTransaction(this.createJSONObject(values));
-            this.handlePassNewRecord(this.createJSONObject(values));
 
+
+
+
+
+            this.handlePassNewRecord(this.createJSONObject(values));
             form.resetFields();
             this.setState({ visible: false });
             // do addToTransaction

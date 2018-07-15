@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Button, Table, Icon } from 'antd';
+import { Button, Table, Icon, DatePicker } from 'antd';
 import '../Transaction/Transaction.css';
 import AddTransactionPage from '../AddTransaction/AddTransactionPage';
 
@@ -8,14 +8,7 @@ const Validator = require('jsonschema').Validator;
 const Json2csvParser = require('json2csv').Parser;
 const fields = ['Transaction Date', 'Category', 'Description', 'Amount'];
 const moment = require('moment');
-
-const columns = [
-    { title: 'Transaction Date', dataIndex: 'transactionDate', key: 'transactionDate' },
-    { title: 'Category', dataIndex: 'category', key: 'category' },
-    { title: 'Description', dataIndex: 'description', key: 'description' },
-    { title: 'Amount', dataIndex: 'amount', key: 'amount' }
-];
-
+const { RangePicker } = DatePicker;
 
 class Transaction extends React.Component {
     constructor(props) {
@@ -27,7 +20,8 @@ class Transaction extends React.Component {
             data: [],
             selectedRows: [],
             selectedRowKeys: [],
-            categories: []
+            categories: [],
+            filterCategories: []
         };
     }
 
@@ -42,7 +36,7 @@ class Transaction extends React.Component {
             data: dataSet,
             selectedRowKeys: []
         })
-
+        
         const endpoint = 'http://localhost:3000/transaction/delete/5aa43585955a2561e0935cdb';
 
         for (let i = 0; i < this.state.selectedRows.length > 0; i++) {
@@ -66,7 +60,7 @@ class Transaction extends React.Component {
 
     componentDidMount() {
         this.getCategories();
-
+        this.createFilters(this.state.categories);
         const endpoint = 'http://localhost:3000/transaction/5aa43585955a2561e0935cdb';
         fetch(endpoint, {
             method: 'post'
@@ -88,9 +82,6 @@ class Transaction extends React.Component {
                     jsonData[i].transactionDate = moment(new Date(jsonData[i].transactionDate)).utc().format('MMM DD, YYYY');
                     jsonData[i].category = jsonData[i].category['name'];
 
-
-
-
                 }
                 return jsonData;
             })
@@ -102,8 +93,24 @@ class Transaction extends React.Component {
             })
             .catch((err) => {
                 console.log('handled the error');
-              });
+            });
     }
+
+    createFilters = (categories) => {
+        const filteredCategories = [];
+        for(let i = 0; i < categories.length; i++) {
+            filteredCategories.push(
+                
+                {
+                text: categories[i].name,
+                value: categories[i].name
+            });
+        }
+        console.log('categories' + filteredCategories);
+        this.setState({
+            filterCategories: filteredCategories
+        });
+}
 
     getCategories = () => {
         const categoryEndpoint = 'http://localhost:3000/category/5aa43585955a2561e0935cdb';
@@ -129,19 +136,22 @@ class Transaction extends React.Component {
             })
             .catch((err) => {
                 console.log('handled the error');
-              });
+            });
     }
+
     
+
     addRecordToState = (newRecord) => {
-        alert('gets hit');
         const dataSet = [...this.state.data];
-
+        for(let i = 0; i < this.state.categories.length; i++) {
+            if(this.state.categories[i]['_id'] === newRecord['category']) {
+                newRecord['category'] = this.state.categories[i]['name']
+            }
+        }
         dataSet.push(newRecord);
-
         this.setState({
             data: dataSet
         })
-
     }
 
     onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -160,6 +170,8 @@ class Transaction extends React.Component {
         this.props.history.push('/transaction/export');
     }
 
+
+
     render() {
         const keys = [
             "transactionDate",
@@ -167,6 +179,28 @@ class Transaction extends React.Component {
             "description",
             "amount"
         ]
+
+        let { 
+            sortedInfo 
+        } = this.state;
+        
+        sortedInfo = sortedInfo || {};
+
+        const columns = [
+            { title: 'Transaction Date', dataIndex: 'transactionDate', key: 'transactionDate'
+        },        
+            { title: 'Category', dataIndex: 'category', 
+            filters: this.state.filterCategories,
+            key: 'category', 
+            sorter: (a, b) => a.category.length - b.category.length,
+            
+
+        },
+            { title: 'Description', dataIndex: 'description', key: 'description' },
+            { title: 'Amount', dataIndex: 'amount', key: 'amount', 
+            sorter: (a, b) => a.amount - b.amount ,    },
+
+           ];
 
         const { selectedRowKeys } = this.state;
         const hasSelected = this.state.selectedRowKeys.length > 0;
@@ -180,7 +214,8 @@ class Transaction extends React.Component {
 
         return (
             <div>
-                <AddTransactionPage categories = {this.state.categories} addRecordToState={this.addRecordToState}
+                
+                <AddTransactionPage categories={this.state.categories} addRecordToState={this.addRecordToState}
                 />
                 <Button onClick={this.onImportClick}>
                     <Icon type="upload" /> Import
@@ -195,6 +230,7 @@ class Transaction extends React.Component {
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
                 </span>
+
                 <Table rowSelection={rowSelection} dataSource={this.state.data} columns={columns} />
             </div>
         )
