@@ -36,7 +36,7 @@ class Transaction extends React.Component {
             data: dataSet,
             selectedRowKeys: []
         })
-        
+
         const endpoint = 'http://localhost:3000/transaction/delete/5aa43585955a2561e0935cdb';
 
         for (let i = 0; i < this.state.selectedRows.length > 0; i++) {
@@ -81,7 +81,6 @@ class Transaction extends React.Component {
                     jsonData[i].amount = parseFloat(jsonData[i].amount).toFixed(2);
                     jsonData[i].transactionDate = moment(new Date(jsonData[i].transactionDate)).utc().format('MMM DD, YYYY');
                     jsonData[i].category = jsonData[i].category['name'];
-
                 }
                 return jsonData;
             })
@@ -98,19 +97,18 @@ class Transaction extends React.Component {
 
     createFilters = (categories) => {
         const filteredCategories = [];
-        for(let i = 0; i < categories.length; i++) {
+        for (let i = 0; i < categories.length; i++) {
             filteredCategories.push(
-                
                 {
-                text: categories[i].name,
-                value: categories[i].name
-            });
+                    text: categories[i].name,
+                    value: categories[i].name
+                });
         }
         console.log('categories' + filteredCategories);
         this.setState({
             filterCategories: filteredCategories
         });
-}
+    }
 
     getCategories = () => {
         const categoryEndpoint = 'http://localhost:3000/category/5aa43585955a2561e0935cdb';
@@ -139,12 +137,10 @@ class Transaction extends React.Component {
             });
     }
 
-    
-
     addRecordToState = (newRecord) => {
         const dataSet = [...this.state.data];
-        for(let i = 0; i < this.state.categories.length; i++) {
-            if(this.state.categories[i]['_id'] === newRecord['category']) {
+        for (let i = 0; i < this.state.categories.length; i++) {
+            if (this.state.categories[i]['_id'] === newRecord['category']) {
                 newRecord['category'] = this.state.categories[i]['name']
             }
         }
@@ -170,8 +166,6 @@ class Transaction extends React.Component {
         this.props.history.push('/transaction/export');
     }
 
-
-
     render() {
         const keys = [
             "transactionDate",
@@ -180,27 +174,28 @@ class Transaction extends React.Component {
             "amount"
         ]
 
-        let { 
-            sortedInfo 
+        let {
+            sortedInfo
         } = this.state;
-        
+
         sortedInfo = sortedInfo || {};
 
         const columns = [
-            { title: 'Transaction Date', dataIndex: 'transactionDate', key: 'transactionDate'
-        },        
-            { title: 'Category', dataIndex: 'category', 
-            filters: this.state.filterCategories,
-            key: 'category', 
-            sorter: (a, b) => a.category.length - b.category.length,
-            
-
-        },
+            {
+                title: 'Transaction Date', dataIndex: 'transactionDate', key: 'transactionDate'
+            },
+            {
+                title: 'Category', dataIndex: 'category',
+                filters: this.state.filterCategories,
+                key: 'category',
+                sorter: (a, b) => a.category.length - b.category.length
+            },
             { title: 'Description', dataIndex: 'description', key: 'description' },
-            { title: 'Amount', dataIndex: 'amount', key: 'amount', 
-            sorter: (a, b) => a.amount - b.amount ,    },
-
-           ];
+            {
+                title: 'Amount', dataIndex: 'amount', key: 'amount',
+                sorter: (a, b) => a.amount - b.amount,
+            },
+        ];
 
         const { selectedRowKeys } = this.state;
         const hasSelected = this.state.selectedRowKeys.length > 0;
@@ -214,23 +209,19 @@ class Transaction extends React.Component {
 
         return (
             <div>
-                
-                <AddTransactionPage categories={this.state.categories} addRecordToState={this.addRecordToState}
-                />
+                <AddTransactionPage categories={this.state.categories} addRecordToState={this.addRecordToState}/>
                 <Button onClick={this.onImportClick}>
                     <Icon type="upload" /> Import
                 </Button>
                 <Button onClick={this.onExportClick} disabled={!hasRecords}>
                     <Icon type="download" />Export
                 </Button>
-
                 <Button onClick={this.onDeleteRecord} disabled={!hasSelected}>
                     <Icon type="delete" /> Delete
                 </Button>
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
                 </span>
-
                 <Table rowSelection={rowSelection} dataSource={this.state.data} columns={columns} />
             </div>
         )

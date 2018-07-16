@@ -152,11 +152,6 @@ class AddTransactionPage extends React.Component {
             // create the json object
             // add to transactions
             this.addTransaction(this.createJSONObject(values));
-
-
-
-
-
             this.handlePassNewRecord(this.createJSONObject(values));
             form.resetFields();
             this.setState({ visible: false });

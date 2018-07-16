@@ -11,6 +11,13 @@ const columns = [
     { title: 'Amount', dataIndex: 'amount', key: 'amount' }
 ];
 
+const importColumns = [
+    { title: 'Import Date', dataIndex: 'createdDate', key: 'createdDate' },
+    { title: 'File Name', dataIndex: 'importFileName', key: 'importFileName' },
+    { title: 'Records Added', dataIndex: 'recordsAdded', key: 'recordsAdded' },
+    { title: 'Errors and Alerts', dataIndex: 'errorImport', key: 'errorName' }
+]
+
 const Validator = require('jsonschema').Validator;
 const Json2csvParser = require('json2csv').Parser;
 const fields = ['Transaction Date', 'Category', 'Description', 'Amount'];
@@ -22,7 +29,7 @@ class Import extends React.Component {
         this.state = {
             uploadData: {},
             data: [],
-            category: this.props.categories
+            importRecords: []
         };
     }
 
@@ -42,9 +49,58 @@ class Import extends React.Component {
         });
     }
 
+    componentWillMount() {
+        const importEndpoint = 'http://localhost:3000/import/5aa43585955a2561e0935cdb';
+        fetch(importEndpoint, {
+            method: 'post'
+        })
+            .then(res => {
+                if (res.status >= 200 && res.status < 300) {
+                    return res.json();
+                }
+                else {
+                    throw new Error('Try Again Later');
+                }
+            })
+            .then(importData => {
+                console.log(importData);
+                return importData;
+            })
+            .then(importData => {
+                this.setState({
+                    importRecords: importData
+                })
+            })
+            .catch((err) => {
+                console.log('handled the error');
+            });
+    }
+
+    addImportToServer = (importRecord) => {
+        const endpoint = 'http://localhost:3000/import/create/1/5aa43585955a2561e0935cdb';
+        fetch(endpoint, {
+            method: 'POST',
+            body: JSON.stringify(importRecord),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(
+                res => {
+                    if (res.status === 201) {
+                        console.log('Success');
+                    }
+                    return res.json();
+                }
+            )
+            .catch(error => console.error('Error:', error))
+            .then(response => console.log('Success: ', response))
+    };
+
+
+
     addTransactionToServer = (transactions) => {
         const endpoint = 'http://localhost:3000/transaction/create/2/5aa43585955a2561e0935cdb';
-
         fetch(endpoint, {
             method: 'POST',
             body: JSON.stringify(transactions),
@@ -65,7 +121,22 @@ class Import extends React.Component {
     };
 
     onImportClick = () => {
-        // go to import js
+        if(document.getElementById("dataInput").value != "") {
+            const jsonData = {
+                "importType": "Transaction",
+                "importFileName": document.getElementById("dataInput").value,
+                "recordsAdded": this.state.uploadData.length,
+                "_id": '5ac8615a3e351c3dccba5607',
+                "_pid": '5aa43585955a2561e0935cdb'
+            };
+            const importList = [...this.state.importRecords];
+            importList.push(jsonData);
+            this.addImportToServer(jsonData);
+            this.setState({
+                importRecords: importList
+            })
+        }
+      
         if (this.state.uploadData.length > 0) {
             const dateFormat = 'YYYY-MM-DD';
             const transactionSchema = {
@@ -119,9 +190,7 @@ class Import extends React.Component {
             this.setState({
                 data: []
             });
-
         }
-
     }
 
     backToTransactionComponent = () => {
@@ -151,7 +220,7 @@ class Import extends React.Component {
                             onChange={onChange}
                         />}>
                 </CsvParse>
-                {this.state.data.length > 0 ? (<Table dataSource={this.state.data} columns={columns} />) : (<p> Log of previous imports </p>)}
+                {this.state.data.length > 0 ? (<Table dataSource={this.state.data} columns={columns} />) : (<Table dataSource={this.state.importRecords} columns={importColumns} />)}
 
             </div>
         )
