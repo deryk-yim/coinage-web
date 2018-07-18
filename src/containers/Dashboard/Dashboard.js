@@ -16,7 +16,7 @@ class Dashboard extends Component {
                 <Sider> <Sidebar/> </Sider>
                 <Layout>
                     <Header style={{padding: '0 0 0 0', background:'transparent'}}> <CustomHeader/> </Header>
-                    <Content> <Body/> </Content>
+                    <Content> <Body/> </Content> <div></div>
                 </Layout>
             </Layout>
         </div>
