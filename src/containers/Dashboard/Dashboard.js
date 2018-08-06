@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Sidebar from '../../components/Sidebar/Sidebar';
 import { Layout } from 'antd';
 import styles from './Dashboard.css';
-import CustomHeader from './CustomHeader';
+import CustomHeader from '../../components/CustomHeader/CustomHeader';
 import Body from './Body';
 
 const { Header, Footer, Sider, Content } = Layout;

@@ -12,7 +12,12 @@ class Body extends React.Component {
         return(
             <div>
                 <Row>
-                   <h2 style={BODY_TITLE}>Dashboard</h2>
+                   <Col span={1}>
+
+                   </Col>
+                   <Col span={1}>
+                   <h1 style={BODY_TITLE}>Dashboard</h1>
+                   </Col>
                 </Row>
                 <Row>
                     <Col span={1}> 

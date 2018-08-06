@@ -10,6 +10,7 @@ class Sidebar extends React.Component {
         
         return(
             <div style={CONTAINER}>
+               
                 <h2 style={SIDEBAR_TITLE}> <Icon type="copyright" /> Coinage </h2>
                 <Button type="primary" style={SIDEBAR_BUTTON}> <Icon type="dashboard" />Dashboard</Button>
                 <Button type="primary" style={SIDEBAR_BUTTON}> <Icon type="profile" />Bills</Button>

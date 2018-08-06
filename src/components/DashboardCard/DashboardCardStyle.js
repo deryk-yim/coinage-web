@@ -56,7 +56,14 @@ export const DASHBOARD_CARD_DAY_COUNTER = {
     background: 'transparent',
 }
 
+export const DASHBOARD_CARD_DROPDOWN_HEADER = {
+    background: 'Transparent',
+    textAlign: 'Right',
+    
+}
+
 export const DASHBOARD_CARD_DROPDOWN = {
     background: 'Transparent',
     textAlign: 'Right',
+    border: '0px',
 }
