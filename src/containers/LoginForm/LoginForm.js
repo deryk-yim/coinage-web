@@ -1,8 +1,6 @@
-
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '../LoginForm/LoginForm.css';
+//import '../LoginForm/LoginForm.css';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 const FormItem = Form.Item;
 
