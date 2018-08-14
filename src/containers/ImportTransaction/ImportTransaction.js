@@ -35,3 +35,48 @@ export function createImportRecord(importType, recordsAdded, pid) {
         return jsonData;
     }
 }
+
+
+export function addImportToServer (importRecord) {
+    const endpoint = 'http://localhost:3000/import/create/1/5aa43585955a2561e0935cdb';
+    fetch(endpoint, {
+        method: 'POST',
+        body: JSON.stringify(importRecord),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(
+            res => {
+                if (res.status === 201) {
+                    console.log('Success');
+                }
+                return res.json();
+            }
+        )
+        .catch(error => console.error('Error:', error))
+        .then(response => console.log('Success: ', response))
+};
+
+
+
+export function addTransactionToServer (transactions) {
+    const endpoint = 'http://localhost:3000/transaction/create/2/5aa43585955a2561e0935cdb';
+    fetch(endpoint, {
+        method: 'POST',
+        body: JSON.stringify(transactions),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(
+            res => {
+                if (res.status === 201) {
+                    console.log('Success');
+                }
+                return res.json();
+            }
+        )
+        .catch(error => console.error('Error:', error))
+        .then(response => console.log('Success: ', response))
+};

@@ -4,6 +4,7 @@ import { Button, Table, Icon } from 'antd';
 import '../Transaction/Transaction.css';
 import CsvParse from '@vtex/react-csv-parse';
 import {showImportRecords} from '../ImportTransaction/ImportTransaction';
+import { METHODS } from 'http';
 
 const importEndpoint = 'http://localhost:3000/import/5aa43585955a2561e0935cdb';
 
@@ -33,6 +34,8 @@ class ImportTransactionPage extends React.Component {
         this.state = {
             selectedRows: [],
             selectedRowKeys: [],
+            data: [],
+            toDelete: []
         };
     }
    
@@ -42,6 +45,22 @@ class ImportTransactionPage extends React.Component {
    
     componentWillMount() {
         showImportRecords(importEndpoint);
+    }
+
+    handleData = (data) => {
+        this.setState({
+            uploadData: data
+        }, this.updateTempData);
+    }
+
+    updateTempData = () => {
+        const newData = this.state.data;
+        this.state.uploadData.forEach(element => {
+            newData.push(element);
+        });
+        this.setState({
+            data: newData
+        });
     }
 
     onImport = () => {
@@ -60,127 +79,16 @@ class ImportTransactionPage extends React.Component {
 
 
 
-    addImportToServer = (importRecord) => {
-        const endpoint = 'http://localhost:3000/import/create/1/5aa43585955a2561e0935cdb';
-        fetch(endpoint, {
-            method: 'POST',
-            body: JSON.stringify(importRecord),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(
-                res => {
-                    if (res.status === 201) {
-                        console.log('Success');
-                    }
-                    return res.json();
-                }
-            )
-            .catch(error => console.error('Error:', error))
-            .then(response => console.log('Success: ', response))
-    };
-
-
-
-    addTransactionToServer = (transactions) => {
-        const endpoint = 'http://localhost:3000/transaction/create/2/5aa43585955a2561e0935cdb';
-        fetch(endpoint, {
-            method: 'POST',
-            body: JSON.stringify(transactions),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(
-                res => {
-                    if (res.status === 201) {
-                        console.log('Success');
-                    }
-                    return res.json();
-                }
-            )
-            .catch(error => console.error('Error:', error))
-            .then(response => console.log('Success: ', response))
-    };
-
-    onImportClick = () => {
-       
-
-
-            
-            // dispatch action to add new record of csv into th eglobal var
-
-            const importList = [...this.state.importRecords];
-            importList.push(jsonData);
-            this.addImportToServer(jsonData);
-            this.setState({
-                importRecords: importList
-            })
-        
-      
-        if (this.state.uploadData.length > 0) {
-            const dateFormat = 'YYYY-MM-DD';
-            const transactionSchema = {
-                "id": "/Transaction",
-                "type": "object",
-                "properties": {
-                    "transactionDate": {
-                        "type": Date,
-                        "required": true,
-                        "minLength": 1,
-                        "format": "dateFormat"
-                    },
-                    "category": {
-                        "type": "string",
-                        "required": true,
-                        "minLength": 1
-                    },
-                    "description": {
-                        "type": "string",
-                        "required": true,
-                        "minLength": 1
-                    },
-                    "amount": {
-                        "type": Number,
-                        "required": true,
-                        "minLength": 1
-                    }
-                    // check categories that they have already.
-                    // take longest length of value
-                    // whatever cell has the longest length <--- use that as description
-                },
-                "required": ["transactionDate", "category", "description", "amount"]
-            };
-
-            const v = new Validator();
-            var i = 5503;
-
-            const transactionsList = [];
-            this.state.uploadData.forEach(element => {
-                const test = v.validate(element, transactionSchema);
-                console.log(v.validate(element, transactionSchema));
-                const id = "5ac8615a3e351c3dccba" + i;
-                element["_id"] = id;
-                element["_pid"] = "5aa43585955a2561e0935cdb";
-                i++;
-                transactionsList.push(element);
-            });
-            this.addTransactionToServer(transactionsList);
-            document.getElementById("dataInput").value = "";
-
-            this.setState({
-                data: []
-            });
-        }
-    }
+    
 
     
 
-    onSelectChange = (selectedRowKeys, selectedRows) => {
-        
-    }
+    
 
+    onSelectChange = (selectedRowKeys) => {
+        console.log('selectedRowKeys changed: ', selectedRowKeys);
+        this.setState({ selectedRowKeys });
+    }
     
 
     render() {
@@ -192,7 +100,7 @@ class ImportTransactionPage extends React.Component {
         ]
 
         const { selectedRowKeys } = this.state;
-
+        const hasSelected = this.state.selectedRowKeys.length > 0;
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange
@@ -205,6 +113,13 @@ class ImportTransactionPage extends React.Component {
                 <Button onClick={this.onImportClick}>
                     <Icon type="upload" /> Import
                 </Button>
+                <Button onClick={this.onDeleteRecord} disabled={!hasSelected}>
+                    <Icon type="delete" /> Delete
+                </Button>
+                <span style={{ marginLeft: 8 }}>
+                    {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
+                </span>
+                
 
                 <CsvParse keys={keys} onDataUploaded={this.handleData}
                     render={
