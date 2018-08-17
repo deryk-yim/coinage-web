@@ -44,6 +44,7 @@ class Transaction extends React.Component {
             toDelete: deleteList
         });
     }
+    
 
     onDeleteRecord = () => {
         for (let i = 0; i < this.state.toDelete.length; i++) {

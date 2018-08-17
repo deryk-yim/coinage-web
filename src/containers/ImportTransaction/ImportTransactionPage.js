@@ -21,7 +21,6 @@ const importColumns = [
     { title: 'Records Added', dataIndex: 'recordsAdded', key: 'recordsAdded' },
     { title: 'Errors and Alerts', dataIndex: 'errorImport', key: 'errorName' }
 ]
-
 const Validator = require('jsonschema').Validator;
 const Json2csvParser = require('json2csv').Parser;
 const fields = ['Transaction Date', 'Category', 'Description', 'Amount'];
@@ -34,8 +33,7 @@ class ImportTransactionPage extends React.Component {
         this.state = {
             selectedRows: [],
             selectedRowKeys: [],
-            data: [],
-            toDelete: []
+            data: []
         };
     }
    
@@ -69,25 +67,52 @@ class ImportTransactionPage extends React.Component {
         }
     }
 
-
-
-
-
-
-
-
-
+    clearAll = () => {
+        this.setState({
+            data: []
+        })
+    }
+    
+    
 
 
     
 
-    
+    removeSelectedRows = () => {
+        const records = [...this.state.data];
+        console.log("Records " + records);
+        const removeRecords = [...this.state.selectedRows];
+        console.log("removeRecords " + removeRecords);
+        console.log("Records " + records.length);
+        const newSet = records.filter(
+            function(e) {
+                return this.indexOf(e) < 0;
+          }, removeRecords);
+
+          console.log("newSet " + newSet);
+          console.log("newSet number " + newSet.length);
+        
+          this.setState({
+            data: newSet,
+            selectedRows: [],
+            selectedRowKeys: []
+        })
+
+       
+        
+    }
 
     
-
-    onSelectChange = (selectedRowKeys) => {
+     onSelectChange = (selectedRowKeys, selectedRows, key) => {
         console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({ selectedRowKeys });
+        console.log(selectedRows);
+        this.setState({
+            selectedRows: selectedRows
+        })
+        console.log('Unique key' + key);
+
+        
     }
     
 
@@ -113,12 +138,15 @@ class ImportTransactionPage extends React.Component {
                 <Button onClick={this.onImportClick}>
                     <Icon type="upload" /> Import
                 </Button>
-                <Button onClick={this.onDeleteRecord} disabled={!hasSelected}>
+                <Button  onClick={this.removeSelectedRows} disabled={!hasSelected}>
                     <Icon type="delete" /> Delete
                 </Button>
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
                 </span>
+                <Button onClick={this.clearAll}>
+                     Clear All
+                </Button>
                 
 
                 <CsvParse keys={keys} onDataUploaded={this.handleData}
@@ -136,25 +164,3 @@ class ImportTransactionPage extends React.Component {
 }
 
 export default withRouter(ImportTransactionPage);
-
-/*
-const mapStateToProps = (state) => {
-    return {
-        transactions: state.transactions,
-        categories: state.categories
-    };
-};
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchTransactionsData: (url) => dispatch(transactionsFetchData(url)),
-        fetchCategories: (url) => dispatch(categoriesFetchData(url)),
-        deleteIds: (ids) => dispatch(removeTransactions(ids))
-
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Transaction);
-
-
-*/
