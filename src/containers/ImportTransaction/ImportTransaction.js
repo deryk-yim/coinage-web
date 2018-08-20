@@ -1,3 +1,6 @@
+import { Modal} from 'antd';
+
+
 export function showImportRecords(endpoint) {
         fetch(endpoint, {
             method: 'post'
@@ -80,3 +83,11 @@ export function addTransactionToServer (transactions) {
         .catch(error => console.error('Error:', error))
         .then(response => console.log('Success: ', response))
 };
+
+export function error() {
+    Modal.error({
+      title: 'Please choose a CSV file',
+      content: 'Accepted formats are .csv',
+    });
+  }
+  

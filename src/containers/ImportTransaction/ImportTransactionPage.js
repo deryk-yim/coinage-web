@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { Button, Table, Icon } from 'antd';
 import '../Transaction/Transaction.css';
 import CsvParse from '@vtex/react-csv-parse';
-import {showImportRecords} from '../ImportTransaction/ImportTransaction';
+import {showImportRecords, error} from '../ImportTransaction/ImportTransaction';
 import { METHODS } from 'http';
 
 const importEndpoint = 'http://localhost:3000/import/5aa43585955a2561e0935cdb';
@@ -25,6 +25,8 @@ const Validator = require('jsonschema').Validator;
 const Json2csvParser = require('json2csv').Parser;
 const fields = ['Transaction Date', 'Category', 'Description', 'Amount'];
 const moment = require('moment');
+
+
 
 class ImportTransactionPage extends React.Component {
 
@@ -62,8 +64,13 @@ class ImportTransactionPage extends React.Component {
     }
 
     onImport = () => {
-        if(document.getElementById("dataInput").value != "") {
+        if(document.getElementById("dataInput").value == "") {
+            error();
+        }
+        else if(document.getElementById("dataInput").value != "") {
+           // create import record
 
+           
         }
     }
 
@@ -73,36 +80,20 @@ class ImportTransactionPage extends React.Component {
         })
     }
     
-    
-
-
-    
-
     removeSelectedRows = () => {
         const records = [...this.state.data];
-        console.log("Records " + records);
         const removeRecords = [...this.state.selectedRows];
-        console.log("removeRecords " + removeRecords);
-        console.log("Records " + records.length);
         const newSet = records.filter(
             function(e) {
                 return this.indexOf(e) < 0;
           }, removeRecords);
-
-          console.log("newSet " + newSet);
-          console.log("newSet number " + newSet.length);
-        
           this.setState({
             data: newSet,
             selectedRows: [],
             selectedRowKeys: []
         })
-
-       
-        
     }
 
-    
      onSelectChange = (selectedRowKeys, selectedRows, key) => {
         console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({ selectedRowKeys });
@@ -110,12 +101,9 @@ class ImportTransactionPage extends React.Component {
         this.setState({
             selectedRows: selectedRows
         })
-        console.log('Unique key' + key);
-
-        
+         
     }
     
-
     render() {
         const keys = [
             "transactionDate",
@@ -123,7 +111,6 @@ class ImportTransactionPage extends React.Component {
             "description",
             "amount"
         ]
-
         const { selectedRowKeys } = this.state;
         const hasSelected = this.state.selectedRowKeys.length > 0;
         const rowSelection = {
@@ -135,7 +122,7 @@ class ImportTransactionPage extends React.Component {
             <div>
                 <p> <a onClick={this.backToTransactionComponent}>Transactions </a> > Import Transactions </p>
                 <h1>Import Transactions </h1>
-                <Button onClick={this.onImportClick}>
+                <Button onClick={this.onImport}>
                     <Icon type="upload" /> Import
                 </Button>
                 <Button  onClick={this.removeSelectedRows} disabled={!hasSelected}>
@@ -144,11 +131,9 @@ class ImportTransactionPage extends React.Component {
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
                 </span>
-                <Button onClick={this.clearAll}>
+                <Button onClick={this.clearAll} disabled={!hasSelected}>
                      Clear All
                 </Button>
-                
-
                 <CsvParse keys={keys} onDataUploaded={this.handleData}
                     render={
                         onChange => <input
@@ -157,7 +142,6 @@ class ImportTransactionPage extends React.Component {
                         />}>
                 </CsvParse>
                 {this.state.data.length > 0 ? (<Table rowSelection={rowSelection} dataSource={this.state.data} columns={columns} />) : (<Table dataSource={this.state.importRecords} columns={importColumns} />)}
-
             </div>
         )
     }

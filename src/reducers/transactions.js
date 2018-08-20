@@ -31,14 +31,14 @@ export function transactions(state = initialState, action) {
         case 'DELETE_TRANSACTIONS_FROM_STORE':
         const transactionId_delete = action.transactionId;
         console.log(transactionId_delete);
-            return state.filter(transaction => transaction._id !== transactionId_delete);
-    
+        return state.filter(transaction => transaction._id !== transactionId_delete);
+
+
+
         default:
             return state;
     }
 }
-
-
 
 export function transactionKeysDelete(state = [], action) {
     switch (action.type) {

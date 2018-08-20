@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 import AddTransactionForm from '../AddTransaction/AddTransactionForm';
 import {createJSONTransaction} from './AddTransaction'
 import { addTransactionCategory, addTransaction} from '../../actions/actionsAddTransaction';
+import { addTransactionToServer } from '../AddTransaction/AddTransaction';
 
-
-
+const addTransactionEndpoint = 'http://localhost:3000/transaction/create/1/5aa43585955a2561e0935cdb';
 const Option = Select.Option;
 const { TextArea } = Input;
 const moment = require('moment');
@@ -28,8 +28,7 @@ class AddTransactionPage extends React.Component {
     handleCancel = () => {
         const form = this.formRef.props.form;
         form.resetFields();
-        this.setState({ visible: false });
-        
+        this.setState({ visible: false }); 
     }
 
     handleCreate = () => {      
@@ -37,21 +36,18 @@ class AddTransactionPage extends React.Component {
         form.validateFields((err, values) => {
             if (err) {
                 return;
-            }            
+            }      
             const newRecord = createJSONTransaction(
                 values, 
                 this.props.categorySelected['key'], 
                 '5aa43585955a2561e0935cdb' 
             );
             this.props.transaction(newRecord);
+            addTransactionToServer(newRecord, addTransactionEndpoint);
             form.resetFields();
             this.setState({ visible: false });
         });
     }
-
-    
-
-    
 
     saveFormRef = (formRef) => {
         this.formRef = formRef;
@@ -87,7 +83,5 @@ const mapDispatchToProps = (dispatch) => {
         transaction: (transaction) => dispatch(addTransaction(transaction)),
     };
 };
-
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddTransactionPage);

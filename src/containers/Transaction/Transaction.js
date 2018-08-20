@@ -7,16 +7,14 @@ import { transactionsFetchData } from '../../actions/actionTransaction';
 import { categoriesFetchData } from '../../actions/actionCategory';
 import { deleteTransactionFromServer } from '../DeleteTransaction/DeleteTransaction';
 import { removeTransactions } from '../../actions/actionDeleteTransaction';
-import {addTransactionToServer} from '../AddTransaction/AddTransaction';
-
 
 const getTransactionsEndpoint = 'http://localhost:3000/transaction/5aa43585955a2561e0935cdb';
 const getCategoriesEndpoint = 'http://localhost:3000/category/5aa43585955a2561e0935cdb';
 const deleteTransactionsEndpoint = 'http://localhost:3000/transaction/delete/5aa43585955a2561e0935cdb';
 
-const addTransactionEndpoint = 'http://localhost:3000/transaction/create/1/5aa43585955a2561e0935cdb';
 
 const deleteList = [];
+const deleteNoIdList = [];
 
 class Transaction extends React.Component {
 
@@ -33,26 +31,41 @@ class Transaction extends React.Component {
     }
 
     onSelectChange = (selectedRowKeys, selectedRows) => {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
-        console.log('selectedRows changed: ', selectedRows);
+        deleteList.length = 0;
+        deleteNoIdList.length = 0;
+
         for (let i = 0; i < selectedRows.length; i++) {
-            deleteList.push(selectedRows[i]['_id']);
+            if (selectedRows[i].hasOwnProperty('_id')) {
+                deleteList.push(selectedRows[i]['_id']);
+            }
         }
+
+        for (let i = 0; i < selectedRows.length; i++) {
+            if (!selectedRows[i].hasOwnProperty('_id')) {
+                deleteNoIdList.push(selectedRows[i]);
+            }
+        }
+
+        console.log("Empty array?: " + deleteList);
         this.setState({
             selectedRowKeys: selectedRowKeys,
             selectedRows: selectedRows,
             toDelete: deleteList
         });
     }
-    
 
     onDeleteRecord = () => {
-        for (let i = 0; i < this.state.toDelete.length; i++) {
-            this.props.deleteIds(this.state.toDelete[i]);
+
+        for (let i = 0; i < this.state.selectedRows.length; i++) {
+            if (this.state.selectedRows[i].hasOwnProperty('_id')) {
+                this.props.deleteIds(this.state.selectedRows[i]['_id']); // deletes the record from the redux store
+            }
         }
-        deleteTransactionFromServer(deleteTransactionsEndpoint, this.state.selectedRows);
+        if (deleteList.length > 0) {
+            deleteTransactionFromServer(deleteTransactionsEndpoint, this.state.selectedRows);
+        }
+
         this.setState({
-            toDelete: [],
             selectedRows: [],
             selectedRowKeys: []
         })
@@ -62,24 +75,11 @@ class Transaction extends React.Component {
         this.props.history.push('/transaction/import');
     }
 
-    /* once user is happy with the newly added transactions they can proceed to select FINAL and 
-    records are created on the backend.
-    will need to make this into a batch Add later..
-    */
-    handleCreateRecords = () => {
-        for (let i = 0; i < this.props.transactions.length; i++) {
-            if (!this.props.transactions[i].hasOwnProperty('_id')) {
-                addTransactionToServer(
-                    this.props.transactions[i], addTransactionEndpoint
-                );
-            }
-        }
-    }
-
     componentDidMount() {
         this.props.fetchTransactionsData(getTransactionsEndpoint);
         this.props.fetchCategories(getCategoriesEndpoint);
     }
+
     render() {
         const keys = [
             "transactionDate",
@@ -120,6 +120,7 @@ class Transaction extends React.Component {
 
         const { selectedRowKeys } = this.state;
         const hasSelected = this.state.selectedRowKeys.length > 0;
+
         const hasRecords = this.props.transactions.length > 0;
         const rowSelection = {
             selectedRowKeys,
@@ -129,9 +130,6 @@ class Transaction extends React.Component {
         return (
             <div>
                 <AddTransactionPage />
-                <Button onClick={this.handleCreateRecords}>
-                    <Icon type="plus" /> Create Records
-                </Button>
                 <Button onClick={this.onImportClick}>
                     <Icon type="upload" /> Import
                 </Button>
