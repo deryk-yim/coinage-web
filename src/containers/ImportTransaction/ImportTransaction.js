@@ -1,37 +1,31 @@
-import { Modal} from 'antd';
+import { Modal } from 'antd';
 
 
 export function showImportRecords(endpoint) {
-        fetch(endpoint, {
-            method: 'post'
+    fetch(endpoint, {
+        method: 'post'
+    })
+        .then(res => {
+            if (res.status >= 200 && res.status < 300) {
+                return res.json();
+            }
+            else {
+                throw new Error('Try Again Later');
+            }
         })
-            .then(res => {
-                if (res.status >= 200 && res.status < 300) {
-                    return res.json();
-                }
-                else {
-                    throw new Error('Try Again Later');
-                }
-            })
-            .then(importData => {
-                console.log(importData);
-                return importData;
-            })
-            .then(importData => {
-                this.setState({
-                    importRecords: importData
-                })
-            })
-            .catch((err) => {
-                console.log('handled the error');
-            });
+        .then(importData => {
+            return importData;
+        })
+        .catch((err) => {
+            console.log('showImportRecords Error');
+        });
 }
 
-export function createImportRecord(importType, recordsAdded, pid) {
-    if(document.getElementById("dataInput").value != "") {
+export function createImportRecord(importType, fileName, recordsAdded, pid) {
+    if (document.getElementById("dataInput").value != "") {
         const jsonData = {
             "importType": importType,
-            "importFileName": document.getElementById("dataInput").value,
+            "importFileName": fileName,
             "recordsAdded": recordsAdded,
             "_pid": pid
         };
@@ -39,12 +33,11 @@ export function createImportRecord(importType, recordsAdded, pid) {
     }
 }
 
-
-export function addImportToServer (importRecord) {
+export function addImportFileToServer(importRecords) {
     const endpoint = 'http://localhost:3000/import/create/1/5aa43585955a2561e0935cdb';
     fetch(endpoint, {
         method: 'POST',
-        body: JSON.stringify(importRecord),
+        body: JSON.stringify(importRecords),
         headers: {
             'Content-Type': 'application/json'
         }
@@ -63,8 +56,7 @@ export function addImportToServer (importRecord) {
 
 
 
-export function addTransactionToServer (transactions) {
-    const endpoint = 'http://localhost:3000/transaction/create/2/5aa43585955a2561e0935cdb';
+export function addTransactionToServer(transactions, endpoint) {
     fetch(endpoint, {
         method: 'POST',
         body: JSON.stringify(transactions),
@@ -86,8 +78,7 @@ export function addTransactionToServer (transactions) {
 
 export function error() {
     Modal.error({
-      title: 'Please choose a CSV file',
-      content: 'Accepted formats are .csv',
+        title: 'Please choose a CSV file',
+        content: 'Accepted formats are .csv',
     });
-  }
-  
+}

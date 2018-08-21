@@ -3,9 +3,12 @@ import { withRouter } from 'react-router-dom';
 import { Button, Table, Icon } from 'antd';
 import '../Transaction/Transaction.css';
 import CsvParse from '@vtex/react-csv-parse';
-import {showImportRecords, error} from '../ImportTransaction/ImportTransaction';
+import {showImportRecords, error, addImportFileToServer, addTransactionToServer} from '../ImportTransaction/ImportTransaction';
+import {doValidate} from '../ImportTransaction/ImportTransactionValidator';
+
 import { METHODS } from 'http';
 
+const addTransactionEndpoint = 'http://localhost:3000/transaction/create/2/5aa43585955a2561e0935cdb';
 const importEndpoint = 'http://localhost:3000/import/5aa43585955a2561e0935cdb';
 
 const columns = [
@@ -26,8 +29,6 @@ const Json2csvParser = require('json2csv').Parser;
 const fields = ['Transaction Date', 'Category', 'Description', 'Amount'];
 const moment = require('moment');
 
-
-
 class ImportTransactionPage extends React.Component {
 
     constructor(props) {
@@ -35,7 +36,9 @@ class ImportTransactionPage extends React.Component {
         this.state = {
             selectedRows: [],
             selectedRowKeys: [],
-            data: []
+            data: [],
+            importRecords: [],
+            uploadData: []
         };
     }
    
@@ -44,7 +47,7 @@ class ImportTransactionPage extends React.Component {
     }
    
     componentWillMount() {
-        showImportRecords(importEndpoint);
+       showImportRecords(importEndpoint);
     }
 
     handleData = (data) => {
@@ -52,7 +55,6 @@ class ImportTransactionPage extends React.Component {
             uploadData: data
         }, this.updateTempData);
     }
-
     updateTempData = () => {
         const newData = this.state.data;
         this.state.uploadData.forEach(element => {
@@ -70,8 +72,20 @@ class ImportTransactionPage extends React.Component {
         else if(document.getElementById("dataInput").value != "") {
            // create import record
 
+           if(this.state.data.length > 0) {
+            doValidate.do
+            addTransactionToServer(this.state.data, addTransactionEndpoint);
+
+           }
+
            
         }
+
+        this.setState({
+            data: []
+        });
+
+        document.getElementById("dataInput").value = "";
     }
 
     clearAll = () => {
