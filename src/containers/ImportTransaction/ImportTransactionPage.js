@@ -3,13 +3,14 @@ import { withRouter } from 'react-router-dom';
 import { Button, Table, Icon } from 'antd';
 import '../Transaction/Transaction.css';
 import CsvParse from '@vtex/react-csv-parse';
-import {showImportRecords, error, addImportFileToServer, addTransactionToServer} from '../ImportTransaction/ImportTransaction';
+import {error, addImportFileToServer, addTransactionToServer} from '../ImportTransaction/ImportTransaction';
 import {doValidate} from '../ImportTransaction/ImportTransactionValidator';
+import { connect } from 'react-redux';
+import {importedFilesFetchData} from '../../actions/actionImportHistory';
 
 import { METHODS } from 'http';
 
 const addTransactionEndpoint = 'http://localhost:3000/transaction/create/2/5aa43585955a2561e0935cdb';
-const importEndpoint = 'http://localhost:3000/import/5aa43585955a2561e0935cdb';
 
 const columns = [
     { title: 'Transaction Date', dataIndex: 'transactionDate', key: 'transactionDate' },
@@ -28,6 +29,8 @@ const Validator = require('jsonschema').Validator;
 const Json2csvParser = require('json2csv').Parser;
 const fields = ['Transaction Date', 'Category', 'Description', 'Amount'];
 const moment = require('moment');
+const getImportedFilesHistory = 'http://localhost:3000/import/5aa43585955a2561e0935cdb';
+
 
 class ImportTransactionPage extends React.Component {
 
@@ -37,7 +40,6 @@ class ImportTransactionPage extends React.Component {
             selectedRows: [],
             selectedRowKeys: [],
             data: [],
-            importRecords: [],
             uploadData: []
         };
     }
@@ -47,7 +49,7 @@ class ImportTransactionPage extends React.Component {
     }
    
     componentWillMount() {
-       showImportRecords(importEndpoint);
+        this.props.fetchImportedFiles(getImportedFilesHistory);
     }
 
     handleData = (data) => {
@@ -75,10 +77,8 @@ class ImportTransactionPage extends React.Component {
            if(this.state.data.length > 0) {
             doValidate.do
             addTransactionToServer(this.state.data, addTransactionEndpoint);
-
            }
 
-           
         }
 
         this.setState({
@@ -134,6 +134,7 @@ class ImportTransactionPage extends React.Component {
 
         return (
             <div>
+               
                 <p> <a onClick={this.backToTransactionComponent}>Transactions </a> > Import Transactions </p>
                 <h1>Import Transactions </h1>
                 <Button onClick={this.onImport}>
@@ -155,10 +156,22 @@ class ImportTransactionPage extends React.Component {
                             onChange={onChange}
                         />}>
                 </CsvParse>
-                {this.state.data.length > 0 ? (<Table rowSelection={rowSelection} dataSource={this.state.data} columns={columns} />) : (<Table dataSource={this.state.importRecords} columns={importColumns} />)}
+                {this.state.data.length > 0 ? (<Table rowSelection={rowSelection} dataSource={this.state.data} columns={columns} />) : (<Table dataSource={this.props.importedFiles} columns={importColumns} />)}
             </div>
         )
     }
 }
 
-export default withRouter(ImportTransactionPage);
+const mapStateToProps = (state) => {
+    return {
+        importedFiles: state.importedFiles
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchImportedFiles: (url) => dispatch(importedFilesFetchData(url))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ImportTransactionPage);

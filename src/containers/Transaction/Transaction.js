@@ -12,7 +12,6 @@ const getTransactionsEndpoint = 'http://localhost:3000/transaction/5aa43585955a2
 const getCategoriesEndpoint = 'http://localhost:3000/category/5aa43585955a2561e0935cdb';
 const deleteTransactionsEndpoint = 'http://localhost:3000/transaction/delete/5aa43585955a2561e0935cdb';
 
-
 const deleteList = [];
 const deleteNoIdList = [];
 
@@ -55,7 +54,6 @@ class Transaction extends React.Component {
     }
 
     onDeleteRecord = () => {
-
         for (let i = 0; i < this.state.selectedRows.length; i++) {
             if (this.state.selectedRows[i].hasOwnProperty('_id')) {
                 this.props.deleteIds(this.state.selectedRows[i]['_id']); // deletes the record from the redux store
@@ -151,7 +149,7 @@ class Transaction extends React.Component {
 const mapStateToProps = (state) => {
     return {
         transactions: state.transactions,
-        categories: state.categories
+        categories: state.categories,
     };
 };
 
@@ -159,8 +157,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchTransactionsData: (url) => dispatch(transactionsFetchData(url)),
         fetchCategories: (url) => dispatch(categoriesFetchData(url)),
-        deleteIds: (ids) => dispatch(removeTransactions(ids))
-
+        deleteIds: (ids) => dispatch(removeTransactions(ids)),
     };
 };
 

@@ -1,26 +1,5 @@
 import { Modal } from 'antd';
 
-
-export function showImportRecords(endpoint) {
-    fetch(endpoint, {
-        method: 'post'
-    })
-        .then(res => {
-            if (res.status >= 200 && res.status < 300) {
-                return res.json();
-            }
-            else {
-                throw new Error('Try Again Later');
-            }
-        })
-        .then(importData => {
-            return importData;
-        })
-        .catch((err) => {
-            console.log('showImportRecords Error');
-        });
-}
-
 export function createImportRecord(importType, fileName, recordsAdded, pid) {
     if (document.getElementById("dataInput").value != "") {
         const jsonData = {
