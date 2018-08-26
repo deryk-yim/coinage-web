@@ -44,6 +44,13 @@ export function importedFilesFetchData(url) {
     };
 }
 
+export function addImportHistory(importRecord) {
+    return {
+        type: 'ADD_IMPORT_RECORD_TO_STORE',
+        newItem: importRecord
+    }
+}
+
 
 
 

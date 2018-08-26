@@ -1,12 +1,16 @@
 import { Modal } from 'antd';
+const moment = require('moment');
 
-export function createImportRecord(importType, fileName, recordsAdded, pid) {
+
+export function createImportRecord(importType, fileName, recordsAdded, pid, errorMessage) {
     if (document.getElementById("dataInput").value != "") {
         const jsonData = {
             "importType": importType,
             "importFileName": fileName,
+            "createdDate": moment().format(),
             "recordsAdded": recordsAdded,
-            "_pid": pid
+            "_pid": pid,
+            "errorMessage": errorMessage
         };
         return jsonData;
     }
@@ -32,8 +36,6 @@ export function addImportFileToServer(importRecords) {
         .catch(error => console.error('Error:', error))
         .then(response => console.log('Success: ', response))
 };
-
-
 
 export function addTransactionToServer(transactions, endpoint) {
     fetch(endpoint, {

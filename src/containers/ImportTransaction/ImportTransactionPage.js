@@ -1,14 +1,11 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
-import { Button, Table, Icon } from 'antd';
+import { Button, Table, Icon, Spin} from 'antd';
 import '../Transaction/Transaction.css';
 import CsvParse from '@vtex/react-csv-parse';
-import {error, addImportFileToServer, addTransactionToServer} from '../ImportTransaction/ImportTransaction';
+import {error, createImportRecord, addTransactionToServer, addImportFileToServer} from '../ImportTransaction/ImportTransaction';
 import {doValidate} from '../ImportTransaction/ImportTransactionValidator';
 import { connect } from 'react-redux';
-import {importedFilesFetchData} from '../../actions/actionImportHistory';
-
-import { METHODS } from 'http';
+import {importedFilesFetchData, addImportHistory} from '../../actions/actionImportHistory';
 
 const addTransactionEndpoint = 'http://localhost:3000/transaction/create/2/5aa43585955a2561e0935cdb';
 
@@ -23,14 +20,14 @@ const importColumns = [
     { title: 'Import Date', dataIndex: 'createdDate', key: 'createdDate' },
     { title: 'File Name', dataIndex: 'importFileName', key: 'importFileName' },
     { title: 'Records Added', dataIndex: 'recordsAdded', key: 'recordsAdded' },
-    { title: 'Errors and Alerts', dataIndex: 'errorImport', key: 'errorName' }
+    { title: 'Errors and Alerts', dataIndex: 'errorMessage', key: 'errorMessage' }
 ]
-const Validator = require('jsonschema').Validator;
 const Json2csvParser = require('json2csv').Parser;
 const fields = ['Transaction Date', 'Category', 'Description', 'Amount'];
 const moment = require('moment');
 const getImportedFilesHistory = 'http://localhost:3000/import/5aa43585955a2561e0935cdb';
 
+const pid = '5aa43585955a2561e0935cdb';
 
 class ImportTransactionPage extends React.Component {
 
@@ -39,9 +36,8 @@ class ImportTransactionPage extends React.Component {
         this.state = {
             selectedRows: [],
             selectedRowKeys: [],
-            data: [],
-            uploadData: []
-        };
+            data: []
+      };
     }
    
     backToTransactionComponent = () => {
@@ -54,37 +50,48 @@ class ImportTransactionPage extends React.Component {
 
     handleData = (data) => {
         this.setState({
-            uploadData: data
-        }, this.updateTempData);
-    }
-    updateTempData = () => {
-        const newData = this.state.data;
-        this.state.uploadData.forEach(element => {
-            newData.push(element);
-        });
-        this.setState({
-            data: newData
+            data: data
         });
     }
 
     onImport = () => {
-        if(document.getElementById("dataInput").value == "") {
+        if(document.getElementById("dataInput").value === "") {
             error();
         }
         else if(document.getElementById("dataInput").value != "") {
-           // create import record
-
            if(this.state.data.length > 0) {
-            doValidate.do
-            addTransactionToServer(this.state.data, addTransactionEndpoint);
+               if(doValidate(this.state.data) === true) {
+                const importSuccessRecord = createImportRecord(
+                    "Transactions", 
+                    document.getElementById("dataInput").files[0].name, 
+                    this.state.data.length, 
+                    pid);
+                addImportFileToServer(importSuccessRecord
+                );
+                this.props.addImportedFile(importSuccessRecord);
+
+                addTransactionToServer(this.state.data, 
+                    addTransactionEndpoint);
+               }
+               
+               else {
+
+                const importFailedRecord = createImportRecord("Transactions", 
+                document.getElementById("dataInput").files[0].name, 
+                0, 
+                pid, 
+                "FAILED");
+                addImportFileToServer(importFailedRecord                    
+                );
+
+                this.props.addImportedFile(importFailedRecord);
+               }
+               
            }
-
         }
-
         this.setState({
             data: []
         });
-
         document.getElementById("dataInput").value = "";
     }
 
@@ -92,6 +99,7 @@ class ImportTransactionPage extends React.Component {
         this.setState({
             data: []
         })
+        document.getElementById("dataInput").value == "";
     }
     
     removeSelectedRows = () => {
@@ -123,7 +131,8 @@ class ImportTransactionPage extends React.Component {
             "transactionDate",
             "category",
             "description",
-            "amount"
+            "amount",
+            "errorMessage"
         ]
         const { selectedRowKeys } = this.state;
         const hasSelected = this.state.selectedRowKeys.length > 0;
@@ -134,7 +143,6 @@ class ImportTransactionPage extends React.Component {
 
         return (
             <div>
-               
                 <p> <a onClick={this.backToTransactionComponent}>Transactions </a> > Import Transactions </p>
                 <h1>Import Transactions </h1>
                 <Button onClick={this.onImport}>
@@ -146,7 +154,7 @@ class ImportTransactionPage extends React.Component {
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
                 </span>
-                <Button onClick={this.clearAll} disabled={!hasSelected}>
+                <Button onClick={this.clearAll} disabled={this.state.data.length < 1}>
                      Clear All
                 </Button>
                 <CsvParse keys={keys} onDataUploaded={this.handleData}
@@ -170,7 +178,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchImportedFiles: (url) => dispatch(importedFilesFetchData(url))
+        fetchImportedFiles: (url) => dispatch(importedFilesFetchData(url)),
+        addImportedFile: (importedFile) => dispatch(addImportHistory(importedFile))
     };
 };
 

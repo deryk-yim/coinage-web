@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Table, Icon } from 'antd';
+import { Button, Table, Icon, Spin } from 'antd';
 import '../Transaction/Transaction.css';
 import { connect } from 'react-redux';
 import AddTransactionPage from '../AddTransaction/AddTransactionPage';
@@ -11,7 +11,6 @@ import { removeTransactions } from '../../actions/actionDeleteTransaction';
 const getTransactionsEndpoint = 'http://localhost:3000/transaction/5aa43585955a2561e0935cdb';
 const getCategoriesEndpoint = 'http://localhost:3000/category/5aa43585955a2561e0935cdb';
 const deleteTransactionsEndpoint = 'http://localhost:3000/transaction/delete/5aa43585955a2561e0935cdb';
-
 const deleteList = [];
 const deleteNoIdList = [];
 
@@ -118,7 +117,6 @@ class Transaction extends React.Component {
 
         const { selectedRowKeys } = this.state;
         const hasSelected = this.state.selectedRowKeys.length > 0;
-
         const hasRecords = this.props.transactions.length > 0;
         const rowSelection = {
             selectedRowKeys,

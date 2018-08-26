@@ -35,12 +35,16 @@ const transactionSchema = {
 
 export function doValidate(data) {
     const v = new Validator();
-    const transactionsList = [];
+    v.addSchema(transactionSchema, '/Transaction');
+    const validateFails = [];
     data.forEach(element => {
-
-        // all complex validation should be here.
-        
-        v.validate(element, transactionSchema);
-        transactionsList.push(element);
+        if(!v.validate(element, transactionSchema).valid) {
+            validateFails.push(element);
+        }
+        console.log('validation ' + v.validate(element, transactionSchema).valid);
     });
+    if(validateFails.length > 0) {
+        return false;
+    }
+    return true;
 };
