@@ -2,12 +2,10 @@ import React from 'react';
 import { Button, Table, Icon, Spin, Progress } from 'antd';
 import '../Transaction/Transaction.css';
 import CsvParse from '@vtex/react-csv-parse';
-import { error, createImportRecord, addTransactionToServer, addImportFileToServer } from '../ImportTransaction/ImportTransaction';
+import { error, createImportRecord, addTransactionToServer, addImportFileToServer, showImportErrors} from '../ImportTransaction/ImportTransaction';
 import { doValidate } from '../ImportTransaction/ImportTransactionValidator';
 import { connect } from 'react-redux';
 import { importedFilesFetchData, addImportHistory } from '../../actions/actionImportHistory';
-import { Modal } from 'antd';
-
 
 const addTransactionEndpoint = 'http://localhost:3000/transaction/create/2/5aa43585955a2561e0935cdb';
 
@@ -94,7 +92,7 @@ class ImportTransactionPage extends React.Component {
         this.setState({
             data: []
         });
-       
+
         document.getElementById("dataInput").value = "";
     }
 
@@ -149,8 +147,17 @@ class ImportTransactionPage extends React.Component {
             { title: 'Import Date', dataIndex: 'createdDate', key: 'createdDate' },
             { title: 'File Name', dataIndex: 'importFileName', key: 'importFileName' },
             { title: 'Records Added', dataIndex: 'recordsAdded', key: 'recordsAdded' },
-            { title: 'Errors and Alerts', dataIndex: 'errorMessage', key: 'errorMessage' 
+            {title: 'Errors and Alerts', dataIndex: 'errorMessage', key: 'errorMessage',
+                render: (text, record) => {
+                    if (this.props.importedFiles.length > 0) {
+                        if (record.errorMessage === "FAILED") {
+                            return (<Button onClick= {() => showImportErrors(text)}> {record.errorMessage} </Button>);
+                        }
+                    }
+                }
+
             }
+
         ]
 
         const { selectedRowKeys } = this.state;
@@ -188,9 +195,10 @@ class ImportTransactionPage extends React.Component {
                 {this.state.importProgressFlag === true ? (
                     <Progress percent={this.state.percent} />
                 ) : (
-                    <p> </p>
+                        <p> </p>
                     )}
-                {this.state.data.length > 0 ? (<Table rowSelection={rowSelection} dataSource={this.state.data} columns={columns} />) : (<Table dataSource={this.props.importedFiles} columns={importColumns} />)}
+                {this.state.data.length > 0 ?
+                    (<Table rowSelection={rowSelection} dataSource={this.state.data} columns={columns} />) : (<Table dataSource={this.props.importedFiles} columns={importColumns} />)}
             </div>
         )
     }
