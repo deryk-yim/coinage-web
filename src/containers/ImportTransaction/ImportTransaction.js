@@ -16,8 +16,7 @@ export function createImportRecord(importType, fileName, recordsAdded, pid, erro
     }
 }
 
-export function addImportFileToServer(importRecords) {
-    const endpoint = 'http://localhost:3000/import/create/1/5aa43585955a2561e0935cdb';
+export function addImportFileToServer(importRecords, endpoint) {
     fetch(endpoint, {
         method: 'POST',
         body: JSON.stringify(importRecords),
@@ -61,5 +60,12 @@ export function error() {
     Modal.error({
         title: 'Please choose a CSV file',
         content: 'Accepted formats are .csv',
+    });
+}
+
+export function showImportErrors(errorReasons) {
+    Modal.error({
+        title: 'Import Failed!',
+        content: errorReasons
     });
 }

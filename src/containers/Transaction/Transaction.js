@@ -61,7 +61,6 @@ class Transaction extends React.Component {
         if (deleteList.length > 0) {
             deleteTransactionFromServer(deleteTransactionsEndpoint, this.state.selectedRows);
         }
-
         this.setState({
             selectedRows: [],
             selectedRowKeys: []
@@ -138,6 +137,7 @@ class Transaction extends React.Component {
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
                 </span>
+                <Spin spinning={!hasRecords} />
                 <Table rowSelection={rowSelection} dataSource={this.props.transactions} columns={columns} />
             </div>
         )

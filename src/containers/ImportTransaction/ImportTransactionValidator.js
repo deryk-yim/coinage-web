@@ -42,6 +42,7 @@ export function doValidate(data) {
             validateFails.push(element);
         }
         console.log('validation ' + v.validate(element, transactionSchema).valid);
+        console.log('Reason for fail: ' + v.validate(element, transactionSchema));
     });
     if(validateFails.length > 0) {
         return false;
