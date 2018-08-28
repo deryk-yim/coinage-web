@@ -39,13 +39,9 @@ export function doValidate(data) {
     const validateFails = [];
     data.forEach(element => {
         if(!v.validate(element, transactionSchema).valid) {
-            validateFails.push(element);
+            validateFails.push(v.validate(element, transactionSchema));
         }
-        console.log('validation ' + v.validate(element, transactionSchema).valid);
-        console.log('Reason for fail: ' + v.validate(element, transactionSchema));
     });
-    if(validateFails.length > 0) {
-        return false;
-    }
-    return true;
+    return validateFails;
 };
+

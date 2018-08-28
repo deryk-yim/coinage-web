@@ -2,7 +2,7 @@ import { Modal } from 'antd';
 const moment = require('moment');
 
 
-export function createImportRecord(importType, fileName, recordsAdded, pid, errorMessage) {
+export function createImportRecord(importType, fileName, recordsAdded, pid, errorMessage, errorContent) {
     if (document.getElementById("dataInput").value != "") {
         const jsonData = {
             "importType": importType,
@@ -10,7 +10,8 @@ export function createImportRecord(importType, fileName, recordsAdded, pid, erro
             "createdDate": moment().format(),
             "recordsAdded": recordsAdded,
             "_pid": pid,
-            "errorMessage": errorMessage
+            "errorMessage": errorMessage,
+            "errorContent": errorContent
         };
         return jsonData;
     }

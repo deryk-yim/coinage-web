@@ -63,7 +63,7 @@ class ImportTransactionPage extends React.Component {
             })
 
             if (this.state.data.length > 0) {
-                if (doValidate(this.state.data) === true) {
+                if (doValidate(this.state.data).length < 1) {
                     const importSuccessRecord = createImportRecord(
                         "Transactions",
                         document.getElementById("dataInput").files[0].name,
@@ -78,11 +78,14 @@ class ImportTransactionPage extends React.Component {
                 }
 
                 else {
-                    const importFailedRecord = createImportRecord("Transactions",
+                    const importFailedRecord = createImportRecord(
+                        "Transactions",
                         document.getElementById("dataInput").files[0].name,
                         0,
                         pid,
-                        "FAILED");
+                        "FAILED",
+                        doValidate(this.state.data).join()
+                    );
                     addImportFileToServer(importFailedRecord, addImportedFile
                     );
                     this.props.addImportedFile(importFailedRecord);
@@ -151,7 +154,7 @@ class ImportTransactionPage extends React.Component {
                 render: (text, record) => {
                     if (this.props.importedFiles.length > 0) {
                         if (record.errorMessage === "FAILED") {
-                            return (<Button onClick= {() => showImportErrors(text)}> {record.errorMessage} </Button>);
+                            return (<Button onClick= {() => showImportErrors(record.errorContent)}> {record.errorMessage} </Button>);
                         }
                     }
                 }
