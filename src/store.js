@@ -5,10 +5,7 @@ import {initialState} from './initialState';
 //import { browserHistory} from 'react-router';
 import thunk from 'redux-thunk';
 
-
 import rootReducer from './reducers/index';
-
-
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

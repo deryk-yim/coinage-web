@@ -34,7 +34,8 @@ class ImportTransactionPage extends React.Component {
             selectedRowKeys: [],
             data: [],
             percent: 0,
-            importProgressFlag: false
+            importProgressFlag: false,
+            filePresent: false
         };
     }
 
@@ -43,25 +44,21 @@ class ImportTransactionPage extends React.Component {
     }
 
     componentWillMount() {
-
         this.props.fetchImportedFiles(getImportedFilesHistory);
     }
 
     handleData = (data) => {
         this.setState({
-            data: data
+            data: data,
+            filePresent: true
         });
     }
 
     onImport = () => {
-        if (document.getElementById("dataInput").value === "") {
-            error();
-        }
-        else if (document.getElementById("dataInput").value != "") {
+       if (document.getElementById("dataInput").value != "") {
             this.setState({
                 importProgressFlag: true
             })
-
             if (this.state.data.length > 0) {
                 if (doValidate(this.state.data).length < 1) {
                     const importSuccessRecord = createImportRecord(
@@ -93,7 +90,8 @@ class ImportTransactionPage extends React.Component {
             }
         }
         this.setState({
-            data: []
+            data: [],
+            filePresent: false
         });
 
         document.getElementById("dataInput").value = "";
@@ -101,7 +99,8 @@ class ImportTransactionPage extends React.Component {
 
     clearAll = () => {
         this.setState({
-            data: []
+            data: [],
+            filePresent: false
         })
         document.getElementById("dataInput").value == "";
     }
@@ -175,7 +174,7 @@ class ImportTransactionPage extends React.Component {
             <div>
                 <p> <a onClick={this.backToTransactionComponent}>Transactions </a> > Import Transactions </p>
                 <h1>Import Transactions </h1>
-                <Button onClick={this.onImport}>
+                <Button onClick={this.onImport} disabled={!this.state.filePresent}>
                     <Icon type="upload" /> Import
                 </Button>
                 <Button onClick={this.removeSelectedRows} disabled={!hasSelected}>

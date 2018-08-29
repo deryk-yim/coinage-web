@@ -70,6 +70,9 @@ class Transaction extends React.Component {
     onImportClick = () => {
         this.props.history.push('/transaction/import');
     }
+    onExportClick = () => {
+        this.props.history.push('/transaction/export');
+    }
 
     componentDidMount() {
         this.props.fetchTransactionsData(getTransactionsEndpoint);
