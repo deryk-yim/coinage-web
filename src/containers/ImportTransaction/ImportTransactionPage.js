@@ -16,7 +16,6 @@ const columns = [
     { title: 'Amount', dataIndex: 'amount', key: 'amount' }
 ];
 
-
 const Json2csvParser = require('json2csv').Parser;
 const fields = ['Transaction Date', 'Category', 'Description', 'Amount'];
 const moment = require('moment');

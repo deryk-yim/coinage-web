@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Table, Icon, Spin, Progress } from 'antd';
+import { Button, Table, Icon, Spin, Progress, Dropdown, Menu, message, DatePicker  } from 'antd';
 import '../Transaction/Transaction.css';
 import { connect } from 'react-redux';
 import { importedFilesFetchData, addImportHistory } from '../../actions/actionImportHistory';
@@ -11,6 +11,7 @@ const columns = [
     { title: 'Amount', dataIndex: 'amount', key: 'amount' }
 ];
 
+const {RangePicker} = DatePicker;
 const getImportedFilesHistory = 'http://localhost:3000/import/5aa43585955a2561e0935cdb';
 
 const pid = '5aa43585955a2561e0935cdb';
@@ -33,7 +34,6 @@ class ExportTransactionPage extends React.Component {
     }
 
     componentWillMount() {
-
         this.props.fetchImportedFiles(getImportedFilesHistory);
     }
 
@@ -44,10 +44,9 @@ class ExportTransactionPage extends React.Component {
     }
 
     onExport = () => {
-         this.setState({
+        this.setState({
             data: []
         });
-
     }
 
     clearAll = () => {
@@ -71,6 +70,11 @@ class ExportTransactionPage extends React.Component {
         })
     }
 
+    handleMenuClick = (e) => {
+        message.info('Click on menu item.');
+        console.log('click', e);
+      }
+
     onSelectChange = (selectedRowKeys, selectedRows, key) => {
         console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({ selectedRowKeys });
@@ -79,6 +83,10 @@ class ExportTransactionPage extends React.Component {
             selectedRows: selectedRows
         })
     }
+
+    onDateChange(date, dateString) {
+        console.log(date, dateString);
+      }
 
     render() {
         const keys = [
@@ -94,6 +102,14 @@ class ExportTransactionPage extends React.Component {
             { title: 'Records Exported', dataIndex: 'recordExported', key: 'recordExported' }
         ]
 
+        const menu = (
+            <Menu onClick={this.handleMenuClick}>
+              <Menu.Item key="1"><Icon type="filter" />All Records</Menu.Item>
+              <Menu.Item key="2"><Icon type="filter" />Past 30 Days</Menu.Item>
+              <Menu.Item key="3"><Icon type="filter" />Past 60 Days</Menu.Item>
+            </Menu>
+          );
+
         const { selectedRowKeys } = this.state;
         const hasSelected = this.state.selectedRowKeys.length > 0;
         const hasRecords = this.props.importedFiles.length > 0;
@@ -104,7 +120,7 @@ class ExportTransactionPage extends React.Component {
 
         return (
             <div>
-                <p> <a onClick={this.backToTransactionComponent}>Transactions </a> > Export Transactions </p>
+                <p> <a onClick={this.backToTransactionComponent}>Transactions</a> > Export Transactions </p>
                 <h1>Export Transactions </h1>
                 <Button onClick={this.onExport}>
                     <Icon type="download" /> Export
@@ -118,6 +134,12 @@ class ExportTransactionPage extends React.Component {
                 <Button onClick={this.clearAll} disabled={this.state.data.length < 1}>
                     Clear All
                 </Button>
+                <Dropdown overlay={menu}>
+                    <Button style={{ marginLeft: 8 }}>
+                        Button <Icon type="down" />
+                    </Button>
+                </Dropdown>
+                <RangePicker onChange={this.onDateChange} />
                 <Spin spinning={!hasRecords} />
                 {this.state.importProgressFlag === true ? (
                     <Progress percent={this.state.percent} />

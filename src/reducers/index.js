@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import { transactions, transactionsHasErrored, transactionsIsLoading, postAddTransactionCategory} from './transactions';
 import { categoriesHasErrored, categoriesIsLoading, categories} from './categories';
-
 import { importedFilesHasErrored, importedFilesIsLoading, importedFiles} from './importTransactions';
+import { exportedFilesHasErrored, exportedFilesIsLoading, exportedFiles} from './exportTransactions';
 
 export default combineReducers({
     transactions,
@@ -14,5 +14,8 @@ export default combineReducers({
     postAddTransactionCategory,
     importedFilesHasErrored,
     importedFilesIsLoading,
-    importedFiles   
+    importedFiles,
+    exportedFilesHasErrored,
+    exportedFilesIsLoading,
+    exportedFiles
 });

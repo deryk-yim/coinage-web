@@ -1,17 +1,12 @@
-import { Modal } from 'antd';
 const moment = require('moment');
 
-
 export function createExportRecord(exportType, fileName, recordsAdded, pid, errorMessage, errorContent) {
-    if (document.getElementById("dataInput").value != "") {
         const jsonData = {
             "exportType": exportType,
-            "importFileName": fileName,
+            "exportFileName": fileName,
             "createdDate": moment().format(),
-            "recordsAdded": recordsAdded,
+            "recordsExported": recordsExported,
             "_pid": pid,
-            "errorMessage": errorMessage,
-            "errorContent": errorContent
         };
         return jsonData;
     }
