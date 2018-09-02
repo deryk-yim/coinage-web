@@ -1,6 +1,6 @@
 import React from 'react';
-import Dashboard from '../Dashboard/Dashboard';
-import {CONTAINER, HEADER_BUTTON} from '../Dashboard/CustomHeaderStyle';
+import Dashboard from '../../containers/Dashboard/Dashboard';
+import {CONTAINER, HEADER_BUTTON} from './CustomHeaderStyle';
 import { Form, Icon, Input, Button, Row, Col} from 'antd';
 
 class CustomHeader extends React.Component {

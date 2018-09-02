@@ -11,8 +11,12 @@ class Body extends React.Component {
     render(){
         return(
             <div>
-                <Row>
+                <Row style={{padding: '0px 0px 30px 0px'}}>
+                   <Col span={1}>
+                   </Col>
+                   <Col span={6}>
                    <h2 style={BODY_TITLE}>Dashboard</h2>
+                   </Col>
                 </Row>
                 <Row>
                     <Col span={1}> 
@@ -35,5 +39,5 @@ class Body extends React.Component {
 
 }
 
-export default Body
+export default Body;
 
