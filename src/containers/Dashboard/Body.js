@@ -11,12 +11,20 @@ class Body extends React.Component {
     render(){
         return(
             <div>
+<<<<<<< HEAD
                 <Row>
                    <Col span={1}>
 
                    </Col>
                    <Col span={1}>
                    <h1 style={BODY_TITLE}>Dashboard</h1>
+=======
+                <Row style={{padding: '0px 0px 30px 0px'}}>
+                   <Col span={1}>
+                   </Col>
+                   <Col span={6}>
+                   <h2 style={BODY_TITLE}>Dashboard</h2>
+>>>>>>> refs/remotes/origin/dashboard
                    </Col>
                 </Row>
                 <Row>
@@ -40,5 +48,5 @@ class Body extends React.Component {
 
 }
 
-export default Body
+export default Body;
 
