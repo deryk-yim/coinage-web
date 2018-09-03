@@ -44,7 +44,6 @@ class Transaction extends React.Component {
             }
         }
 
-        console.log("Empty array?: " + deleteList);
         this.setState({
             selectedRowKeys: selectedRowKeys,
             selectedRows: selectedRows,

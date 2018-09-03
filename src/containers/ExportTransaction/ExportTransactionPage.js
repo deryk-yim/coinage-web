@@ -1,8 +1,11 @@
 import React from 'react';
-import { Button, Table, Icon, Spin, Progress, Dropdown, Menu, message, DatePicker  } from 'antd';
+import { Button, Table, Icon, Spin, Progress, Dropdown, Menu, message, DatePicker } from 'antd';
 import '../Transaction/Transaction.css';
 import { connect } from 'react-redux';
-import { importedFilesFetchData, addImportHistory } from '../../actions/actionImportHistory';
+import { exportedFilesFetchData, addExportHistory } from '../../actions/actionExportHistory';
+import { createExportRecord, addExportFileToServer, exportCSV } from '../ExportTransaction/ExportTransaction';
+import { transactionsFetchData } from '../../actions/actionTransaction';
+import { CSVLink } from 'react-csv';
 
 const columns = [
     { title: 'Transaction Date', dataIndex: 'transactionDate', key: 'transactionDate' },
@@ -11,8 +14,9 @@ const columns = [
     { title: 'Amount', dataIndex: 'amount', key: 'amount' }
 ];
 
-const {RangePicker} = DatePicker;
-const getImportedFilesHistory = 'http://localhost:3000/import/5aa43585955a2561e0935cdb';
+const { RangePicker } = DatePicker;
+const getExportedFilesHistory = 'http://localhost:3000/export/5aa43585955a2561e0935cdb';
+const addExportedFile = 'http://localhost:3000/export/create/1/5aa43585955a2561e0935cdb';
 
 const pid = '5aa43585955a2561e0935cdb';
 
@@ -34,7 +38,11 @@ class ExportTransactionPage extends React.Component {
     }
 
     componentWillMount() {
-        this.props.fetchImportedFiles(getImportedFilesHistory);
+        this.props.fetchExportedFiles(getExportedFilesHistory);
+        const exportDataPoints = exportCSV(this.props.transactions);
+        this.setState({
+            exportData: exportDataPoints
+        });
     }
 
     handleData = (data) => {
@@ -44,9 +52,13 @@ class ExportTransactionPage extends React.Component {
     }
 
     onExport = () => {
-        this.setState({
-            data: []
-        });
+        const exportSuccessRecord = createExportRecord(
+            "Transactions",
+            "Export Name",
+            this.props.transactions.length,
+            pid);
+        addExportFileToServer(exportSuccessRecord, addExportedFile);
+        this.props.addExportedFile(exportSuccessRecord);        
     }
 
     clearAll = () => {
@@ -73,12 +85,10 @@ class ExportTransactionPage extends React.Component {
     handleMenuClick = (e) => {
         message.info('Click on menu item.');
         console.log('click', e);
-      }
+    }
 
     onSelectChange = (selectedRowKeys, selectedRows, key) => {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({ selectedRowKeys });
-        console.log(selectedRows);
         this.setState({
             selectedRows: selectedRows
         })
@@ -86,7 +96,7 @@ class ExportTransactionPage extends React.Component {
 
     onDateChange(date, dateString) {
         console.log(date, dateString);
-      }
+    }
 
     render() {
         const keys = [
@@ -104,26 +114,33 @@ class ExportTransactionPage extends React.Component {
 
         const menu = (
             <Menu onClick={this.handleMenuClick}>
-              <Menu.Item key="1"><Icon type="filter" />All Records</Menu.Item>
-              <Menu.Item key="2"><Icon type="filter" />Past 30 Days</Menu.Item>
-              <Menu.Item key="3"><Icon type="filter" />Past 60 Days</Menu.Item>
+                <Menu.Item key="1"><Icon type="filter" />All Records</Menu.Item>
+                <Menu.Item key="2"><Icon type="filter" />Past 30 Days</Menu.Item>
+                <Menu.Item key="3"><Icon type="filter" />Past 60 Days</Menu.Item>
             </Menu>
-          );
+        );
 
         const { selectedRowKeys } = this.state;
         const hasSelected = this.state.selectedRowKeys.length > 0;
-        const hasRecords = this.props.importedFiles.length > 0;
+        const hasRecords = this.props.exportedFiles.length > 0;
         const rowSelection = {
             selectedRowKeys,
             onChange: this.onSelectChange
         };
+
+        // onDelete deelte the selected records and then clean up the arrays again
 
         return (
             <div>
                 <p> <a onClick={this.backToTransactionComponent}>Transactions</a> > Export Transactions </p>
                 <h1>Export Transactions </h1>
                 <Button onClick={this.onExport}>
-                    <Icon type="download" /> Export
+                    <Icon type="download" />
+                    <CSVLink data={this.state.exportData}
+                        filename={"my-file.csv"}
+                        target="_blank">
+                        Export
+                    </CSVLink>
                 </Button>
                 <Button onClick={this.removeSelectedRows} disabled={!hasSelected}>
                     <Icon type="delete" /> Delete
@@ -147,23 +164,27 @@ class ExportTransactionPage extends React.Component {
                         <p> </p>
                     )}
                 {this.state.data.length > 0 ?
-                    (<Table rowSelection={rowSelection} dataSource={this.state.data} columns={columns} />) : (<Table dataSource={this.props.exporedFiles} columns={exportColumns} />)}
+                    (<Table rowSelection={rowSelection} dataSource={this.state.data}
+                        columns={columns} />) : (<Table dataSource={this.props.exportedFiles} columns={exportColumns}
+                        />)}
             </div>
         )
     }
 }
-
+// when the data has been loaded into state then we grab this csv download
 
 const mapStateToProps = (state) => {
     return {
-        importedFiles: state.importedFiles
+        transactions: state.transactions,
+        exportedFiles: state.exportedFiles
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchImportedFiles: (url) => dispatch(importedFilesFetchData(url)),
-        addImportedFile: (importedFile) => dispatch(addImportHistory(importedFile))
+        fetchTransactionsData: (url) => dispatch(transactionsFetchData(url)),
+        fetchExportedFiles: (url) => dispatch(exportedFilesFetchData(url)),
+        addExportedFile: (exportedFile) => dispatch(addExportHistory(exportedFile))
     };
 };
 
