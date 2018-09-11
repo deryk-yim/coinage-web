@@ -1,4 +1,15 @@
+
 const moment = require('moment');
+
+export function retrieveTransactions(transactions, page) {
+    return {
+        type: 'RETRIEVE_TRANSACTIONS',
+        payload: {
+            transactions,
+            page
+        }
+    };
+}
 
 export function transactionsHasErrored(bool) {
     return {
@@ -14,20 +25,13 @@ export function transactionsIsLoading(bool) {
     };
 }
 
-export function transactionsFetchDataSuccess(transactions) {
-    return {
-        type: 'TRANSACTIONS_FETCH_DATA_SUCCESS',
-        transactions
-    };
-}
-
-export function transactionsFetchData(url) {
+export function transactionsFetchData(url, page) {
     return (dispatch) => {
         dispatch(transactionsIsLoading(true));
         fetch(url, {
             method: 'post'
         })
-            .then( res => {
+            .then(res => {
                 if (res.status >= 200 && res.status < 300) {
                     dispatch(transactionsIsLoading(false));
                     return res.json();
@@ -37,18 +41,15 @@ export function transactionsFetchData(url) {
                 }
             })
             .then(jsonData => {
-                console.log(jsonData);
-                console.log(jsonData[0].category['name']);
-
+                               
                 for (let i = 0; i < jsonData.length; i++) {
-                    jsonData[i].amount = parseFloat(jsonData[i].amount).toFixed(2);
-                    jsonData[i].transactionDate = moment(new Date(jsonData[i].transactionDate)).format('MMM DD, YYYY');
-                    console.log(jsonData[i].transactionDate);
-                    jsonData[i].category = jsonData[i].category['name'];
+                    jsonData[i]['transactions'].amount = parseFloat(jsonData[i].amount).toFixed(2);
+                    jsonData[i]['transactions'].transactionDate = moment(new Date(jsonData[i]['transactions'].transactionDate)).format('MMM DD, YYYY');
+                    jsonData[i]['transactions'].category = jsonData[i]['transactions'].category['name'];
                 }
                 return jsonData;
             })
-            .then((transactions) => dispatch(transactionsFetchDataSuccess(transactions)))
+            .then((transactions) => dispatch(retrieveTransactions(transactions, page)))
             .catch(() => dispatch(transactionsHasErrored(true)));
     };
 }

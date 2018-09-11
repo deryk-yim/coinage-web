@@ -1,5 +1,6 @@
 import {initialState} from '../initialState';
 
+
 export function transactionsHasErrored(state = false, action) {
     switch (action.type) {
         case 'TRANSACTIONS_HAS_ERRORED':
@@ -20,20 +21,16 @@ export function transactionsIsLoading(state = false, action) {
 
 export function transactions(state = initialState, action) {
     switch (action.type) {
-        case 'TRANSACTIONS_FETCH_DATA_SUCCESS':
-        return action.transactions
+        case 'RETRIEVE_TRANSACTIONS':
+        return action.payload;
 
         case 'ADD_TRANSACTION_TO_STORE': 
         return [
             ...state, action.newItem
         ];
-                
         case 'DELETE_TRANSACTIONS_FROM_STORE':
         const transactionId_delete = action.transactionId;
         return state.filter(transaction => transaction._id !== transactionId_delete);
-
-
-
         default:
             return state;
     }
@@ -63,3 +60,24 @@ export function postAddTransactionCategory(state = {}, action) {
               }
     }
 }
+
+/*
+const todos = (todos = {}, action = {}) {
+    switch (action.type) {
+      case 'RECEIVE_ALL_TODOS':
+        let _todos = {}
+        for (let todo of action.payload.todos) {
+          _todos = {
+            ..._todos,
+            [todo.id]: todo
+          }
+        }
+        return {
+          ...todos,
+          ..._todos
+        }
+      default:
+        return paginationItemsReducer(todos, action)  // we compose an hypothetic paginationItemsReducer here
+    }
+
+*/

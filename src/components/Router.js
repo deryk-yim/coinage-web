@@ -4,6 +4,8 @@ import LoginForm from '../containers/LoginForm/LoginForm';
 import Dashboard from '../containers/Dashboard/Dashboard';
 import ImportTransactionPage from '../containers/ImportTransaction/ImportTransactionPage';
 import ExportTransactionPage from '../containers/ExportTransaction/ExportTransactionPage';
+import ExportTransactionHistory from '../containers/ExportTransaction/ExportTransactionHistory';
+
 import React from 'react';
 import { render } from 'react-dom';
 import {IndexRoute, browserHistory } from 'react-router';
@@ -18,6 +20,7 @@ const Router = () => (
         <Route exact path="/transaction" component={Transaction}/>
         <Route exact path='/transaction/import' component={ImportTransactionPage}/>
         <Route exact path='/transaction/export' component={ExportTransactionPage}/>
+        <Route exact path='/transaction/export/history' component={ExportTransactionHistory}/>
         <Route exact path="/dashboard" component={Dashboard}/>
    </Switch>
     </BrowserRouter>
