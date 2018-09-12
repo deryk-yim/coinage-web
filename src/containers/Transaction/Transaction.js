@@ -16,7 +16,6 @@ const deleteTransactionsEndpoint = 'http://localhost:3000/transaction/delete/5aa
 const deleteList = [];
 const deleteNoIdList = [];
 const moment = require('moment');
-const countTransactions = 0;
 
 
 class Transaction extends React.Component {
@@ -134,7 +133,7 @@ class Transaction extends React.Component {
         })
         .then(jsonData => {
             this.setState({
-                count: jsonData
+                count: jsonData.count
             })
         })
             .catch(error => console.error('Error:', error))
@@ -212,7 +211,7 @@ class Transaction extends React.Component {
                     {
                         pageSizeOptions: ['10'],
                         onChange: this.onChange,
-                        total: 2000
+                        total: this.state.count
                     }
                 } rowSelection={rowSelection} dataSource={this.state.data} columns={columns} />
             </div>
