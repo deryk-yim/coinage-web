@@ -1,22 +1,21 @@
 import React from 'react';
-
-import { Button, Table, Icon, Spin, Pagination } from 'antd';
+import { Button, Table, Icon, Spin, Form, Select, Input, InputNumber, Popconfirm } from 'antd';
 import '../Transaction/Transaction.css';
 import { connect } from 'react-redux';
-import AddTransactionPage from '../AddTransaction/AddTransactionPage';
 import { transactionsFetchData } from '../../actions/actionTransaction';
 import { categoriesFetchData } from '../../actions/actionCategory';
 import { deleteTransactionFromServer } from '../DeleteTransaction/DeleteTransaction';
 import { removeTransactions } from '../../actions/actionDeleteTransaction';
+import EditableTransactionTable from '../Transaction/EditableTransactionTable';
+
 
 const getTransactionsEndpoint = 'http://localhost:3000/transaction/5aa43585955a2561e0935cdb/';
-const getTransactionCount = 'http://localhost:3000/transaction/count/5aa43585955a2561e0935cdb';
+const getTransactionCount = 'http://localhost:3000/transaction/count/1/5aa43585955a2561e0935cdb';
 const getCategoriesEndpoint = 'http://localhost:3000/category/5aa43585955a2561e0935cdb';
 const deleteTransactionsEndpoint = 'http://localhost:3000/transaction/delete/5aa43585955a2561e0935cdb';
 const deleteList = [];
 const deleteNoIdList = [];
 const moment = require('moment');
-
 
 class Transaction extends React.Component {
 
@@ -57,8 +56,7 @@ class Transaction extends React.Component {
             .then(jsonData => {
                 this.setState({
                     data: jsonData
-                })
-
+                });
             });
     };
 
@@ -105,11 +103,12 @@ class Transaction extends React.Component {
     }
     onExportClick = () => {
         this.props.history.push('/transaction/export');
-        
+
     }
 
     componentDidMount() {
         this.props.fetchCategories(getCategoriesEndpoint);
+        // week endpoint grab everything from the week and update
         this.getTransactionsByPage(getTransactionsEndpoint, 1);
         this.countTransactions(getTransactionCount);
         console.log("Total Transactions: " + this.countTransactions(getTransactionCount));
@@ -117,32 +116,62 @@ class Transaction extends React.Component {
 
     onChange = (e) => {
         this.getTransactionsByPage(getTransactionsEndpoint, e);
+        //check based on filter
+
     }
 
     countTransactions(endpoint) {
         fetch(endpoint, {
             method: 'POST',
         })
-        .then(res => {
-            if (res.status >= 200 && res.status < 300) {
-                return res.json();
-            }
-            else {
-                throw new Error('Try Again Later');
-            }
-        })
-        .then(jsonData => {
-            this.setState({
-                count: jsonData.count
+            .then(res => {
+                if (res.status >= 200 && res.status < 300) {
+                    return res.json();
+                }
+                else {
+                    throw new Error('Try Again Later');
+                }
             })
-        })
+            .then(jsonData => {
+                console.log(jsonData);
+                this.setState({
+                    count: jsonData.data
+                })
+            })
             .catch(error => console.error('Error:', error))
             .then(response => console.log('Success: ', response))
     };
 
+    handleChange(value) {
+        if (value === 'Past Week') {
 
+        }
+        else if (value === 'Past 30 Days') {
 
-    
+        }
+        else if (value === 'Past 60 Days') {
+
+        }
+        else if (value === 'Custom Dates') {
+
+        }
+    }
+
+    handleAdd = () => {
+        const { 
+            count, 
+            dataSource } = this.state;
+        const newData = {
+          key: count,
+          name: `Edward King ${count}`,
+          age: 32,
+          address: `London, Park Lane no. ${count}`,
+        };
+        this.setState({
+          dataSource: [...dataSource, newData],
+          count: count + 1,
+        });
+      }
 
     render() {
         const keys = [
@@ -150,7 +179,7 @@ class Transaction extends React.Component {
             "category",
             "description",
             "amount"
-        ]
+        ];
 
         let {
             sortedInfo
@@ -158,41 +187,38 @@ class Transaction extends React.Component {
 
         sortedInfo = sortedInfo || {};
 
-        const columns = [
-            {
-                title: 'Transaction Date', dataIndex: 'transactionDate', key: 'transactionDate'
-            },
-            {
-                title: 'Category', dataIndex: 'category',
-                key: 'category',
-                sorter: (a, b) => {
-                    if (a.category < b.category) {
-                        return -1
-                    }
-                    if (a.category > b.category) {
-                        return 1;
-                    }
-                    return 0;
-                }
-            },
-            { title: 'Description', dataIndex: 'description', key: 'description' },
-            {
-                title: 'Amount', dataIndex: 'amount', key: 'amount',
-                sorter: (a, b) => a.amount - b.amount,
-            },
-        ];
-
         const { selectedRowKeys } = this.state;
         const hasSelected = this.state.selectedRowKeys.length > 0;
         const hasRecords = true;
-        const rowSelection = {
-            selectedRowKeys,
-            onChange: this.onSelectChange
-        };
+
+
+        const Option = Select.Option;
+
+        const optionItems = this.props.categories.map((item) =>
+            <Option value={item['_id']}>{item['name']}</Option>
+        );
 
         return (
             <div>
-                <AddTransactionPage />
+                <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
+                    Add a row
+                </Button>
+                <Select defaultValue="Past Week" style={{ width: 140 }} onChange={this.handleChange}>
+                    <Option value="Past Week">Past Week</Option>
+                    <Option value="Past 30 Days">Past 30 Days</Option>
+                    <Option value="Past 60 Days">Past 60 Days</Option>
+                    <Option value="Custom Dates">Custom Dates</Option>
+                    <Option value="All Dates">Custom Dates</Option>
+                </Select>
+
+                <Select
+                    mode="tags"
+                    size="default"
+                    placeholder="All Categories"
+                    style={{ width: '50%' }}
+                >
+                    {optionItems}
+                </Select>
 
                 <Button onClick={this.onImportClick}>
                     <Icon type="upload" /> Import
@@ -207,13 +233,7 @@ class Transaction extends React.Component {
                     {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
                 </span>
                 <Spin spinning={!hasRecords} />
-                <Table pagination={
-                    {
-                        pageSizeOptions: ['10'],
-                        onChange: this.onChange,
-                        total: this.state.count
-                    }
-                } rowSelection={rowSelection} dataSource={this.state.data} columns={columns} />
+                <EditableTransactionTable data={this.state.data}/>
             </div>
         )
     }
