@@ -7,7 +7,7 @@ import { categoriesFetchData } from '../../actions/actionCategory';
 import { deleteTransactionFromServer } from '../DeleteTransaction/DeleteTransaction';
 import { removeTransactions } from '../../actions/actionDeleteTransaction';
 import EditableTransactionTable from '../Transaction/EditableTransactionTable';
-
+import { countFetchData } from '../../actions/actionCounts';
 
 const getTransactionsEndpoint = 'http://localhost:3000/transaction/5aa43585955a2561e0935cdb/';
 const getTransactionCount = 'http://localhost:3000/transaction/count/1/5aa43585955a2561e0935cdb';
@@ -16,6 +16,9 @@ const deleteTransactionsEndpoint = 'http://localhost:3000/transaction/delete/5aa
 const deleteList = [];
 const deleteNoIdList = [];
 const moment = require('moment');
+
+
+
 
 class Transaction extends React.Component {
 
@@ -31,34 +34,6 @@ class Transaction extends React.Component {
             count: 0
         };
     }
-
-    getTransactionsByPage(url, page) {
-        fetch(url + page, {
-            method: 'post'
-        })
-            .then(res => {
-                console.log(url + page);
-                if (res.status >= 200 && res.status < 300) {
-                    return res.json();
-                }
-                else {
-                    throw new Error('Try Again Later');
-                }
-            })
-            .then(jsonData => {
-                for (let i = 0; i < jsonData.length; i++) {
-                    jsonData[i].amount = parseFloat(jsonData[i].amount).toFixed(2);
-                    jsonData[i].transactionDate = moment(new Date(jsonData[i].transactionDate)).format('MMM DD, YYYY');
-                    jsonData[i].category = jsonData[i].category['name'];
-                }
-                return jsonData
-            })
-            .then(jsonData => {
-                this.setState({
-                    data: jsonData
-                });
-            });
-    };
 
     onSelectChange = (selectedRowKeys, selectedRows) => {
         deleteList.length = 0;
@@ -108,39 +83,13 @@ class Transaction extends React.Component {
 
     componentDidMount() {
         this.props.fetchCategories(getCategoriesEndpoint);
-        // week endpoint grab everything from the week and update
-        this.getTransactionsByPage(getTransactionsEndpoint, 1);
-        this.countTransactions(getTransactionCount);
-        console.log("Total Transactions: " + this.countTransactions(getTransactionCount));
+        this.props.fetchTransactionsData(getTransactionsEndpoint, 1);
+        this.props.fetchCount(getTransactionCount);
     }
 
     onChange = (e) => {
-        this.getTransactionsByPage(getTransactionsEndpoint, e);
-        //check based on filter
-
+        this.props.fetchTransactionsData(getTransactionsEndpoint, e);
     }
-
-    countTransactions(endpoint) {
-        fetch(endpoint, {
-            method: 'POST',
-        })
-            .then(res => {
-                if (res.status >= 200 && res.status < 300) {
-                    return res.json();
-                }
-                else {
-                    throw new Error('Try Again Later');
-                }
-            })
-            .then(jsonData => {
-                console.log(jsonData);
-                this.setState({
-                    count: jsonData.data
-                })
-            })
-            .catch(error => console.error('Error:', error))
-            .then(response => console.log('Success: ', response))
-    };
 
     handleChange(value) {
         if (value === 'Past Week') {
@@ -157,21 +106,6 @@ class Transaction extends React.Component {
         }
     }
 
-    handleAdd = () => {
-        const { 
-            count, 
-            dataSource } = this.state;
-        const newData = {
-          key: count,
-          name: `Edward King ${count}`,
-          age: 32,
-          address: `London, Park Lane no. ${count}`,
-        };
-        this.setState({
-          dataSource: [...dataSource, newData],
-          count: count + 1,
-        });
-      }
 
     render() {
         const keys = [
@@ -232,8 +166,7 @@ class Transaction extends React.Component {
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
                 </span>
-                <Spin spinning={!hasRecords} />
-                <EditableTransactionTable data={this.state.data}/>
+                <EditableTransactionTable />
             </div>
         )
     }
@@ -243,6 +176,7 @@ const mapStateToProps = (state) => {
     return {
         transactions: state.transactions,
         categories: state.categories,
+        count: 10
     };
 };
 
@@ -251,6 +185,7 @@ const mapDispatchToProps = (dispatch) => {
         fetchTransactionsData: (url, page) => dispatch(transactionsFetchData(url, page)),
         fetchCategories: (url) => dispatch(categoriesFetchData(url)),
         deleteIds: (ids) => dispatch(removeTransactions(ids)),
+        fetchCount: (url) => dispatch(countFetchData(url))
     };
 };
 
