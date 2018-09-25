@@ -7,7 +7,7 @@ import { categoriesFetchData } from '../../actions/actionCategory';
 import { deleteTransactionFromServer } from '../DeleteTransaction/DeleteTransaction';
 import { removeTransactions } from '../../actions/actionDeleteTransaction';
 import EditableTransactionTable from '../Transaction/EditableTransactionTable';
-import { countFetchData } from '../../actions/actionCounts';
+//import { countFetchData } from '../../actions/actionCounts';
 
 const getTransactionsEndpoint = 'http://localhost:3000/transaction/5aa43585955a2561e0935cdb/';
 const getTransactionCount = 'http://localhost:3000/transaction/count/1/5aa43585955a2561e0935cdb';
@@ -84,7 +84,7 @@ class Transaction extends React.Component {
     componentDidMount() {
         this.props.fetchCategories(getCategoriesEndpoint);
         this.props.fetchTransactionsData(getTransactionsEndpoint, 1);
-        this.props.fetchCount(getTransactionCount);
+        //this.props.fetchCount(getTransactionCount);
     }
 
     onChange = (e) => {
@@ -106,6 +106,7 @@ class Transaction extends React.Component {
         }
     }
 
+    
 
     render() {
         const keys = [
@@ -149,8 +150,7 @@ class Transaction extends React.Component {
                     mode="tags"
                     size="default"
                     placeholder="All Categories"
-                    style={{ width: '50%' }}
-                >
+                    style={{ width: '50%' }}>
                     {optionItems}
                 </Select>
 
@@ -166,7 +166,7 @@ class Transaction extends React.Component {
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
                 </span>
-                <EditableTransactionTable />
+                <EditableTransactionTable dataSource={this.props.transactions} />
             </div>
         )
     }
@@ -185,7 +185,7 @@ const mapDispatchToProps = (dispatch) => {
         fetchTransactionsData: (url, page) => dispatch(transactionsFetchData(url, page)),
         fetchCategories: (url) => dispatch(categoriesFetchData(url)),
         deleteIds: (ids) => dispatch(removeTransactions(ids)),
-        fetchCount: (url) => dispatch(countFetchData(url))
+       // fetchCount: (url) => dispatch(countFetchData(url))
     };
 };
 

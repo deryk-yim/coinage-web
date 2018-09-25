@@ -12,16 +12,13 @@ const EditableRow = ({ form, index, ...props }) => (
     <tr {...props} />
   </EditableContext.Provider>
 );
+
 const EditableFormRow = Form.create()(EditableRow);
-
-const startTime = moment();
-
 
 const data = [];
 for (let i = 0; i < 100; i++) {
   data.push({
-    transactionDate: moment(), // cannot be string 
-    
+    transactionDate: '2018-09-08', // cannot be string 
     category: 'clam',
     description: `London Park no. ${i}`,
     amount: 32
@@ -50,20 +47,17 @@ const Option = Select.Option;
 
 
 const dateFormat = 'YYYY/MM/DD';
+
 class EditableTransactionCell extends React.Component {
 
-  
-
-  getInput = (record) => {
+  getInput = () => {
     if (this.props.inputType === 'number') {
-     return <InputNumber />;
+      return <InputNumber />;
     }
-    
     if (this.props.inputType === 'text') {
       return <Input />;
     }
-
-    if(this.props.inputType === 'dropdown') {
+    if (this.props.inputType === 'dropdown') {
       return (<Select
         showSearch
         style={{ width: 200 }}
@@ -71,70 +65,16 @@ class EditableTransactionCell extends React.Component {
         optionFilterProp="children"
         onChange={handleChange}
         onFocus={handleFocus}
-        onBlur={handleBlur}
-        
-      >
+        onBlur={handleBlur}>
         <Option value="jack">Jack</Option>
         <Option value="lucy">Lucy</Option>
         <Option value="tom">Tom</Option>
       </Select>);
     }
-
-    if(this.props.inputType === 'date') {
-      // convert record transactionDate into moment 
-
-      
-      
-
-
-      return <DatePicker onChange={onChange} />
+    if (this.props.inputType === 'date') {
+      return <DatePicker onChange={onChange}/>
     }
-    
-   
   };
-/*
-@Form.create()
-class TeamForm extends Component {
-  render() {
-    const { form: { getFieldDecorator } } = this.props;
-    return (
-      <div style={{ margin: 24 }}>
-        <Form
-          hideRequiredMark
-        >
-          <Form.Item label="Date">
-            {getFieldDecorator('employment_start', {
-              initialValue: moment(),
-              rules: [{ type: 'object', required: true, message: 'Please select time' }],
-            })(
-              <DatePicker format="DD/MM/YYYY" />
-              )}
-          </Form.Item>
-        </Form>
-      </div>
-    );
-  }
-}
-
-ReactDOM.render(
-
-
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   render() {
     const {
@@ -150,9 +90,7 @@ ReactDOM.render(
     return (
       <EditableContext.Consumer>
         {(form) => {
-
           const { getFieldDecorator } = form;
-
           return (
             <td {...restProps}>
               {editing ? (
@@ -162,8 +100,10 @@ ReactDOM.render(
                       required: true,
                       message: `Please Input ${title}!`,
                     }],
-                    initialValue: record[dataIndex],
-                  })(this.getInput(record))}
+                    initialValue: dataIndex === 'transactionDate' ? moment(record[dataIndex]): record[dataIndex]
+                  }
+                )(this.getInput(record))
+                  }
                 </FormItem>
               ) : restProps.children}
             </td>
@@ -184,14 +124,16 @@ class EditableTransactionTable extends React.Component {
       editingKey: ''
     };
 
+
+
     this.columns = [{
-      title: 'Transaction Date', 
-      dataIndex: 'transactionDate', 
-      key: 'transactionDate', 
+      title: 'Transaction Date',
+      dataIndex: 'transactionDate',
+      key: 'transactionDate',
       editable: true
     },
 
-    
+
     {
       title: 'Category',
       dataIndex: 'category',
@@ -214,7 +156,7 @@ class EditableTransactionTable extends React.Component {
       editable: true
     },
 
-    
+
     {
       title: 'Amount', dataIndex: 'amount', key: 'amount',
       sorter: (a, b) => a.amount - b.amount,
@@ -264,17 +206,20 @@ class EditableTransactionTable extends React.Component {
 
 
 
+
+
+
   handleAdd = () => {
-    const { count, dataSource } = this.state;
+    const { data } = this.state;
     const newData = {
-      key: count,
-      name: `Edward King ${count}`,
-      age: 32,
-      address: `London, Park Lane no. ${count}`,
+      transactionDate: moment().format(), // cannot be string 
+      category: 'clam',
+      description: '',
+      amount: 32
     };
     this.setState({
-      dataSource: [...dataSource, newData],
-      count: count + 1,
+      data: [...data, newData]
+
     });
   }
 
@@ -322,7 +267,7 @@ class EditableTransactionTable extends React.Component {
     };
 
     const columns = this.columns.map((col) => {
-      
+
 
 
 
@@ -335,22 +280,26 @@ class EditableTransactionTable extends React.Component {
       return {
         ...col,
         onCell: record => (
-          
-          
-          
+
+
+
           {
-          record,
-          inputType: col.dataIndex === 'amount' ? 'number' : (col.dataIndex==='description' ? 'text': (col.dataIndex === 'category' ? 'dropdown': 'date')),
-          dataIndex: col.dataIndex,
-          title: col.title,
-          editing: this.isEditing(record),
-        }),
+            record,
+            inputType: col.dataIndex === 'amount' ? 'number' : (col.dataIndex === 'description' ? 'text' : (col.dataIndex === 'transactionDate' ? 'date' : 'dropdown')),
+            dataIndex: col.dataIndex,
+            title: col.title,
+            editing: this.isEditing(record),
+          }),
       };
     });
 
     // 
     return (
       <div>
+
+        <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
+          Add a row
+        </Button>
 
 
 
@@ -360,7 +309,6 @@ class EditableTransactionTable extends React.Component {
           dataSource={this.state.data}
           columns={columns}
           rowClassName="editable-row" />
-        <p> {this.state.data.length}</p>
       </div>
     );
   }
