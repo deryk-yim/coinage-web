@@ -166,7 +166,7 @@ class Transaction extends React.Component {
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
                 </span>
-                <EditableTransactionTable dataSource={this.props.transactions} />
+                <EditableTransactionTable />
             </div>
         )
     }
@@ -175,8 +175,7 @@ class Transaction extends React.Component {
 const mapStateToProps = (state) => {
     return {
         transactions: state.transactions,
-        categories: state.categories,
-        count: 10
+        categories: state.categories
     };
 };
 
