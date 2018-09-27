@@ -10,7 +10,8 @@ const moment = require('moment');
 
 
 const data = [];
-for (let i = 0; i < 100; i++) {
+/*
+for (let i = 0; i < 50; i++) {
   data.push({
     key: i.toString(),
     transactionDate: '2018-09-08', // cannot be string 
@@ -18,7 +19,9 @@ for (let i = 0; i < 100; i++) {
     description: `London Park no. ${i}`,
     amount: 32
   });
+  
 }
+*/
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
 
@@ -120,10 +123,14 @@ class EditableTransactionTable extends React.Component {
 
     this.state = {
       data,
-      editingKey: ''
+      editingKey: '',
+      count: 1
     };
 
     this.columns = [
+      {
+        title: 'Count',
+        dataIndex: 'key'      },
       {
       title: 'Transaction Date',
       dataIndex: 'transactionDate',
@@ -200,6 +207,55 @@ class EditableTransactionTable extends React.Component {
 
 
 
+  handleAdd = () => {
+
+    const { 
+      data,
+      count
+    } = this.state;
+
+
+    
+
+    const newData = {
+      key: count,
+      transactionDate: moment().format('YYYY-MM-DD'),
+      category: '',
+      description: '',
+      amount: ''
+    };
+    this.edit(newData.key);
+    console.log('KEY: ' + newData.key);
+    console.log('Editing Key: ' + this.state.editingKey);
+    
+    
+
+    this.setState({
+      data: [...data, newData],
+      count: count + 1
+    });
+
+    /*
+
+    const { count, dataSource } = this.state;
+    const newData = {
+      key: count,
+      name: `Edward King ${count}`,
+      age: 32,
+      address: `London, Park Lane no. ${count}`,
+    };
+    this.setState({
+      dataSource: [...dataSource, newData],
+      count: count + 1,
+    });
+
+
+
+    */
+
+    // put into redux store
+ 
+  }
 
 
   
@@ -235,7 +291,7 @@ class EditableTransactionTable extends React.Component {
         // item is the old, row is the new
         newData.splice(index, 1, {
           // still need the index i 
-          key: row['key'],
+          key: item['key'],
           transactionDate: moment(row['transactionDate']).format('YYYY-MM-DD'), // cannot be string 
           category: row['category'],
         description: row['description'],
@@ -290,20 +346,18 @@ class EditableTransactionTable extends React.Component {
 
     // 
     return (
-      
-
-        
-
-
-
+      <div>
+        <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
+          Add a row
+        </Button>
         <Table
           components={components}
           bordered
           dataSource={this.state.data}
           columns={columns}
-          rowClassName="editable-row" />
+          rowClassName={() => 'editable-row'} />
       
-    );
+      </div> );
   }
 }
 
