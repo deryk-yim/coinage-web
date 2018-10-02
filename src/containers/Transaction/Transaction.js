@@ -17,9 +17,6 @@ const deleteList = [];
 const deleteNoIdList = [];
 const moment = require('moment');
 
-
-
-
 class Transaction extends React.Component {
 
     constructor(props) {
@@ -78,13 +75,13 @@ class Transaction extends React.Component {
     }
     onExportClick = () => {
         this.props.history.push('/transaction/export');
-
     }
 
     componentDidMount() {
         this.props.fetchCategories(getCategoriesEndpoint);
         this.props.fetchTransactionsData(getTransactionsEndpoint, 1);
     }
+
 
     onChange = (e) => {
         this.props.fetchTransactionsData(getTransactionsEndpoint, e);
@@ -109,6 +106,7 @@ class Transaction extends React.Component {
 
     render() {
         const keys = [
+            "_id",
             "transactionDate",
             "category",
             "description",
@@ -157,8 +155,17 @@ class Transaction extends React.Component {
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
                 </span>
-                
+
                 <EditableTransactionTable />
+
+                <span style={{ marginLeft: 8 }}>
+                Transactions: {this.props.transactions.length}
+                </span>
+                
+                <span style={{ marginLeft: 8 }}>
+                    {this.props.categories.length}
+                </span>
+
             </div>
         )
     }

@@ -1,21 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { addTransactionCategory, addTransaction} from '../../actions/actionsAddTransaction';
+import { addTransactionToServer } from '../AddTransaction/AddTransaction';
 import '../Transaction/EditableTransactionTable.css';
 import { Button, Table, Icon, Spin, Form, Select, Input, InputNumber, Popconfirm, DatePicker } from 'antd';
+const addTransactionEndpoint = 'http://localhost:3000/transaction/create/1/5aa43585955a2561e0935cdb';
+
 const moment = require('moment');
-
-const data = [];
-
-for (let i = 0; i < 50; i++) {
-  data.push({
-    key: i.toString(),
-    transactionDate: '2018-09-08', // cannot be string 
-    category: 'clam',
-    description: `London Park no. ${i}`,
-    amount: 32
-  });
-
-}
-
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
 
@@ -29,7 +20,6 @@ const EditableFormRow = Form.create()(EditableRow);
 const Option = Select.Option;
 
 class EditableCell extends React.Component {
-
   getInput = () => {
     if (this.props.inputType === 'number') {
       return <InputNumber />;
@@ -37,16 +27,14 @@ class EditableCell extends React.Component {
     if (this.props.inputType === 'text') {
       return <Input />;
     }
-    if (this.props.inputType === 'dropdown') {
-      return (<Select
-        showSearch
-        style={{ width: 200 }}
-        placeholder="Select a category"
-        optionFilterProp="children">
-        <Option value="jack">Jack</Option>
-        <Option value="lucy">Lucy</Option>
-        <Option value="tom">Tom</Option>
-      </Select>);
+    if (this.props.inputType === 'dropdown') {      
+      const options = this.props.categories.map((item) =>
+      <Option value={item['_id']}>{item['name']}</Option>);
+        return (            
+          <Select showSearch style={{ width: 200 }} placeholder="Select a category" optionFilterProp="children">
+          {options}
+          </Select>
+        );
     }
     if (this.props.inputType === 'date') {
       return <DatePicker />
@@ -90,21 +78,22 @@ class EditableCell extends React.Component {
   }
 }
 
-
 class EditableTransactionTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data,
+      data: [],
       editingKey: '',
-      count: 101,
-      pendingKeys: []
+      count: 0,
+      pendingKeys: [],
+      loading: false,
+      selectedRowKeys: []
     };
 
     this.columns = [
       {
-        title: 'Count',
-        dataIndex: 'key'
+        title: 'Id',
+        dataIndex: '_id'
       },
       {
         title: 'Transaction Date',
@@ -136,9 +125,10 @@ class EditableTransactionTable extends React.Component {
         editable: true
       },
       {
-        title: 'operation',
-        dataIndex: 'operation',
+        title: 'Edit',
+        dataIndex: 'edit',
         render: (text, record) => {
+          console.log(record);
           const editable = this.isEditing(record);
           return (
             <div>
@@ -148,7 +138,7 @@ class EditableTransactionTable extends React.Component {
                     {form => (
                       <a
                         href="javascript:;"
-                        onClick={() => this.save(form, record.key)}
+                        onClick={() => this.save(form, record._id)}
                         style={{ marginRight: 8 }}>
                         Save
                         </a>
@@ -156,13 +146,13 @@ class EditableTransactionTable extends React.Component {
                   </EditableContext.Consumer>
                   <Popconfirm
                     title="Sure to cancel?"
-                    onConfirm={() => this.cancel(record.key)}
+                    onConfirm={() => this.cancel(record._id)}
                   >
                     <a>Cancel</a>
                   </Popconfirm>
                 </span>
               ) : (
-                  <a onClick={() => this.edit(record.key)}>Edit</a>
+                  <a onClick={() => this.edit(record._id)}><Icon type='edit'/></a>
                 )}
             </div>
           );
@@ -172,10 +162,10 @@ class EditableTransactionTable extends React.Component {
   }
 
   handleAdd = () => {
+    // for adding, fire redux actions
     const {
       data,
-      count,
-      pendingKeys
+      count
     } = this.state;
 
     const newData = {
@@ -185,73 +175,88 @@ class EditableTransactionTable extends React.Component {
       description: '',
       amount: ''
     };
-    this.edit(newData.key);
+    this.edit(newData._id);
+
+    // add to redux and 
+
+
+    /*
+    
+    addTransactionToServer(newData, addTransactionEndpoint);
+    */
+   this.props.transaction(newData);
+   /*
     this.setState({
       data: [...data, newData],
-      pendingKeys: [...pendingKeys, newData.key],
       count: count + 1
     });
-  }
+    */
 
-  onSave = () => {
-    alert("BIG SAVE");
-    this.setState(
-      {
-        pendingKeys: []
-      }
-    );
+    // check all fields are not empty then add
+    
+
+    // after then set key back to count 0
+
+
   }
 
   isEditing = (record) => {
-    return record.key === this.state.editingKey;
+    return record._id === this.state.editingKey;
   };
 
-  edit(key) {
-    this.setState({ editingKey: key });
+  edit(_id) {
+    this.setState({ editingKey: _id });
   }
 
-  onRow = ({ key }) => this.state.pendingKeys.includes(key) && { className: "pending-transaction" };
-
-
+  onRow = ({ _id }) => this.state.pendingKeys.includes(_id) && { className: "pending-transaction" };
 
   save(form, key) {
-    form.validateFields((error, row) => {
 
+    // fire off into redux store this.props.transactions
+    form.validateFields((error, row) => {
       if (error) {
         return;
       }
-      const newData = [...this.state.data];
-
-      const newPendingKeys = [...this.state.pendingKeys];
-
-      const index = newData.findIndex(item => key === item.key);
+      const newData = [...this.props.transactions];
+      console.log("MAGIC: " + this.props.transactions);
+      console.log("new Data List: " + newData);
+      const index = this.props.transactions.findIndex(item => key === item._id);
       console.log('Index ' + index);
       if (index > -1) {
+        alert("index present");
         const item = newData[index];
         row['transactionDate'] = moment(row['transactionDate']);
         newData.splice(index, 1, {
-          key: item['key'],
+          key: item['_id'],
           transactionDate: moment(row['transactionDate']).format('YYYY-MM-DD'), // cannot be string 
           category: row['category'],
           description: row['description'],
           amount: row['amount']
         });
-        newPendingKeys.push(item['key']);
+        console.log('--------------ITEM --------------------');
+        console.log('Item Key: ' + item['_id']);
+        console.log('Item date: ' + item['transactionDate']);
+        console.log('Item category: ' + item['category']);
+
+        console.log('--------------Row --------------------');
+        console.log('Item Key: ' + row['_id']);
+        console.log('Item date: ' + row['transactionDate']);
+        console.log('Item category: ' + row['category']);
+
+        // updateTransactionById
         this.setState(
           {
             data: newData,
-            pendingKeys: newPendingKeys,
             editingKey: ''
           }
         );
       } else {
-        alert('bu');
         newData.push(row);
-        newPendingKeys.push(row['key']);
+        alert("2");
+        // this piece -- add to the redux store, data isnt being used to show the data on the table
         this.setState(
           {
             data: newData,
-            pendingKeys: newPendingKeys,
             editingKey: ''
           }
         );
@@ -264,14 +269,26 @@ class EditableTransactionTable extends React.Component {
     this.setState({ editingKey: '' });
   };
 
+  onSelectChange = (selectedRowKeys) => {
+    console.log('selectedRowKeys changed: ', selectedRowKeys);
+    this.setState({ selectedRowKeys });
+  }
+
   render() {
+
+    const { selectedRowKeys } = this.state;
     const components = {
       body: {
         row: EditableFormRow,
-        cell: EditableCell,
+        cell: connect(mapStateToProps)(EditableCell),
       },
     };
 
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.onSelectChange
+    };
+    const hasSelected = selectedRowKeys.length > 0;
     const columns = this.columns.map((col) => {
       if (!col.editable) {
         return col;
@@ -292,20 +309,33 @@ class EditableTransactionTable extends React.Component {
     return (
       <div>
         <Table
+          rowSelection={rowSelection}
           components={components}
           bordered
-          dataSource={this.state.data}
+          dataSource={this.props.transactions}
           columns={columns}
           onRow={this.onRow}
         />
         <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16, marginLeft: 20, marginRight: 30 }}>
           Add a row
         </Button>
-        <Button onClick={this.onSave} type="primary" style={{ marginBottom: 16 }}>
-          SAVE
-        </Button>
+        <span> {this.props.categories.length} </span>
       </div>);
   }
 }
 
-export default EditableTransactionTable;
+const mapStateToProps = (state) => {
+  return {
+    transactions: state.transactions,
+    categories: state.categories
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+      addTransactionOption: (option) => dispatch(addTransactionCategory(option)),
+      transaction: (transaction) => dispatch(addTransaction(transaction)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditableTransactionTable);

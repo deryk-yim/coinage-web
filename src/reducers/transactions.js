@@ -22,7 +22,7 @@ export function transactionsIsLoading(state = false, action) {
 export function transactions(state = initialState, action) {
     switch (action.type) {
         case 'RETRIEVE_TRANSACTIONS':
-        return action.payload;
+        return action.payload.transactions;
 
         case 'ADD_TRANSACTION_TO_STORE': 
         return [
@@ -60,24 +60,3 @@ export function postAddTransactionCategory(state = {}, action) {
               }
     }
 }
-
-/*
-const todos = (todos = {}, action = {}) {
-    switch (action.type) {
-      case 'RECEIVE_ALL_TODOS':
-        let _todos = {}
-        for (let todo of action.payload.todos) {
-          _todos = {
-            ..._todos,
-            [todo.id]: todo
-          }
-        }
-        return {
-          ...todos,
-          ..._todos
-        }
-      default:
-        return paginationItemsReducer(todos, action)  // we compose an hypothetic paginationItemsReducer here
-    }
-
-*/

@@ -5,10 +5,6 @@ export function addTransactionCategory(optionSelected) {
     }
 }
 
-/*
-Add transaction created from form and store into state in redux store
-*/
-
 export function addTransaction(transaction) {
     return {
         type: 'ADD_TRANSACTION_TO_STORE',

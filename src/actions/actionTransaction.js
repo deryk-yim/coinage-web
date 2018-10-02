@@ -28,7 +28,8 @@ export function transactionsIsLoading(bool) {
 export function transactionsFetchData(url, page) {
     return (dispatch) => {
         dispatch(transactionsIsLoading(true));
-        fetch(url, {
+        console.log(url + page);
+        fetch(url + page, {
             method: 'post'
         })
             .then(res => {
@@ -41,15 +42,18 @@ export function transactionsFetchData(url, page) {
                 }
             })
             .then(jsonData => {
-                               
                 for (let i = 0; i < jsonData.length; i++) {
-                    jsonData[i]['transactions'].amount = parseFloat(jsonData[i].amount).toFixed(2);
-                    jsonData[i]['transactions'].transactionDate = moment(new Date(jsonData[i]['transactions'].transactionDate)).format('MMM DD, YYYY');
-                    jsonData[i]['transactions'].category = jsonData[i]['transactions'].category['name'];
+                    jsonData[i]._id;
+                    jsonData[i].amount = parseFloat(jsonData[i].amount).toFixed(2);
+                    jsonData[i].transactionDate = moment(new Date(jsonData[i].transactionDate)).format('MMM DD, YYYY');
+                    jsonData[i].category = jsonData[i].category['name'];
                 }
+                console.log(jsonData);
+
                 return jsonData;
             })
-            .then((transactions) => dispatch(retrieveTransactions(transactions, page)))
+            .then((transactions) => 
+            dispatch(retrieveTransactions(transactions, page)))
             .catch(() => dispatch(transactionsHasErrored(true)));
     };
 }
