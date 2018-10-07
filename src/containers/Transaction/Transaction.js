@@ -4,18 +4,12 @@ import '../Transaction/Transaction.css';
 import { connect } from 'react-redux';
 import { transactionsFetchData } from '../../actions/actionTransaction';
 import { categoriesFetchData } from '../../actions/actionCategory';
-import { deleteTransactionFromServer } from '../DeleteTransaction/DeleteTransaction';
 import { removeTransactions } from '../../actions/actionDeleteTransaction';
+import { countAllTransactionsFetchData} from '../../actions/actionCountTransactions';
 import EditableTransactionTable from '../Transaction/EditableTransactionTable';
-//import { countFetchData } from '../../actions/actionCounts';
-
 const getTransactionsEndpoint = 'http://localhost:3000/transaction/5aa43585955a2561e0935cdb/';
 const getTransactionCount = 'http://localhost:3000/transaction/count/1/5aa43585955a2561e0935cdb';
 const getCategoriesEndpoint = 'http://localhost:3000/category/5aa43585955a2561e0935cdb';
-const deleteTransactionsEndpoint = 'http://localhost:3000/transaction/delete/5aa43585955a2561e0935cdb';
-const deleteList = [];
-const deleteNoIdList = [];
-const moment = require('moment');
 
 class Transaction extends React.Component {
 
@@ -30,45 +24,7 @@ class Transaction extends React.Component {
             importRecords: [],
             count: 0
         };
-    }
-
-    onSelectChange = (selectedRowKeys, selectedRows) => {
-        deleteList.length = 0;
-        deleteNoIdList.length = 0;
-
-        for (let i = 0; i < selectedRows.length; i++) {
-            if (selectedRows[i].hasOwnProperty('_id')) {
-                deleteList.push(selectedRows[i]['_id']);
-            }
-        }
-
-        for (let i = 0; i < selectedRows.length; i++) {
-            if (!selectedRows[i].hasOwnProperty('_id')) {
-                deleteNoIdList.push(selectedRows[i]);
-            }
-        }
-
-        this.setState({
-            selectedRowKeys: selectedRowKeys,
-            selectedRows: selectedRows,
-            toDelete: deleteList
-        });
-    }
-
-    onDeleteRecord = () => {
-        for (let i = 0; i < this.state.selectedRows.length; i++) {
-            if (this.state.selectedRows[i].hasOwnProperty('_id')) {
-                this.props.deleteIds(this.state.selectedRows[i]['_id']); // deletes the record from the redux store
-            }
-        }
-        if (deleteList.length > 0) {
-            deleteTransactionFromServer(deleteTransactionsEndpoint, this.state.selectedRows);
-        }
-        this.setState({
-            selectedRows: [],
-            selectedRowKeys: []
-        })
-    }
+    } 
 
     onImportClick = () => {
         this.props.history.push('/transaction/import');
@@ -80,12 +36,11 @@ class Transaction extends React.Component {
     componentDidMount() {
         this.props.fetchCategories(getCategoriesEndpoint);
         this.props.fetchTransactionsData(getTransactionsEndpoint, 1);
+        this.props.fetchAllTransactionCount(getTransactionCount);
     }
 
-
-    onChange = (e) => {
-        this.props.fetchTransactionsData(getTransactionsEndpoint, e);
-    }
+// this needs to go to Editable Table level not on Transaction component
+    
 
     handleChange(value) {
         if (value === 'Past Week') {
@@ -155,17 +110,8 @@ class Transaction extends React.Component {
                 <span style={{ marginLeft: 8 }}>
                     {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
                 </span>
-
+                <span> {this.props.count} </span>
                 <EditableTransactionTable />
-
-                <span style={{ marginLeft: 8 }}>
-                Transactions: {this.props.transactions.length}
-                </span>
-                
-                <span style={{ marginLeft: 8 }}>
-                    {this.props.categories.length}
-                </span>
-
             </div>
         )
     }
@@ -174,7 +120,8 @@ class Transaction extends React.Component {
 const mapStateToProps = (state) => {
     return {
         transactions: state.transactions,
-        categories: state.categories
+        categories: state.categories,
+        count: state.countAllTransactions
     };
 };
 
@@ -182,7 +129,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchTransactionsData: (url, page) => dispatch(transactionsFetchData(url, page)),
         fetchCategories: (url) => dispatch(categoriesFetchData(url)),
-        deleteIds: (ids) => dispatch(removeTransactions(ids))
+        deleteIds: (ids) => dispatch(removeTransactions(ids)),
+        fetchAllTransactionCount: (url) => dispatch(countAllTransactionsFetchData(url))
     };
 };
 

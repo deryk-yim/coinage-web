@@ -25,8 +25,13 @@ export function transactions(state = initialState, action) {
         return action.payload.transactions;
 
         case 'ADD_TRANSACTION_TO_STORE': 
+        console.log('transaction store: '+ state.length);
+        console.log('State:' + state[0]['description']);
         return [
-            ...state, action.newItem
+            //action.newItem, ...state
+            action.newItem, ...state
+            // after adding have to call server to give new results 
+            // adding to the front is a broken 
         ];
         case 'DELETE_TRANSACTIONS_FROM_STORE':
         const transactionId_delete = action.transactionId;
@@ -60,3 +65,4 @@ export function postAddTransactionCategory(state = {}, action) {
               }
     }
 }
+

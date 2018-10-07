@@ -3,6 +3,7 @@ import { transactions, transactionsHasErrored, transactionsIsLoading, postAddTra
 import { categoriesHasErrored, categoriesIsLoading, categories} from './categories';
 import { importedFilesHasErrored, importedFilesIsLoading, importedFiles} from './importTransactions';
 import { exportedFilesHasErrored, exportedFilesIsLoading, exportedFiles} from './exportTransactions';
+import { countAllTransactionsHasErrored, countAllTransactionsIsLoading, countAllTransactions} from './countTransactions';
 
 export default combineReducers({
     transactions,
@@ -17,5 +18,9 @@ export default combineReducers({
     importedFiles,
     exportedFilesHasErrored,
     exportedFilesIsLoading,
-    exportedFiles
+    exportedFiles,
+    countAllTransactionsHasErrored,
+    countAllTransactionsIsLoading,
+    countAllTransactions
+
 });
