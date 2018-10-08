@@ -253,7 +253,6 @@ class EditableTransactionTable extends React.Component {
         return;
       }
       const index = this.props.transactions.findIndex(item => _id === item._id);
-      const newCategory = this.convertToCategoryName(row['category'], this.props.categories);
       if (_id === 0) {
         alert('This is the newly added record');
         if (index > -1) {
@@ -262,7 +261,7 @@ class EditableTransactionTable extends React.Component {
           this.props.transactions.splice(index, 1, {
             _id: item['_id'],
             transactionDate: moment(row['transactionDate']).format('MMM DD, YYYY'), // cannot be string 
-            category: newCategory,
+            category: item['category'] != row['category'] ? this.convertToCategoryName(row['category'], this.props.categories) : row['category'],
             description: row['description'],
             amount: row['amount']
           });
@@ -278,22 +277,17 @@ class EditableTransactionTable extends React.Component {
       }
       else {
         if (index > -1) {
-          
+          alert("Existing Record");
           const item = this.props.transactions[index];
-
-
-
-
-          const newCategory = this.convertToCategoryName(row['category'], this.props.categories);
-
-
-
+          // turn this into ternary
           
-
+          
+      
+          
           this.props.transactions.splice(index, 1, {
             _id: item['_id'],
             transactionDate: moment(row['transactionDate']).format('MMM DD, YYYY'), // cannot be string 
-            category: newCategory,
+            category: item['category'] != row['category'] ? this.convertToCategoryName(row['category'], this.props.categories) : row['category']  ,
             description: row['description'],
             amount: row['amount']
           });
@@ -308,7 +302,7 @@ class EditableTransactionTable extends React.Component {
           console.log('Row Key: ' + row['_id']);
           console.log('Row date: ' + row['transactionDate']);
           console.log('Row category: ' + row['category']);
-          console.log('Row description: ' + row['category']);
+          console.log('Row description: ' + row['description']);
           console.log('Row amount: ' + row['amount']);
 
           console.log("Category: " + row['category']);
