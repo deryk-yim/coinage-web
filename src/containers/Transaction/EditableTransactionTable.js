@@ -190,7 +190,7 @@ class EditableTransactionTable extends React.Component {
       page: e.current,
       selectedRows: [],
       selectedRowKeys: []
-   
+
     })
     this.props.fetchTransactionsData(getTransactionsEndpoint, e.current);
   }
@@ -199,25 +199,34 @@ class EditableTransactionTable extends React.Component {
     console.log('Delete: selectedRows:' + this.state.selectedRows);
     console.log('Delete: selectedRowKeys:' + this.state.selectedRowKeys);
     for (let i = 0; i < this.state.selectedRows.length; i++) {
-        if (this.state.selectedRows[i].hasOwnProperty('_id')) {
-            this.props.deleteIds(this.state.selectedRows[i]['_id']); // deletes the record from the redux store
-        }
+      if (this.state.selectedRows[i].hasOwnProperty('_id')) {
+        this.props.deleteIds(this.state.selectedRows[i]['_id']); // deletes the record from the redux store
+      }
     }
     if (this.state.selectedRows.length > 0) {
-        deleteTransactionFromServer(deleteTransactionsEndpoint, this.state.selectedRows);
+      deleteTransactionFromServer(deleteTransactionsEndpoint, this.state.selectedRows);
     }
     this.setState({
-        selectedRows: [],
-        selectedRowKeys: []
+      selectedRows: [],
+      selectedRowKeys: []
     })
-    //this.props.fetchTransactionsData(getTransactionsEndpoint, this.state.page);
-}
+  }
+
+  createGuid = () => {
+    function _p8(s) {  
+        var p = (Math.random().toString(16)+"000000000").substr(2,8);  
+        return s ? "-" + p.substr(0,4) + "-" + p.substr(4,4) : p ;  
+     }  
+     return _p8() + _p8(true) + _p8(true) + _p8();  
+  }
 
   handleAdd = () => {
 
+    
+
     console.log("addFlag state: " + this.state.addFlag);
     const newData = {
-      _id: this.state.count,
+      _id: this.createGuid(),
       transactionDate: moment().format('YYYY-MM-DD'),
       category: '',
       description: '',
@@ -231,21 +240,21 @@ class EditableTransactionTable extends React.Component {
   }
 
   convertToCategory(string, list) {
-    for(let i = 0; i < list.length; i++) {
-      if(list[i]['name'] === string) {
+    for (let i = 0; i < list.length; i++) {
+      if (list[i]['name'] === string) {
         return list[i]._id;
       }
-    } 
+    }
   }
 
   convertToCategoryName(id, list) {
-    for(let i = 0; i < list.length; i++) {
-      if(list[i]['_id'] === id) {
+    for (let i = 0; i < list.length; i++) {
+      if (list[i]['_id'] === id) {
         return list[i].name;
       }
-    } 
+    }
   }
-  
+
 
   save(form, _id) {
     form.validateFields((error, row) => {
@@ -253,7 +262,7 @@ class EditableTransactionTable extends React.Component {
         return;
       }
       const index = this.props.transactions.findIndex(item => _id === item._id);
-      if (_id === 0) {
+      if (this.state.addFlag) {
         alert('This is the newly added record');
         if (index > -1) {
           const item = this.props.transactions[index];
@@ -279,15 +288,10 @@ class EditableTransactionTable extends React.Component {
         if (index > -1) {
           alert("Existing Record");
           const item = this.props.transactions[index];
-          // turn this into ternary
-          
-          
-      
-          
           this.props.transactions.splice(index, 1, {
             _id: item['_id'],
             transactionDate: moment(row['transactionDate']).format('MMM DD, YYYY'), // cannot be string 
-            category: item['category'] != row['category'] ? this.convertToCategoryName(row['category'], this.props.categories) : row['category']  ,
+            category: item['category'] != row['category'] ? this.convertToCategoryName(row['category'], this.props.categories) : row['category'],
             description: row['description'],
             amount: row['amount']
           });
@@ -306,7 +310,7 @@ class EditableTransactionTable extends React.Component {
           console.log('Row amount: ' + row['amount']);
 
           console.log("Category: " + row['category']);
-          if( item['category'] === row['category']) {
+          if (item['category'] === row['category']) {
             row['category'] = this.convertToCategory(row['category'], this.props.categories);
           }
           editTransactionFromServer(row, updateTransactionEndpoint, _id);
@@ -319,7 +323,6 @@ class EditableTransactionTable extends React.Component {
       );
     }
     );
-    //this.props.fetchTransactionsData(getTransactionsEndpoint, this.state.page);
   }
 
   cancel = (id) => {
@@ -370,13 +373,13 @@ class EditableTransactionTable extends React.Component {
         </Button>
 
         <Button disabled={
-            (this.props.count < 1 && this.state.selectedRowKeys.length < 1) ||
-            (this.props.count > 0 &&  this.state.selectedRowKeys.length < 1)
+          (this.props.count < 1 && this.state.selectedRowKeys.length < 1) ||
+          (this.props.count > 0 && this.state.selectedRowKeys.length < 1)
         } onClick={this.onDeleteRecord} type="primary" style={{ marginBottom: 16, marginLeft: 20, marginRight: 30 }}>
           Delete
-        
+
         </Button>
-        
+
         <Table
           rowSelection={rowSelection}
           components={components}
