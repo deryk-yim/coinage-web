@@ -1,11 +1,8 @@
 export const CONTAINER = {
     background: 'linear-gradient(119deg, #F82279, #934CDB)',
     height: '100vh',
-<<<<<<< HEAD
-=======
 
     
->>>>>>> refs/remotes/origin/dashboard
 }
 
 export const COINAGE_TITLE = {
@@ -13,51 +10,13 @@ export const COINAGE_TITLE = {
     textTransform: 'uppercase',
     color: 'white',
     width: '100%',
-<<<<<<< HEAD
-    height: 40,
-    padding: '50px 0 50px 25px',
-=======
     height: 29,
     padding: '25px 0 50px 10px',
->>>>>>> refs/remotes/origin/dashboard
     fontFamily: 'Gibson',
     textAlign: 'left',
     fontSize: 26,
 }
 
-<<<<<<< HEAD
-export const SIGNUP = {
-    width: '60%',
-    backgroundColor: '#FFFFFF',
-    color: '#C038AD',
-    height: 50,  
-    fontSize: 18, 
-}
-
-export const SIGNUP_TITLE = {
-    display: 'inline-block',
-    width: '100%',
-    fontSize: 34,
-    color: 'white',
-    fontFamily: 'Gibson',
-    backgroundColor: 'transparent',
-    border: 'none',
-    textAlign: 'left',
-}
-
-export const TERMS_AND_COND = {
-    display: 'inline-block',
-    fontSize: 18,
-    color: 'white',
-}
-
-export const LOGIN = {
-    display: 'inline-block',
-    fontSize: 18,
-    color: 'white',
-    textAlign: 'center',
-}
-=======
 export const SIGNUP_TITLE = {
     display: 'block',
     textTransform: 'uppercase',
@@ -106,4 +65,3 @@ export const TERMS_AND_COND = {
     fontSize: 18,
 }
 
->>>>>>> refs/remotes/origin/dashboard

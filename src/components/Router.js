@@ -3,25 +3,19 @@ import Transaction from '../containers/Transaction/Transaction';
 import LoginForm from '../containers/LoginForm/LoginForm';
 import RegisterForm from '../containers/RegisterForm/RegisterForm';
 import Dashboard from '../containers/Dashboard/Dashboard';
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 import Profile from '../containers/Profile/Profile'
-=======
-import RegisterForm from '../containers/RegisterForm/RegisterForm';
-import Profile from '../containers/Profile/Profile';
->>>>>>> refs/remotes/origin/dashboard
-import React from 'react';
-=======
 import ImportTransactionPage from '../containers/ImportTransaction/ImportTransactionPage';
 import ExportTransactionPage from '../containers/ExportTransaction/ExportTransactionPage';
 import ExportTransactionHistory from '../containers/ExportTransaction/ExportTransactionHistory';
->>>>>>> fb583f70faab6f30d3bd8c517f665e3ceace6ae2
 
 import React from 'react';
 import { render } from 'react-dom';
 import {IndexRoute, browserHistory } from 'react-router';
 import {Provider} from 'react-redux';
 import store, {history } from '../store';
+
+require('../styles/main.css');
 
 const Router = () => (
     <Provider store={store}>

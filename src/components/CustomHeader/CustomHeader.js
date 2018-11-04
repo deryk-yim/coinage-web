@@ -6,7 +6,7 @@ import { Form, Icon, Input, Button, Row, Col} from 'antd';
 class CustomHeader extends React.Component {
     render(){
         return(
-            <div classname="header-custom" style={CONTAINER}>
+            <div className="header-custom" style={CONTAINER}>
                 <Col span={1}></Col>
                 <Col span={3}>
                     <Button style={HEADER_BUTTON}><Icon type="plus-circle-o" /> Add Transaction</Button>
