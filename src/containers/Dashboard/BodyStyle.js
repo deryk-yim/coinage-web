@@ -9,4 +9,4 @@ export const BODY_TITLE = {
     border: 'none',
     textAlign: 'left',
     fontSize: 34,
-    }
+}

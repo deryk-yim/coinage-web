@@ -1,9 +1,9 @@
-
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import '../LoginForm/LoginForm.css';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button, Checkbox, Row, Col } from 'antd';
+import { CONTAINER, COINAGE_LOGO, COINAGE_TITLE, INPUT, REMEMBER_ME, FORGET_PASSWORD, LOGIN_BUTTON, REGISTER} from '../LoginForm/LoginFormStyle.js';
+
 const FormItem = Form.Item;
 
 
@@ -17,41 +17,50 @@ class LoginForm extends React.Component {
         const { getFieldDecorator } = this.props.form;
         return (
 
-          <div className="form">
-          <Form onSubmit={this.handleSubmit} className="login-form">
-          <p className="loginTitle"> Coinage </p>
-            <FormItem>
-              {getFieldDecorator('userName', {
-                rules: [{ required: true, message: 'Please input your username!' }],
-              })(
-                <Input prefix={<Icon type="user"  />} style={{ marginBottom: '1'}} placeholder="USERNAME" />
-              )}
-            </FormItem>
-            <FormItem>
-              {getFieldDecorator('password', {
-                rules: [{ required: true, message: 'Please input your Password!' }],
-              })(
-                <Input prefix={<Icon type="lock" />} type="password" placeholder="●●●●●●●" />
-              )}
-            </FormItem>
-            <FormItem>
-
-              {getFieldDecorator('remember', {
-                valuePropName: 'checked',
-                initialValue: true,
-              })(
-                <Checkbox>Remember me</Checkbox>
-              )}
-
-              <a className="login-form-forgot" href="">Forgot password</a>
-
-              <Button type="primary" htmlType="submit" className="login-form-button">
-                Login
-              </Button>
-
-              <p className="registration">or <a href="">register now!</a></p>
-
-            </FormItem>
+          <div style={CONTAINER}>
+            <Form onSubmit={this.handleSubmit} className="login-form">
+          
+            
+            <Col span={8}>
+            </Col>
+            <Col span={8}>
+              <Row style={{padding: '120px 0px 10px 0px'}}>
+                <Col span={12}>
+                  <h2 style={COINAGE_LOGO}> <Icon type="copyright" /> </h2>
+                </Col>
+              </Row>
+              <Row style={{padding: '10px 0px 10px 0px'}}>
+                <Col span={12}>
+                  <h2 style={COINAGE_LOGO}> KOINIJ </h2>
+                </Col>
+              </Row>
+              <Row style={{padding: '10px 0px 10px 0px'}}>
+                <Input style={INPUT} prefix={<Icon type="user"  />} placeholder="USERNAME" />
+              </Row>
+              <Row style={{padding: '10px 0px 10px 0px'}}>
+                <Input style={INPUT} prefix={<Icon type="user"  />} placeholder="USERNAME" />
+              </Row>
+              <Row style={{padding: '10px 0px 10px 0px'}}>
+                <Col span={1}>
+                  <Checkbox></Checkbox>
+                </Col>
+                <Col span={6}>
+                  <h2 style={REMEMBER_ME}>Remember me</h2>
+                </Col>
+                <Col span={6}>
+                  <Button style={FORGET_PASSWORD}>Forget Password</Button>
+                </Col>
+              </Row> 
+              <Row>
+                <Button type="primary" style={LOGIN_BUTTON}>LOGIN</Button>  
+              </Row>
+              <Row>
+                <Col span={12}>
+                  <Button style={REGISTER}>or register now!</Button>   
+                </Col>
+              </Row>
+            </Col>
+            
           </Form>
 
           </div>
