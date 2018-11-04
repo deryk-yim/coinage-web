@@ -13,7 +13,6 @@ export const BODY_TITLE = {
 
  export const PROFILE_SETTING = {
     display: 'inline-block',
-    width: '100%',
     height: 22,
     padding: '0px 0px 0px 0px',
     color: 'white',

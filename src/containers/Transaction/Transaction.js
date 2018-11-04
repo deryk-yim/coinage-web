@@ -1,135 +1,137 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Button, Table } from 'antd';
+import { Button, Table, Icon, Spin, Form, Select, Input, InputNumber, Popconfirm } from 'antd';
 import '../Transaction/Transaction.css';
-import AddTransactionDialog from '../AddTransactionDialog/AddTransactionDialog';
-
-
-const columns = [
-    {
-        title: 'Created Date',
-        dataIndex: 'createdDate',
-        key: 'createdDate',
-    },
-    {
-        title: 'Category',
-        dataIndex: 'category',
-        key: 'category',
-    }, {
-        title: 'Description',
-        dataIndex: 'description',
-        key: 'description',
-    }, {
-        title: 'Currency',
-        dataIndex: 'currency',
-        key: 'currency',
-    },
-    {
-        title: 'Amount',
-        dataIndex: 'amount',
-        key: 'amount',
-    },
-    {
-        title: 'Modified Date',
-        dataIndex: 'modifiedDate',
-        key: 'modifiedDate',
-    }];
-
+import { connect } from 'react-redux';
+import { transactionsFetchData } from '../../actions/actionTransaction';
+import { categoriesFetchData } from '../../actions/actionCategory';
+import { removeTransactions } from '../../actions/actionDeleteTransaction';
+import { countAllTransactionsFetchData} from '../../actions/actionCountTransactions';
+import EditableTransactionTable from '../Transaction/EditableTransactionTable';
+const getTransactionsEndpoint = 'http://localhost:3000/transaction/5aa43585955a2561e0935cdb/';
+const getTransactionCount = 'http://localhost:3000/transaction/count/1/5aa43585955a2561e0935cdb';
+const getCategoriesEndpoint = 'http://localhost:3000/category/5aa43585955a2561e0935cdb';
 
 class Transaction extends React.Component {
+
     constructor(props) {
         super(props)
         this.state = {
-            isOpenAddTrans: false,
-            isOpenEditTrans: false,
-            response: false,
-            data: []
+            selectedRows: [],
+            selectedRowKeys: [],
+            toDelete: [],
+            uploadData: {},
+            data: [],
+            importRecords: [],
+            count: 0
         };
+    } 
+
+    onImportClick = () => {
+        this.props.history.push('/transaction/import');
+    }
+    onExportClick = () => {
+        this.props.history.push('/transaction/export');
     }
 
     componentDidMount() {
-        const endpoint = 'http://localhost:3000/transaction/5aa43585955a2561e0935cdb';
-        fetch(endpoint, {
-            method: 'post'
-        })
-            .then(res => {
-                if (res.status >= 200 && res.status < 300) {
-                    return res.json();
-                }
-                else {
-                    throw new Error("Try Again Later");
-                }
-            })
-            .then(jsonData => {
-                this.setState({
-                    data: jsonData,
-                    response: true
-                });
-                alert((Array.isArray(jsonData)));
-            })
+        this.props.fetchCategories(getCategoriesEndpoint);
+        this.props.fetchTransactionsData(getTransactionsEndpoint, 1);
+        this.props.fetchAllTransactionCount(getTransactionCount);
     }
 
-
-
-    openAddTransaction = () => {
-        this.setState({
-            isOpenAddTrans: true
-        })
-    }
-
-    closeAddTransaction = (bool) => {
-        this.setState({
-            isOpenAddTrans: bool
-        })
-    }
-
-
-
-    openEditTransaction = () => {
-        this.setState({
-            isOpenEditTrans: true
-        })
-    }
-
-  
-    addTransactionToServer = (transaction) => {
-        const endpoint = 'http://localhost:3000/transaction/create/1/5aa43585955a2561e0935cdb';
-
-        fetch(endpoint, {
-            method: 'POST',
-            body: JSON.stringify(transaction),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .catch(error => console.error('Error:', error))
-        .then(response => console.log('Success: ', response))
-
-     };
+// this needs to go to Editable Table level not on Transaction component
     
+
+    handleChange(value) {
+        if (value === 'Past Week') {
+
+        }
+        else if (value === 'Past 30 Days') {
+
+        }
+        else if (value === 'Past 60 Days') {
+
+        }
+        else if (value === 'Custom Dates') {
+
+        }
+    }
+
+    
+
     render() {
+        const keys = [
+            "_id",
+            "transactionDate",
+            "category",
+            "description",
+            "amount"
+        ];
+
+        let {
+            sortedInfo
+        } = this.state;
+
+        sortedInfo = sortedInfo || {};
+        const { selectedRowKeys } = this.state;
+        const hasSelected = this.state.selectedRowKeys.length > 0;
+        const hasRecords = true;
+        const Option = Select.Option;
+        const optionItems = this.props.categories.map((item) =>
+            <Option value={item['_id']}>{item['name']}</Option>
+        );
 
         return (
-
             <div>
+                
+                <Select defaultValue="Past Week" style={{ width: 140 }} onChange={this.handleChange}>
+                    <Option value="Past Week">Past Week</Option>
+                    <Option value="Past 30 Days">Past 30 Days</Option>
+                    <Option value="Past 60 Days">Past 60 Days</Option>
+                    <Option value="Custom Dates">Custom Dates</Option>
+                    <Option value="All Dates">Custom Dates</Option>
+                </Select>
 
+                <Select
+                    mode="tags"
+                    size="default"
+                    placeholder="All Categories"
+                    style={{ width: '50%' }}>
+                    {optionItems}
+                </Select>
 
-                <Button onClick={this.openAddTransaction}> + Add Transaction  </Button>
-                <Button > Import </Button>
-                <Button > Export </Button>
-                <AddTransactionDialog addTransactionToServer={this.addTransactionToServer}
-                    openAddTransaction={this.openAddTransaction}
-                    closeAddTransaction={this.closeAddTransaction}
-                    shown={this.state.isOpenAddTrans}
-                />
-
-                <Table dataSource={this.state.data} columns={columns} />
+                <Button onClick={this.onImportClick}>
+                    <Icon type="upload" /> Import
+                </Button>
+                <Button onClick={this.onExportClick} disabled={!hasRecords}>
+                    <Icon type="download" />Export
+                </Button>
+                
+                <span style={{ marginLeft: 8 }}>
+                    {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
+                </span>
+                <span> {this.props.count} </span>
+                <EditableTransactionTable />
             </div>
-
         )
     }
-
 }
 
-export default Transaction;
+const mapStateToProps = (state) => {
+    return {
+        transactions: state.transactions,
+        categories: state.categories,
+        count: state.countAllTransactions
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchTransactionsData: (url, page) => dispatch(transactionsFetchData(url, page)),
+        fetchCategories: (url) => dispatch(categoriesFetchData(url)),
+        deleteIds: (ids) => dispatch(removeTransactions(ids)),
+        fetchAllTransactionCount: (url) => dispatch(countAllTransactionsFetchData(url))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Transaction);
