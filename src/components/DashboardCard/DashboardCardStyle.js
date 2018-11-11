@@ -1,25 +1,10 @@
 export const DASHBOARD_CARD = {
-    background: 'linear-gradient(133deg, #5189DC, #944BDB)',
     borderRadius: '5%',
-    width: 360,
-    height: 342,
-    display: 'inline-block',
-}
-export const DASHBOARD_CARD_BILLS = {
-    background: 'linear-gradient(180deg, #F82279, #934CDB)',
-    borderRadius: '5%',
-    width: 360,
-    height: 342,
+    width: '90%',
+    paddingTop: '90%',
     display: 'inline-block',
 }
 
-export const DASHBOARD_CARD_INSIGHTS = {
-    background: 'linear-gradient(180deg, #FC9722, #FD2472)',
-    borderRadius: '5%',
-    width: 360,
-    height: 342,
-    display: 'inline-block',
-}
 
 export const DASHBOARD_CIRCLE = {
     background: 'Transparent',

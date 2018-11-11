@@ -2,8 +2,6 @@ import React from 'react';
 import Dashboard from '../Dashboard/Dashboard';
 import {BODY_TITLE} from '../Dashboard/BodyStyle';
 import DashboardCard from '../../components/DashboardCard/DashboardCard';
-import DashboardCardBills from '../../components/DashboardCard/DashboardCardBills';
-import DashboardCardInsights from '../../components/DashboardCard/DashboardCardInsights';
 import { Form, Icon, Input, Button, Row, Col} from 'antd';
 
 
@@ -21,14 +19,33 @@ class Body extends React.Component {
                 <Row>
                     <Col span={1}> 
                     </Col>
-                    <Col span={6}>
-                        <DashboardCard/>
+                    <Col sm={24} md={6}>
+                        <DashboardCard 
+                            label={"TRANSACTION"} 
+                            value={300} 
+                            timeFrame={"IN THE PAST 30 DAYS"}
+                            backgroundAngle={133}
+                            backgroundColors={["#5189DC", "#944BDB"]}
+                        />
                     </Col>
-                    <Col span={6}>
-                        <DashboardCardBills/>    
+                    <Col sm={24} md={6}>
+                
+                        <DashboardCard
+                            label={"BILLS"} 
+                            value={300} 
+                            timeFrame={"IN THE PAST 30 DAYS"}
+                            backgroundAngle={180}
+                            backgroundColors={["#F82279", "#934CDB"]}
+                        />    
                     </Col>
-                    <Col span={6}>
-                    <DashboardCardInsights/>    
+                    <Col sm={24} md={6}>
+                        <DashboardCard
+                            label={"INSIGHTS"} 
+                            value={300} 
+                            timeFrame={"IN THE PAST 30 DAYS"} 
+                            backgroundAngle={180}
+                            backgroundColors={["#FC9722", "#FD2472"]} 
+                        />    
                     </Col>
                 </Row>
           

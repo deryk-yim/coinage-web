@@ -14,7 +14,7 @@ class RegisterForm extends Component {
                 <Col span={8}>
                 </Col>
                 <Col span={8}>
-                    <Row style={{padding: '10px 0px 10px 0px'}}>
+                    <Row style={{padding: '30px 0px 10px 0px'}}>
                         <h2 style={SIGNUP_TITLE}>SIGNUP</h2>
                     </Row>
                     <Row style={{padding: '20px 0px 10px 0px'}}>
@@ -33,7 +33,7 @@ class RegisterForm extends Component {
                         <Col span={1}>
                             <Checkbox></Checkbox>
                         </Col>
-                        <Col span={8}>
+                        <Col span={12}>
                             <h2 style={TERMS_AND_COND}>I accept the terms & conditions </h2>
                         </Col>
                     </Row>
