@@ -4,14 +4,16 @@ import './grid.css';
 
 export class Grid extends React.Component {
     render() {
-        const { style, className, nopadding } = this.props;
+        const { style, className, nopadding, center } = this.props;
         const styles = style && getStyle(style)
             , nodeClass = className ? className : ''
-            , nopaddingClass = nopadding && 'nopadding';
+            , nopaddingClass = nopadding && 'nopadding'
+            , centerClass = center && 'center';
         const gridClasses = [
             'gridContainer',
             nodeClass,
-            nopaddingClass
+            nopaddingClass,
+            centerClass
         ].filter(item => item).join(' ');
 
         return (
@@ -48,14 +50,24 @@ export class Col extends React.Component {
             , sizeClass = size && getSize(size)
             , offsetClass = offset && getOffset(offset)
             , orderClass = order && getOrder(order)
-            , nopaddingClass = nopadding && 'nopadding';
+            , nopaddingClass = nopadding && 'nopadding'
+            , centerClass = center && 'col-center-content'
+            , topClass = top && 'col-top-content'
+            , bottomClass = bottom && 'col-bottom-content'
+            , leftClass = left && 'col-left-content'
+            , rightClass = right && 'col-right-content';
         const columnClasses = [
                 'column',
                 nodeClass, 
                 sizeClass, 
                 offsetClass, 
                 orderClass, 
-                nopaddingClass
+                nopaddingClass,
+                centerClass,
+                topClass,
+                bottomClass,
+                leftClass,
+                rightClass
             ].filter(item => item).join(' ');
 
         return (
