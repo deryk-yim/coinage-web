@@ -44,7 +44,7 @@ export class Row extends React.Component {
 
 export class Col extends React.Component {
     render() {
-        const { size, offset, order, style, className, nopadding } = this.props;
+        const { size, offset, order, style, className, nopadding, center, top, bottom, left, right } = this.props;
         const styles = getStyle(style)
             , nodeClass = className ? className : ''
             , sizeClass = size && getSize(size)
