@@ -56,7 +56,7 @@ class RegisterForm extends Component {
                         </Col>                      
                     </Row>
                     <Row style={{justifyContent: 'center'}}>
-                    <Col size={{xs: 12, sm: 6}}>
+                    <Col size={{xs: 12, sm: 4}}>
                         <Row > 
                             <h2 style={SIGNUP_TITLE}>SIGNUP</h2>
                         </Row>
@@ -73,10 +73,8 @@ class RegisterForm extends Component {
                             <Input prefix={<Icon type="lock" />} placeholder="RETYPE PASSWORD" />
                         </Row>
                         <Row >
-                            <Col>
-                                <Checkbox></Checkbox>
-                            </Col>
-                            <Col>
+                            <Col size={{xs:12}} style={{display:'flex'}}>
+                                <Checkbox></Checkbox>                                
                                 <h2 style={TERMS_AND_COND}>I accept the terms & conditions </h2>
                             </Col>
                         </Row>

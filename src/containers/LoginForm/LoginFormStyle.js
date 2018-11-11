@@ -1,6 +1,6 @@
 export const CONTAINER = {
     background: 'linear-gradient(119deg, #F82279, #934CDB)',
-    height: '100vh',
+    minHeight: '100vh',
 }
 
 export const COINAGE_LOGO = {
@@ -28,7 +28,7 @@ export const COINAGE_TITLE = {
 
 export const INPUT = {
     background: 'transparent',
-    width: '363px',
+    width: '100%',
     height: '59px',
     borderWidth: '1.5px',
     borderRadius: '11px 11px 11px 11px',
@@ -37,10 +37,11 @@ export const INPUT = {
 }
 
 export const REMEMBER_ME = {
-    display: 'block',
+    display: 'flex',
     color: 'white',
     width: '100%',
     height: 18,
+    marginLeft: '10px', 
     padding: '0px 0 0px px',
     fontFamily: 'Gibson',
     textAlign: 'left',
@@ -78,7 +79,7 @@ export const LOGIN_BUTTON = {
     display: 'block',
     textTransform: 'uppercase',
     color: '#C038AD',
-    width: '50%',
+    width: '100%',
     height: 55.2,
     padding: '0px 0 0px 0px',
     fontFamily: 'Gibson',
