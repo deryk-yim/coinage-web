@@ -26,13 +26,26 @@ export class Grid extends React.Component {
 
 export class Row extends React.Component {
     render() {
-        const { style, className } = this.props;
+        const { style, className, center, top, bottom, left, right } = this.props;
         const styles = style && getStyle(style)
-            , nodeClass = className ? className : '';
+            , nodeClass = className ? className : ''
+            , centerClass = center && 'row-center-content'
+            , topClass = top && 'row-top-content'
+            , bottomClass = bottom && 'row-bottom-content'
+            , leftClass = left && 'row-left-content'
+            , rightClass = right && 'row-right-content';
         const rowClasses = [
             'row',
-            nodeClass
+            nodeClass,
+            centerClass,
+            topClass,
+            bottomClass,
+            leftClass,
+            rightClass
         ].filter(item => item).join(' ');
+
+        [1, 2, undefined, 3, 6]
+        false, undefined, 0, 'asdadsa'
 
         return (
             <div className={rowClasses} style={styles}>
@@ -69,7 +82,6 @@ export class Col extends React.Component {
                 leftClass,
                 rightClass
             ].filter(item => item).join(' ');
-
         return (
             <div className={columnClasses} style={styles}>
                 {this.props.children}
