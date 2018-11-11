@@ -48,17 +48,17 @@ class RegisterForm extends Component {
                     </Row>                
                 </Col> */}
                 
-                <Grid>
+                <Grid center>
                     <Row style={{justifyContent: 'flex-start'}}>
 
                         <Col size={{xs: 12, sm: 6}}>
                             <h2 style={COINAGE_TITLE}> <Icon type="copyright" /> Coinage </h2>
                         </Col>                      
                     </Row>
-                    <Row style={{justifyContent: 'center'}}>
+                    <Row center>
                     <Col size={{xs: 12, sm: 4}}>
                         <Row > 
-                            <h2 style={SIGNUP_TITLE}>SIGNUP</h2>
+                            <h2 style={SIGNUP_TITLE}>SIGNUP</h2> 
                         </Row>
                         <Row >
                             <Input prefix={<Icon type="user"  />} placeholder="USERNAME" />
