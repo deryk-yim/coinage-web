@@ -87,6 +87,9 @@ class Body extends React.Component {
 
                 <Grid>
                     <Row>
+                        <h2 style={BODY_TITLE}>Profile</h2>
+                    </Row>
+                    <Row>
                         <Col size={{xs: 12, sm: 6}}>
                             <Input prefix={<Icon type="user" />} placeholder="USERNAME" />
                         </Col>
@@ -138,7 +141,7 @@ class Body extends React.Component {
                     </Row>
 
 
-                    <Row>
+                    {/*<Row>
                         <Col 
                             nopadding
                             size={{xs: 3, sm: 6, md: 9, lg: 9, xl: 9}}
@@ -160,7 +163,7 @@ class Body extends React.Component {
                             offset={{ xs: 0, sm: 2, md: 4 }}>
                             3
                        </Col>
-                   </Row>
+                   </Row> */}
                 </Grid>
             </div>
         )

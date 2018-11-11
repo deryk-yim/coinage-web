@@ -7,8 +7,12 @@
   width: 100%;
   padding-right: 15px;
   padding-left: 15px;
-  margin-right: auto;
+}
+
+.center {
   margin-left: auto;
+  margin-right:auto;
+
 }
 @media (min-width: 576px) {
   .gridContainer {
@@ -44,6 +48,7 @@
   flex-wrap: wrap;
   margin-right: -15px;
   margin-left: -15px;
+  margin-bottom: 15px;
 }
 
 .column {
