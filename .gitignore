@@ -1,5 +1,9 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
+# Configs #
+##################
+variables.env
+
 # dependencies
 /node_modules
 
@@ -19,3 +23,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# dotenv environment variables file
+.env
