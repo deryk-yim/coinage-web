@@ -12,8 +12,28 @@
 .center {
   margin-left: auto;
   margin-right:auto;
-
 }
+
+.col-center-content {
+  justify-content: center;
+}
+
+.col-left-content {
+  justify-content: flex-start;
+}
+
+.col-right-content {
+  justify-content: flex-end;
+}
+
+.col-top-content {
+  align-content: flex-start;
+}
+
+.col-bottom-content {
+  align-content: flex-end;
+}
+
 @media (min-width: 576px) {
   .gridContainer {
     max-width: 540px;
