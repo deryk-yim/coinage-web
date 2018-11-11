@@ -62,36 +62,44 @@ class LoginForm extends React.Component {
             </Col>*/}
             <Grid>
               <Row style={{justifyContent: 'center'}}>
-                <Col size={{xs: 12, sm: 6}}>
+                <Col size={{xs: 12, sm: 8, md: 6, lg: 4}}>
                   <Row>
-                    <h2 style={COINAGE_LOGO}> <Icon type="copyright" /> </h2>
+                    <Col size={{xs:12}}>
+                      <h2 style={COINAGE_LOGO}> <Icon type="copyright" /> </h2>
+                    </Col>
                   </Row>
                   <Row>
                     <h2 style={COINAGE_LOGO}> KOINIJ </h2>
                   </Row>
                   <Row>
-                    <Input style={INPUT} prefix={<Icon type="user"  />} placeholder="USERNAME" />
-                  </Row>
-                  <Row>
-                    <Input style={INPUT} prefix={<Icon type="lock"  />} placeholder="PASSWORD" />
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Checkbox></Checkbox>
+                    <Col size={{xs:12, sm:12}}>
+                      <Input style={INPUT} prefix={<Icon type="user"  />} placeholder="USERNAME" />
                     </Col>
-                    <Col>
+                  </Row>
+                  <Row>
+                    <Col size={{xs:12, sm:12}}>
+                      <Input style={INPUT} prefix={<Icon type="lock"  />} placeholder="PASSWORD" />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col size={{xs:12, sm:6}} style={{display:'flex'}}>
+                      <Checkbox></Checkbox>
                       <h2 style={REMEMBER_ME}>Remember me</h2>
                     </Col>
-                    <Col>
+                    <Col size={{xs:12, sm:6}}>
                       <Button style={FORGET_PASSWORD}>Forget Password</Button>
                     </Col>
                   
                   </Row>
                   <Row>
-                    <Button type="primary" style={LOGIN_BUTTON}>LOGIN</Button>  
+                    <Col size={{xs:12, sm:12}}>
+                      <Button type="primary" style={LOGIN_BUTTON}>LOGIN</Button>  
+                    </Col>
                   </Row>
                   <Row>
-                    <Button style={REGISTER}>or register now!</Button>  
+                    <Col size={{xs:12, sm:12}}>
+                      <Button style={REGISTER}>or register now!</Button>  
+                    </Col>
                   </Row>
                 </Col>
 

@@ -1,6 +1,6 @@
 export const CONTAINER = {
     background: 'linear-gradient(119deg, #F82279, #934CDB)',
-    height: '100vh',
+    minHeight: '100vh',
 
     
 }
@@ -59,6 +59,7 @@ export const TERMS_AND_COND = {
     color: 'white',
     width: '100%',
     height: 18,
+    marginLeft: '10px', 
     padding: '0px 0 0px px',
     fontFamily: 'Gibson',
     textAlign: 'left',
