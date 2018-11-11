@@ -34,7 +34,7 @@ export const SIGNUP_BUTTON = {
     display: 'block',
     textTransform: 'uppercase',
     color: '#C038AD',
-    width: '50%',
+    width: '100%',
     height: 55.2,
     padding: '0px 0 0px 0px',
     fontFamily: 'Gibson',

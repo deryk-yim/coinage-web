@@ -36,6 +36,18 @@ export const CATEGORY_VALUE = {
     fontSize: 40,
 }
 
+export const CATEGORY = {
+    display: 'inline-block',
+    width: '100%',
+    height: 19,
+    padding: '0px 0px 0px 0px',
+    color: 'white',
+    fontFamily: 'Gibson',
+    backgroundColor: 'transparent',
+    border: 'none',
+    textAlign: 'left',
+    fontSize: 17,
+}
     
 export const GRAPH = {
     width: '1000px',
