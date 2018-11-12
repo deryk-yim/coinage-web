@@ -6,9 +6,9 @@ export const CONTAINER = {
 
 export const HEADER_BUTTON = {
     display: 'inline-block',
-    width: '100%',
+  
     height: 18,
-    padding: '20px 0px 20px 25px',
+    padding: '0px 0px 0px 0px',
     color: 'white',
     fontFamily: 'Gibson',
     backgroundColor: 'transparent',

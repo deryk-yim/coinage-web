@@ -46,7 +46,7 @@ export const SIGNUP_BUTTON = {
 export const LOGIN_LINK = {
     display: 'block',
     color: 'white',
-    width: '100%',
+    width: '70%',
     height: 21,
     padding: '0px 0 0px px',
     fontFamily: 'Gibson',
