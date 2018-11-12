@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import Sidebar from '../../components/Sidebar/Sidebar';
 import { Layout } from 'antd';
-import styles from './Dashboard.css';
+
+import Sidebar from '../../components/Sidebar/Sidebar';
 import CustomHeader from '../../components/CustomHeader/CustomHeader';
 import Body from './Body';
 
 const { Header, Footer, Sider, Content } = Layout;
-
 
 class Dashboard extends Component {
   render() {

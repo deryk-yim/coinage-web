@@ -1,28 +1,26 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import '../LoginForm/LoginForm.css';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
-import { CONTAINER, COINAGE_LOGO, COINAGE_TITLE, INPUT, REMEMBER_ME, FORGET_PASSWORD, LOGIN_BUTTON, REGISTER} from '../LoginForm/LoginFormStyle.js';
-import { Grid, Row, Col } from '../../components/Grid/Grid';
-const FormItem = Form.Item;
 
+import {
+  Form, Icon, Input, Button, Checkbox,
+  } from 'antd';
+import {
+  CONTAINER, COINAGE_LOGO, INPUT, REMEMBER_ME, FORGET_PASSWORD, LOGIN_BUTTON, REGISTER,
+  } from './LoginFormStyle.js';
+import { Grid, Row, Col } from '../../components/Grid/Grid';
+import './LoginForm.css';
 
 class LoginForm extends React.Component {
 
-    handleSubmit = (e) => {
-        e.preventDefault();
-    }
+  handleSubmit = (e) => {
+    return e.preventDefault();
+  }
 
-    render() {
-        const { getFieldDecorator } = this.props.form;
-        return (
-
-          <div style={CONTAINER}>
-            <Form onSubmit={this.handleSubmit} className="login-form">
-          
-            
-            {/*<Col span={8}>
-            </Col>
+  render() {
+    return (
+    <div style={CONTAINER}>
+    <Form onSubmit={this.handleSubmit} className="login-form"> {
+      /* <Col span={8}>
+    </Col>
             <Col span={8}>
               <Row style={{padding: '120px 0px 10px 0px'}}>
                 <Col span={12}>
@@ -50,60 +48,66 @@ class LoginForm extends React.Component {
                 <Col span={6}>
                   <Button style={FORGET_PASSWORD}>Forget Password</Button>
                 </Col>
-              </Row> 
+              </Row>
               <Row>
-                <Button type="primary" style={LOGIN_BUTTON}>LOGIN</Button>  
+                <Button type="primary" style={LOGIN_BUTTON}>LOGIN</Button>
               </Row>
               <Row>
                 <Col span={12}>
-                  <Button style={REGISTER}>or register now!</Button>   
+                  <Button style={REGISTER}>or register now!</Button>
                 </Col>
               </Row>
             </Col>*/}
             <Grid>
-              <Row style={{justifyContent: 'center'}}>
-                <Col size={{xs: 12, sm: 6}}>
+              <Row style={{ justifyContent: 'center' }}>
+                <Col size={{ xs: 12, sm: 6 }}>
                   <Row>
-                    <h2 style={COINAGE_LOGO}> <Icon type="copyright" /> </h2>
+                    <h2 style={COINAGE_LOGO}>
+                    <Icon type="copyright" />
+                    </h2>
                   </Row>
                   <Row>
-                    <h2 style={COINAGE_LOGO}> KOINIJ </h2>
+                    <h2 style={COINAGE_LOGO}>
+                    KOINIJ
+                    </h2>
                   </Row>
                   <Row>
-                    <Input style={INPUT} prefix={<Icon type="user"  />} placeholder="USERNAME" />
+                    <Input style={INPUT} prefix={<Icon type="user" />} placeholder="USERNAME" />
                   </Row>
                   <Row>
-                    <Input style={INPUT} prefix={<Icon type="lock"  />} placeholder="PASSWORD" />
+                    <Input style={INPUT} prefix={<Icon type="lock" />} placeholder="PASSWORD" />
                   </Row>
                   <Row>
                     <Col>
-                      <Checkbox></Checkbox>
+                      <Checkbox />
                     </Col>
                     <Col>
-                      <h2 style={REMEMBER_ME}>Remember me</h2>
+                      <h2 style={REMEMBER_ME}>
+                      Remember me
+                      </h2>
                     </Col>
                     <Col>
-                      <Button style={FORGET_PASSWORD}>Forget Password</Button>
+                      <Button style={FORGET_PASSWORD}>
+                      Forget Password
+                      </Button>
                     </Col>
-                  
                   </Row>
                   <Row>
-                    <Button type="primary" style={LOGIN_BUTTON}>LOGIN</Button>  
+                    <Button type="primary" style={LOGIN_BUTTON}>
+                    LOGIN
+                    </Button>
                   </Row>
                   <Row>
-                    <Button style={REGISTER}>or register now!</Button>  
+                    <Button style={REGISTER}>
+                    or register now!
+                    </Button>
                   </Row>
                 </Col>
-
               </Row>
-            </Grid>          
-            
-          </Form>
-
-          </div>
-        
+            </Grid>
+    </Form>
+    </div>
         );
       }
 }
 export default Form.create()(LoginForm);
-

@@ -20,9 +20,9 @@ export function importedFiles(state = [], action) {
     switch (action.type) {
         case 'IMPORTED_FILES_FETCH_DATA_SUCCESS':
             return action.importedRecords;
-        case 'ADD_IMPORT_RECORD_TO_STORE': 
+        case 'ADD_IMPORT_RECORD_TO_STORE':
             return [
-                ...state, action.newItem
+                ...state, action.newItem,
             ];
         default:
             return state;

@@ -1,8 +1,7 @@
 import React from 'react';
-import Dashboard from '../../containers/Dashboard/Dashboard';
-import {DASHBOARD_CARD, DASHBOARD_CARD_TITLE, DASHBOARD_CARD_DAY_COUNTER, DASHBOARD_CIRCLE, DASHBOARD_CARD_DROPDOWN, DASHBOARD_CARD_DROPDOWN_HEADER} from '../DashboardCard/DashboardCardStyle';
-import { Form, Icon, Input, Button, Layout } from 'antd';
+import { Icon, Button, Layout } from 'antd';
 
+import { DASHBOARD_CARD, DASHBOARD_CARD_TITLE, DASHBOARD_CARD_DAY_COUNTER, DASHBOARD_CIRCLE, DASHBOARD_CARD_DROPDOWN, DASHBOARD_CARD_DROPDOWN_HEADER } from '../DashboardCard/DashboardCardStyle';
 
 const { Header, Footer, Sider, Content } = Layout;
 

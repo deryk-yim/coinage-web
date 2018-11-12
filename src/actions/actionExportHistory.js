@@ -1,5 +1,3 @@
-const moment = require('moment');
-
 export function exportedFilesHasErrored(bool) {
     return {
         type: 'EXPORTED_FILES_HAS_ERRORED',

@@ -2,7 +2,7 @@ export const CONTAINER = {
     background: 'white',
     width:'100%',
     padding: '0px 0px 0px 0px',
-}
+};
 
 export const HEADER_BUTTON = {
     display: 'inline-block',
@@ -15,4 +15,4 @@ export const HEADER_BUTTON = {
     border: 'none',
     textAlign: 'left',
     textTransform: 'uppercase',
-    }
+};

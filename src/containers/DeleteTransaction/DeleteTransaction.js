@@ -1,5 +1,5 @@
-export function deleteTransactionFromServer (endpoint, selectedRows) {
-    for (let i = 0; i < selectedRows.length > 0; i++) {
+export default function deleteTransactionFromServer(endpoint, selectedRows) {
+    for (let i = 0; i < selectedRows.length; i++) {
         const endpointDelete = endpoint + '/' + selectedRows[i]._id;
         fetch(endpointDelete, {
             method: 'delete'
@@ -16,4 +16,4 @@ export function deleteTransactionFromServer (endpoint, selectedRows) {
                 error: err
             }))
     }
-}
+};

@@ -1,9 +1,10 @@
 import { combineReducers } from 'redux';
-import { transactions, transactionsHasErrored, transactionsIsLoading, postAddTransactionCategory} from './transactions';
-import { categoriesHasErrored, categoriesIsLoading, categories} from './categories';
-import { importedFilesHasErrored, importedFilesIsLoading, importedFiles} from './importTransactions';
-import { exportedFilesHasErrored, exportedFilesIsLoading, exportedFiles} from './exportTransactions';
-import { countAllTransactionsHasErrored, countAllTransactionsIsLoading, countAllTransactions} from './countTransactions';
+
+import { transactions, transactionsHasErrored, transactionsIsLoading, postAddTransactionCategory } from './transactions';
+import { categoriesHasErrored, categoriesIsLoading, categories } from './categories';
+import { importedFilesHasErrored, importedFilesIsLoading, importedFiles } from './importTransactions';
+import { exportedFilesHasErrored, exportedFilesIsLoading, exportedFiles } from './exportTransactions';
+import { countAllTransactionsHasErrored, countAllTransactionsIsLoading, countAllTransactions } from './countTransactions';
 
 export default combineReducers({
     transactions,
@@ -21,6 +22,5 @@ export default combineReducers({
     exportedFiles,
     countAllTransactionsHasErrored,
     countAllTransactionsIsLoading,
-    countAllTransactions
-
+    countAllTransactions,
 });

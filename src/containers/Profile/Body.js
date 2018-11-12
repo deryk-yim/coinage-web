@@ -1,15 +1,14 @@
 import React from 'react';
-import Profile from '../Profile/Profile';
-import {BODY_TITLE, PROFILE_SETTING, SWITCH} from '../Profile/BodyStyle';
-// import { Form, Icon, Input, Button, Row, Col, Switch} from 'antd';
-import { Form, Icon, Input, Button, Switch } from 'antd';
-import { Grid, Row, Col }  from '../../components/Grid/Grid';
+
+import { BODY_TITLE, PROFILE_SETTING, SWITCH } from './BodyStyle';
+import { Icon, Input, Switch } from 'antd';
+import { Grid, Row, Col } from '../../components/Grid/Grid';
 
 class Body extends React.Component {
-    render(){
-        return(
-            <div>
-                {/* <Row style={{padding: '0px 0px 30px 0px'}}>
+    render() {
+        return (
+        <div>
+            {/* <Row style={{padding: '0px 0px 30px 0px'}}>
                     <Col span={1}>
                     </Col>
                     <Col span={6}>
@@ -50,7 +49,7 @@ class Body extends React.Component {
                     </Col>
                     <Col span={2}>
                         <Switch style={SWITCH}></Switch>
-                    </Col>                    
+                    </Col>
                 </Row>
                 <Row style={{padding: '15px 0px 15px 0px'}}>
                     <Col span={1}>
@@ -83,14 +82,14 @@ class Body extends React.Component {
                     <Col span={2}>
                         <Switch style={SWITCH}></Switch>
                     </Col>    
-                </Row> */}
-
+                </Row> */
+                }
                 <Grid>
                     <Row>
                         <h2 style={BODY_TITLE}>Profile</h2>
                     </Row>
                     <Row>
-                        <Col size={{xs: 12, sm: 6}}>
+                        <Col size={{ xs: 12, sm: 6 }}>
                             <Input prefix={<Icon type="user" />} placeholder="USERNAME" />
                         </Col>
                         <Col size={{ xs: 12, sm: 6 }}>
@@ -121,28 +120,38 @@ class Body extends React.Component {
                             <Col><Switch style={SWITCH}></Switch></Col>
                         </Col>
                         <Col size={{ xs: 12, sm: 6 }}>
-                            <Col><h2 style={PROFILE_SETTING}>PROFILE SETTING</h2></Col>
+                            <Col><h2 style={PROFILE_SETTING}>
+                            PROFILE SETTING
+                            </h2>
+                            </Col>
                             <Col><Switch style={SWITCH}></Switch></Col>
                         </Col>
                     </Row>
                     <Row>
                         <Col size={{ xs: 12, sm: 6 }}>
-                            <Col><h2 style={PROFILE_SETTING}>PROFILE SETTING</h2></Col>
-                            <Col><Switch style={SWITCH}></Switch></Col>
+                            <Col><h2 style={PROFILE_SETTING}>
+                            PROFILE SETTING
+                            </h2>
+                            </Col>
+                            <Col>
+                            <Switch style={SWITCH}>
+                            </Switch>
+                            </Col>
                         </Col>
                         <Col size={{ xs: 12, sm: 6 }}>
                             <Col>
-                                <h2 style={PROFILE_SETTING}>PROFILE SETTING</h2>
+                                <h2 style={PROFILE_SETTING}>
+                                PROFILE SETTING
+                                </h2>
                             </Col>
                             <Col>
-                                <Switch style={SWITCH}></Switch>
+                                <Switch style={SWITCH}>
+                                </Switch>
                             </Col>
                         </Col>
                     </Row>
-
-
                     {/*<Row>
-                        <Col 
+                        <Col> 
                             nopadding
                             size={{xs: 3, sm: 6, md: 9, lg: 9, xl: 9}}
                             style={{ backgroundColor: 'red', color: 'white', height: '50px'}}
@@ -166,10 +175,8 @@ class Body extends React.Component {
                    </Row> */}
                 </Grid>
             </div>
-        )
+        );
     }
-
 }
 
 export default Body;
-

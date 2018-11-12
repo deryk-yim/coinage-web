@@ -1,5 +1,7 @@
 const Json2csvParser = require('json2csv').Parser;
+
 const moment = require('moment');
+
 const fields = ['transactionDate', 'category', 'description', 'amount'];
 
 export function createExportRecord(exportType, fileName, recordsExported, pid) {
@@ -38,7 +40,3 @@ export function exportCSV(data) {
     const csv = json2csvParser.parse(data);
     return csv;
 };
-
-
-
-

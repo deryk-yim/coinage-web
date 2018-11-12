@@ -9,9 +9,9 @@ export const BODY_TITLE = {
     border: 'none',
     textAlign: 'left',
     fontSize: 34,
-    }
+};
 
- export const PROFILE_SETTING = {
+export const PROFILE_SETTING = {
     display: 'inline-block',
     height: 22,
     padding: '0px 0px 0px 0px',
@@ -21,12 +21,10 @@ export const BODY_TITLE = {
     border: 'none',
     textAlign: 'left',
     fontSize: 20,
-    }    
-   
-    export const SWITCH = {
+};
 
-        color: 'blue',
-        backgroundColor: 'white',
-        switchColor: 'red',
-
-        }   
+export const SWITCH = {
+    color: 'blue',
+    backgroundColor: 'white',
+    switchColor: 'red',
+};

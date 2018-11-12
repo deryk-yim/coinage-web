@@ -20,9 +20,9 @@ export function exportedFiles(state = [], action) {
     switch (action.type) {
         case 'EXPORTED_FILES_FETCH_DATA_SUCCESS':
             return action.exportedRecords;
-        case 'ADD_EXPORT_RECORD_TO_STORE': 
+        case 'ADD_EXPORT_RECORD_TO_STORE':
             return [
-                ...state, action.newItem
+                ...state, action.newItem,
             ];
         default:
             return state;

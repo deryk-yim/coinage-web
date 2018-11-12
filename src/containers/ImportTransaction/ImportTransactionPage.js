@@ -1,14 +1,14 @@
 import React from 'react';
-import { Button, Table, Icon, Spin, Progress } from 'antd';
-import '../Transaction/Transaction.css';
 import CsvParse from '@vtex/react-csv-parse';
-import { error, createImportRecord, addTransactionToServer, addImportFileToServer, showImportErrors} from '../ImportTransaction/ImportTransaction';
-import { doValidate } from '../ImportTransaction/ImportTransactionValidator';
 import { connect } from 'react-redux';
+import { Button, Table, Icon, Spin, Progress } from 'antd';
+
+import { createImportRecord, addTransactionToServer, addImportFileToServer, showImportErrors } from '../ImportTransaction/ImportTransaction';
+import { doValidate } from '../ImportTransaction/ImportTransactionValidator';
 import { importedFilesFetchData, addImportHistory } from '../../actions/actionImportHistory';
+import '../Transaction/Transaction.css';
 
 const addTransactionEndpoint = 'http://localhost:3000/transaction/create/2/5aa43585955a2561e0935cdb';
-
 const columns = [
     { title: 'Transaction Date', dataIndex: 'transactionDate', key: 'transactionDate' },
     { title: 'Category', dataIndex: 'category', key: 'category' },
@@ -16,16 +16,11 @@ const columns = [
     { title: 'Amount', dataIndex: 'amount', key: 'amount' }
 ];
 
-const Json2csvParser = require('json2csv').Parser;
-const fields = ['Transaction Date', 'Category', 'Description', 'Amount'];
-const moment = require('moment');
 const getImportedFilesHistory = 'http://localhost:3000/import/5aa43585955a2561e0935cdb';
 const addImportedFile = 'http://localhost:3000/import/create/1/5aa43585955a2561e0935cdb';
-
 const pid = '5aa43585955a2561e0935cdb';
 
 class ImportTransactionPage extends React.Component {
-
     constructor(props) {
         super(props)
         this.state = {

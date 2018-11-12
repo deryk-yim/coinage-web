@@ -55,7 +55,6 @@ class EditableCell extends React.Component {
       index,
       ...restProps
     } = this.props;
-
     return (
       <EditableContext.Consumer>
         {(form) => {

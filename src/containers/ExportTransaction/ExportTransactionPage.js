@@ -1,17 +1,19 @@
 import React from 'react';
-import { Button, Table, Icon, Progress, Dropdown, Menu, message, DatePicker } from 'antd';
-import '../Transaction/Transaction.css';
 import { connect } from 'react-redux';
+
+import { Button, Icon, Progress, Dropdown, Menu, DatePicker } from 'antd';
+
+import { CSVLink } from 'react-csv';
+
 import { exportedFilesFetchData, addExportHistory } from '../../actions/actionExportHistory';
 import { createExportRecord, addExportFileToServer, exportCSV } from '../ExportTransaction/ExportTransaction';
 import { transactionsFetchData } from '../../actions/actionTransaction';
-import { CSVLink } from 'react-csv';
+import '../Transaction/Transaction.css';
 
 const { RangePicker } = DatePicker;
 const getExportedFilesHistory = 'http://localhost:3000/export/5aa43585955a2561e0935cdb';
 const addExportedFile = 'http://localhost:3000/export/create/1/5aa43585955a2561e0935cdb';
 const getTransactionsEndpoint = 'http://localhost:3000/transaction/5aa43585955a2561e0935cdb';
-
 const pid = '5aa43585955a2561e0935cdb';
 
 class ExportTransactionPage extends React.Component {
@@ -88,8 +90,7 @@ class ExportTransactionPage extends React.Component {
                 <Button onClick={this.onExport} disabled={this.state.exportData.length === 0} >
                     <Icon type="download" />
                     <CSVLink data={this.state.exportData}
-                        filename={"my-file.csv"}
-                        target="_blank">
+                        filename={"my-file.csv"} target="_blank">
                         Export
                     </CSVLink>
                 </Button>
@@ -97,35 +98,33 @@ class ExportTransactionPage extends React.Component {
                     Export History
                 </Button>
                 <Dropdown overlay={menu}>
-                    <Button style={{ marginLeft: 8 }}>
-                        Select Filter <Icon type="down" />
+                    <Button style={{ marginLeft: 8 }}> 
+                    Select Filter
+                    <Icon type="down" />
                     </Button>
                 </Dropdown>
-               
                 <RangePicker onChange={this.onDateChange} />
-               
                 {this.state.importProgressFlag === true ? (
-                    <Progress percent={this.state.percent} />
-                ) : (
-                        <p> </p>
-                    )}
+                <Progress percent={this.state.percent} />
+                ) : (''
+                )}
             </div>
-        )
+        );
     }
 }
 
 const mapStateToProps = (state) => {
     return {
         transactions: state.transactions,
-        exportedFiles: state.exportedFiles
+        exportedFiles: state.exportedFiles,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchTransactionsData: (url) => dispatch(transactionsFetchData(url)),
-        fetchExportedFiles: (url) => dispatch(exportedFilesFetchData(url)),
-        addExportedFile: (exportedFile) => dispatch(addExportHistory(exportedFile))
+        fetchTransactionsData: url => dispatch(transactionsFetchData(url)),
+        fetchExportedFiles: url => dispatch(exportedFilesFetchData(url)),
+        addExportedFile: exportedFile => dispatch(addExportHistory(exportedFile)),
     };
 };
 

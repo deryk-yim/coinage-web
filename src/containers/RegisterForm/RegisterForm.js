@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button, Checkbox} from 'antd';
-import { CONTAINER, COINAGE_TITLE, SIGNUP_TITLE, SIGNUP_BUTTON, LOGIN_LINK, TERMS_AND_COND } from '../RegisterForm/RegisterFormStyle.js';
-import { Grid, Row, Col } from '../../components/Grid/Grid'; 
 
+import {
+    Icon, Input, Button, Checkbox 
+    } from 'antd';
+
+import { 
+    CONTAINER, COINAGE_TITLE, SIGNUP_TITLE, SIGNUP_BUTTON, LOGIN_LINK, TERMS_AND_COND
+    } from '../RegisterForm/RegisterFormStyle.js';
+
+import { 
+    Grid, Row, Col 
+    } from '../../components/Grid/Grid'; 
 
 class RegisterForm extends Component {
     render() {
@@ -49,19 +57,19 @@ class RegisterForm extends Component {
                 </Col> */}
                 
                 <Grid>
-                    <Row style={{justifyContent: 'flex-start'}}>
+                    <Row style={{ justifyContent: 'flex-start' }}>
 
-                        <Col size={{xs: 12, sm: 6}}>
+                        <Col size={{ xs: 12, sm: 6 }}>
                             <h2 style={COINAGE_TITLE}> <Icon type="copyright" /> Coinage </h2>
                         </Col>                      
                     </Row>
-                    <Row style={{justifyContent: 'center'}}>
-                    <Col size={{xs: 12, sm: 6}}>
+                    <Row style={{ justifyContent: 'center' }}>
+                    <Col size={{ xs: 12, sm: 6 }}>
                         <Row > 
                             <h2 style={SIGNUP_TITLE}>SIGNUP</h2>
                         </Row>
                         <Row >
-                            <Input prefix={<Icon type="user"  />} placeholder="USERNAME" />
+                            <Input prefix={<Icon type="user" />} placeholder="USERNAME" />
                         </Row>
                         <Row >
                             <Input prefix={<Icon type="mail" />} placeholder="EMAIL" />
@@ -77,7 +85,9 @@ class RegisterForm extends Component {
                                 <Checkbox></Checkbox>
                             </Col>
                             <Col>
-                                <h2 style={TERMS_AND_COND}>I accept the terms & conditions </h2>
+                                <h2 style={TERMS_AND_COND}>
+                                I accept the terms & conditions 
+                                </h2>
                             </Col>
                         </Row>
                         <Row >
@@ -86,24 +96,19 @@ class RegisterForm extends Component {
                             </Button>
                         </Row>
                         <Row >
-                            <h2 style={LOGIN_LINK}>or Login with your account!</h2>
+                            <h2 style={LOGIN_LINK}> 
+                            or Login with your account!
+                            </h2>
                         </Row> 
                     </Col>
                     </Row>
-
                 </Grid>
-
-         
             </div>
-
             // need to add link to terms and conditions and login
             // need to fix input to match actual with vertical line right of icon
             // need username and password check with server
-        )
-
+        );
     }
-
-
 }
 
 export default RegisterForm;

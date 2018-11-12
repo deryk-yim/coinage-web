@@ -1,6 +1,6 @@
 import { Modal } from 'antd';
-const moment = require('moment');
 
+const moment = require('moment');
 
 export function createImportRecord(importType, fileName, recordsAdded, pid, errorMessage, errorContent) {
     if (document.getElementById("dataInput").value != "") {

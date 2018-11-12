@@ -1,5 +1,6 @@
-
-export const initialState = {
+const initialState = {
     transactions: [],
     transactionImport: [],
 };
+
+export default initialState;

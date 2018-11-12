@@ -1,8 +1,6 @@
 import React from 'react';
-import Dashboard from '../Dashboard/Dashboard';
-import {BODY_TITLE} from '../Dashboard/BodyStyle';
+import BODY_TITLE from './BodyStyle';
 import DashboardCard from '../../components/DashboardCard/DashboardCard';
-import { Form, Icon, Input, Button} from 'antd';
 import { Grid, Row, Col }  from '../../components/Grid/Grid';
 
 class Body extends React.Component {
@@ -48,7 +46,6 @@ class Body extends React.Component {
                         />    
                     </Col>
                 </Row>*/}
-
                 <Grid>
                     <Row style={{justifyContent: 'flex-start'}}>
                         <h2 style={BODY_TITLE}>Dashboard</h2>
@@ -89,7 +86,7 @@ class Body extends React.Component {
         )
     }
 
-}
+};
 
 export default Body;
 

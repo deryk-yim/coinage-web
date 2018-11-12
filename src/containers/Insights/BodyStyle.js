@@ -9,7 +9,7 @@ export const BODY_TITLE = {
     border: 'none',
     textAlign: 'left',
     fontSize: 34,
-}
+};
 
 export const BODY_TEXT = {
     display: 'inline-block',
@@ -22,7 +22,7 @@ export const BODY_TEXT = {
     border: 'none',
     textAlign: 'left',
     fontSize: 24,
-}
+};
 
 export const CATEGORY_VALUE = {
     display: 'inline-block',
@@ -34,7 +34,7 @@ export const CATEGORY_VALUE = {
     border: 'none',
     textAlign: 'left',
     fontSize: 40,
-}
+};
 
 export const CATEGORY = {
     display: 'inline-block',

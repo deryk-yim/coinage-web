@@ -4,7 +4,6 @@ import InsightsHeader from './InsightsHeader';
 import { Layout } from 'antd';
 import Body from './Body';
 
-
 const { Header, Footer, Sider, Content } = Layout;
 
 class Insights extends Component {
@@ -21,8 +20,6 @@ class Insights extends Component {
             </div>
         )
     }    
-}
-
-
+};
 
 export default Insights;

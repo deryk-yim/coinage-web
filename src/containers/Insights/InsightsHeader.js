@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
-import Insights from './Insights';
-import {CONTAINER, HEADER_BUTTON} from './InsightsHeaderStyle';
-import { Menu, message, Form, Icon, Input, Button, Row, Col, Dropdown} from 'antd';
+import { CONTAINER, HEADER_BUTTON } from './InsightsHeaderStyle';
+import { Menu, Icon, Button, Col, Dropdown} from 'antd';
 
 function handleButtonClick(e) {
-    
     console.log('click left button', e);
   }
   
   function handleMenuClick(e) {
-   
     console.log('click', e);
   }
   

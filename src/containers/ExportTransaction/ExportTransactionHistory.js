@@ -1,7 +1,6 @@
 
 
 /*
-
 const exportColumns = [
     { title: 'Export Date', dataIndex: 'createdDate', key: 'createdDate' },
     { title: 'File Name', dataIndex: 'exportFileName', key: 'exportFileName' },
@@ -9,9 +8,6 @@ const exportColumns = [
 ];
 
 const hasRecords = this.props.exportedFiles.length > 0;
-
-
-
 
 const mapStateToProps = (state) => {
     return {
@@ -27,10 +23,4 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExportTransactionHistoryPage);
-
-
-
-
-
-
 */

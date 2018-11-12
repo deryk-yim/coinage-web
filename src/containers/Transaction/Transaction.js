@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, Table, Icon, Spin, Form, Select, Input, InputNumber, Popconfirm } from 'antd';
-import '../Transaction/Transaction.css';
 import { connect } from 'react-redux';
+import { Button, Icon, Select } from 'antd';
+
+import '../Transaction/Transaction.css';
 import { transactionsFetchData } from '../../actions/actionTransaction';
 import { categoriesFetchData } from '../../actions/actionCategory';
 import { removeTransactions } from '../../actions/actionDeleteTransaction';
