@@ -37,3 +37,14 @@ export function getOrder(order) {
     }
     return orderClass;
 }
+
+export function getPosition(prefix, positions) {
+    if(typeof positions == 'object') {
+        return Object.entries(positions)
+            .filter(position => position[1])
+            .map((position) => {
+                return `${prefix}-${position[0]}-content`;
+            }).join(' ');
+    }
+    return '';
+}

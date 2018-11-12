@@ -1,5 +1,5 @@
 import React from 'react';
-import { getStyle, getSize, getOffset, getOrder } from './functions';
+import { getStyle, getSize, getOffset, getOrder, getPosition } from './functions';
 import './grid.css';
 
 export class Grid extends React.Component {
@@ -29,24 +29,12 @@ export class Row extends React.Component {
         const { style, className, center, top, bottom, left, right } = this.props;
         const styles = style && getStyle(style)
             , nodeClass = className ? className : ''
-            , centerClass = center && 'row-center-content'
-            , topClass = top && 'row-top-content'
-            , bottomClass = bottom && 'row-bottom-content'
-            , leftClass = left && 'row-left-content'
-            , rightClass = right && 'row-right-content';
+            , positionClass = getPosition('row', {center, top, bottom, left, right});
         const rowClasses = [
             'row',
             nodeClass,
-            centerClass,
-            topClass,
-            bottomClass,
-            leftClass,
-            rightClass
+            positionClass
         ].filter(item => item).join(' ');
-
-        [1, 2, undefined, 3, 6]
-        false, undefined, 0, 'asdadsa'
-
         return (
             <div className={rowClasses} style={styles}>
                 {this.props.children}
@@ -64,24 +52,16 @@ export class Col extends React.Component {
             , offsetClass = offset && getOffset(offset)
             , orderClass = order && getOrder(order)
             , nopaddingClass = nopadding && 'nopadding'
-            , centerClass = center && 'col-center-content'
-            , topClass = top && 'col-top-content'
-            , bottomClass = bottom && 'col-bottom-content'
-            , leftClass = left && 'col-left-content'
-            , rightClass = right && 'col-right-content';
+            , positionClass = getPosition('col', {center, top, bottom, left, right});
         const columnClasses = [
-                'column',
-                nodeClass, 
-                sizeClass, 
-                offsetClass, 
-                orderClass, 
-                nopaddingClass,
-                centerClass,
-                topClass,
-                bottomClass,
-                leftClass,
-                rightClass
-            ].filter(item => item).join(' ');
+            'column',
+            nodeClass, 
+            sizeClass, 
+            offsetClass, 
+            orderClass, 
+            nopaddingClass,
+            positionClass
+        ].filter(item => item).join(' ');
         return (
             <div className={columnClasses} style={styles}>
                 {this.props.children}
