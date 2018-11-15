@@ -7,7 +7,8 @@ import './grid.css';
 
 export const Grid = (props) => {
     const {
-        style, className, nopadding, center, children,
+        style, className, nopadding,
+        center, children,
     } = props;
     const styles = style && getStyle(style);
     const nodeClass = className || '';
@@ -44,7 +45,9 @@ Grid.defaultProps = {
 
 export const Row = (props) => {
     const {
-        style, className, center, top, bottom, left, right, children,
+        style, className, center,
+        top, bottom, left, right,
+        children,
     } = props;
     const styles = style && getStyle(style);
     const nodeClass = className || '';
@@ -87,7 +90,10 @@ Row.defaultProps = {
 
 export const Col = (props) => {
     const {
-        size, offset, order, style, className, nopadding, center, top, bottom, left, right, children,
+        size, offset, order, style,
+        className, nopadding, center,
+        top, bottom, left, right,
+        children,
     } = props;
     const styles = getStyle(style);
     const nodeClass = className || '';
