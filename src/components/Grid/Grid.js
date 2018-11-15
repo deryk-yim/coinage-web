@@ -87,7 +87,7 @@ Row.defaultProps = {
 
 export const Col = (props) => {
     const {
-        size, offset, order, style, className, nopadding, center, top, bottom, left, right, children
+        size, offset, order, style, className, nopadding, center, top, bottom, left, right, children,
     } = props;
     const styles = getStyle(style);
     const nodeClass = className || '';
