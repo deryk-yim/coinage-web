@@ -11,6 +11,9 @@
         }],
         "import/no-unresolved": "off",
         "import/extensions": "off",
-        "react/jsx-indent": "off"
+        "react/jsx-indent": "off",
+        "linebreak-style": 0,
+        "indent": "off",
+        "no-trailing-spaces": [2, { "skipBlankLines": true }]
     }
 }
