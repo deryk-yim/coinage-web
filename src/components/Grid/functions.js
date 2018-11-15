@@ -1,6 +1,6 @@
 export function getStyle(style) {
-    let styles = {};
-    if(style) {
+    const styles = {};
+    if (style) {
         Object.keys(style).forEach((property) => {
             styles[property] = style[property];
         });

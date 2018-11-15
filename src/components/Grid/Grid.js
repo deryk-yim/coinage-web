@@ -1,22 +1,23 @@
 import React from 'react';
-import { getStyle, getSize, getOffset, getOrder, getPosition } from './functions';
-import './grid.css';
-// import { resolveCname } from 'dns';
 import PropTypes from 'prop-types';
-
-
+import {
+    getStyle, getSize, getOffset, getOrder, getPosition,
+} from './functions';
+import './grid.css';
 
 export const Grid = (props) => {
-    const { style, className, nopadding, center, children } = props;
-    const styles = style && getStyle(style)
-        , nodeClass = className ? className : ''
-        , nopaddingClass = nopadding && 'nopadding'
-        , centerClass = center && 'center';
+    const {
+        style, className, nopadding, center, children,
+    } = props;
+    const styles = style && getStyle(style);
+    const nodeClass = className || '';
+    const nopaddingClass = nopadding && 'nopadding';
+    const centerClass = center && 'center';
     const gridClasses = [
         'gridContainer',
         nodeClass,
         nopaddingClass,
-        centerClass
+        centerClass,
     ].filter(item => item).join(' ');
     return (
         <div className={gridClasses} style={styles}>
@@ -30,19 +31,30 @@ Grid.propTypes = {
     className: PropTypes.string,
     nopadding: PropTypes.bool,
     center: PropTypes.bool,
-    children: PropTypes.node
-}
+    children: PropTypes.node,
+};
+Grid.defaultProps = {
+    style: undefined,
+    className: undefined,
+    nopadding: undefined,
+    center: undefined,
+    children: undefined,
+};
 
 
 export const Row = (props) => {
-    const { style, className, center, top, bottom, left, right, children } = props;
-    const styles = style && getStyle(style)
-        , nodeClass = className ? className : ''
-        , positionClass = getPosition('row', { center, top, bottom, left, right });
+    const {
+        style, className, center, top, bottom, left, right, children,
+    } = props;
+    const styles = style && getStyle(style);
+    const nodeClass = className || '';
+    const positionClass = getPosition('row', {
+        center, top, bottom, left, right,
+    });
     const rowClasses = [
         'row',
         nodeClass,
-        positionClass
+        positionClass,
     ].filter(item => item).join(' ');
     return (
         <div className={rowClasses} style={styles}>
@@ -52,26 +64,40 @@ export const Row = (props) => {
 };
 
 Row.propTypes = {
-    style: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])), 
-    className: PropTypes.string, 
-    center: PropTypes.bool, 
-    top: PropTypes.bool, 
-    bottom: PropTypes.bool, 
-    left: PropTypes.bool, 
-    right: PropTypes.bool, 
-    children: PropTypes.node
-}
+    style: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
+    className: PropTypes.string,
+    center: PropTypes.bool,
+    top: PropTypes.bool,
+    bottom: PropTypes.bool,
+    left: PropTypes.bool,
+    right: PropTypes.bool,
+    children: PropTypes.node,
+};
+Row.defaultProps = {
+    style: undefined,
+    className: undefined,
+    center: undefined,
+    top: undefined,
+    bottom: undefined,
+    left: undefined,
+    right: undefined,
+    children: undefined,
+};
 
 
 export const Col = (props) => {
-    const { size, offset, order, style, className, nopadding, center, top, bottom, left, right, children } = props;
-    const styles = getStyle(style)
-        , nodeClass = className ? className : ''
-        , sizeClass = size && getSize(size)
-        , offsetClass = offset && getOffset(offset)
-        , orderClass = order && getOrder(order)
-        , nopaddingClass = nopadding && 'nopadding'
-        , positionClass = getPosition('col', { center, top, bottom, left, right });
+    const {
+        size, offset, order, style, className, nopadding, center, top, bottom, left, right, children
+    } = props;
+    const styles = getStyle(style);
+    const nodeClass = className || '';
+    const sizeClass = size && getSize(size);
+    const offsetClass = offset && getOffset(offset);
+    const orderClass = order && getOrder(order);
+    const nopaddingClass = nopadding && 'nopadding';
+    const positionClass = getPosition('col', {
+        center, top, bottom, left, right,
+    });
     const columnClasses = [
         'column',
         nodeClass,
@@ -79,7 +105,7 @@ export const Col = (props) => {
         offsetClass,
         orderClass,
         nopaddingClass,
-        positionClass
+        positionClass,
     ].filter(item => item).join(' ');
     return (
         <div className={columnClasses} style={styles}>
@@ -87,7 +113,6 @@ export const Col = (props) => {
         </div>
     );
 };
-
 Col.propTypes = {
     style: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
     className: PropTypes.string,
@@ -100,5 +125,19 @@ Col.propTypes = {
     bottom: PropTypes.bool,
     left: PropTypes.bool,
     right: PropTypes.bool,
-    children: PropTypes.node
-}
+    children: PropTypes.node,
+};
+Col.defaultProps = {
+    style: undefined,
+    className: undefined,
+    size: undefined,
+    offset: undefined,
+    order: undefined,
+    nopadding: undefined,
+    center: undefined,
+    top: undefined,
+    bottom: undefined,
+    left: undefined,
+    right: undefined,
+    children: undefined,
+};
