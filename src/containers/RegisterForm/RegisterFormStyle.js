@@ -44,13 +44,15 @@ export const SIGNUP_BUTTON = {
 }
 
 export const LOGIN_LINK = {
-    display: 'block',
+    display: 'inline-block',
+    width: '100%',
+    height: 18,
+    padding: '0px 0px 0px 0px',
     color: 'white',
-    width: '70%',
-    height: 21,
-    padding: '0px 0 0px px',
     fontFamily: 'Gibson',
-    textAlign: 'left',
+    backgroundColor: 'transparent',
+    border: 'none',
+    textAlign: 'center',
     fontSize: 18,
 }
 

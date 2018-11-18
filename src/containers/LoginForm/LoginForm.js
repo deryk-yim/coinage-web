@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import  { Redirect } from 'react-router-dom'
 import '../LoginForm/LoginForm.css';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { CONTAINER, COINAGE_LOGO, COINAGE_TITLE, INPUT, REMEMBER_ME, FORGET_PASSWORD, LOGIN_BUTTON, REGISTER} from '../LoginForm/LoginFormStyle.js';
@@ -9,12 +10,26 @@ const FormItem = Form.Item;
 
 class LoginForm extends React.Component {
 
+    state = {
+      redirect: false
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
     }
 
+    onRegister = () => {
+      this.setState({
+        redirect: true
+      })
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
+        const { redirect } = this.state;
+        if(redirect) {
+          return <Redirect to='/register'/>;
+        }
         return (
 
           <div style={CONTAINER}>
@@ -58,7 +73,7 @@ class LoginForm extends React.Component {
                   </Row>
                   <Row>
                     <Col size={{xs:12, sm:12}}>
-                      <Button style={REGISTER}>or register now!</Button>  
+                      <Button onClick={this.onRegister}style={REGISTER}>or register now!</Button>  
                     </Col>
                   </Row>
                 </Col>

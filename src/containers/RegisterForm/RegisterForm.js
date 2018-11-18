@@ -1,11 +1,29 @@
 import React, { Component } from 'react';
+import  { Redirect } from 'react-router-dom'
+
 import { Form, Icon, Input, Button, Checkbox} from 'antd';
 import { CONTAINER, COINAGE_TITLE, SIGNUP_TITLE, SIGNUP_BUTTON, LOGIN_LINK, TERMS_AND_COND } from '../RegisterForm/RegisterFormStyle.js';
 import { Grid, Row, Col } from '../../components/Grid/Grid'; 
 
 
 class RegisterForm extends Component {
+
+    state = {
+        redirect: false
+    }
+
+    onLogin = () => {
+        this.setState({
+            redirect: true
+        })
+    }
+    
     render() {
+        const { redirect } = this.state;
+
+        if(redirect) {
+            return <Redirect to='/'/>;
+        }
         return (
             <div style={CONTAINER}>
 
@@ -48,7 +66,7 @@ class RegisterForm extends Component {
                                 </Button>
                             </Row>
                             <Row center>
-                                <h2 style={LOGIN_LINK}>or Login with your account!</h2>
+                                <Button onClick={this.onLogin} style={LOGIN_LINK}>or Login with your account!</Button>
                             </Row> 
                         </Col>
                     </Row>
