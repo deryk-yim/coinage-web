@@ -1,7 +1,7 @@
 export const CONTAINER = {
     background: 'linear-gradient(119deg, #F82279, #934CDB)',
     minHeight: '100vh',
-}
+};
 
 export const COINAGE_LOGO = {
     display: 'block',
@@ -13,7 +13,7 @@ export const COINAGE_LOGO = {
     fontFamily: 'Gibson',
     textAlign: 'center',
     fontSize: 26,
-}
+};
 export const COINAGE_TITLE = {
     display: 'block',
     textTransform: 'uppercase',
@@ -24,7 +24,7 @@ export const COINAGE_TITLE = {
     fontFamily: 'Gibson',
     textAlign: 'center',
     fontSize: 26,
-}
+};
 
 export const INPUT = {
     background: 'transparent',
@@ -34,19 +34,19 @@ export const INPUT = {
     borderRadius: '11px 11px 11px 11px',
     beforeColor: 'transparent',
 
-}
+};
 
 export const REMEMBER_ME = {
     display: 'flex',
     color: 'white',
     width: '100%',
     height: 18,
-    marginLeft: '10px', 
+    marginLeft: '10px',
     padding: '0px 0 0px px',
     fontFamily: 'Gibson',
     textAlign: 'left',
     fontSize: 18,
-}
+};
 
 
 export const FORGET_PASSWORD = {
@@ -60,7 +60,7 @@ export const FORGET_PASSWORD = {
     border: 'none',
     textAlign: 'right',
     fontSize: 18,
-    }
+};
 
 export const REGISTER = {
     display: 'inline-block',
@@ -73,7 +73,7 @@ export const REGISTER = {
     border: 'none',
     textAlign: 'center',
     fontSize: 18,
-    }
+};
 
 export const LOGIN_BUTTON = {
     display: 'block',
@@ -86,4 +86,4 @@ export const LOGIN_BUTTON = {
     textAlign: 'Center',
     fontSize: 17,
     background: '#FFFFFF',
-}
+};
