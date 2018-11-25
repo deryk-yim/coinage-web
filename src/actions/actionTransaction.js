@@ -1,27 +1,26 @@
-
-const moment = require('moment');
+import moment from 'moment';
 
 export function retrieveTransactions(transactions, page) {
     return {
         type: 'RETRIEVE_TRANSACTIONS',
         payload: {
             transactions,
-            page
-        }
+            page,
+        },
     };
 }
 
 export function transactionsHasErrored(bool) {
     return {
         type: 'TRANSACTIONS_HAS_ERRORED',
-        hasErrored: bool
-    }
+        hasErrored: bool,
+    };
 }
 
 export function transactionsIsLoading(bool) {
     return {
         type: 'TRANSACTIONS_IS_LOADING',
-        isLoading: bool
+        isLoading: bool,
     };
 }
 
@@ -30,34 +29,30 @@ export function transactionsFetchData(url, page) {
         dispatch(transactionsIsLoading(true));
         console.log(url + page);
         fetch(url + page, {
-            method: 'post'
+            method: 'post',
         })
-            .then(res => {
-                if (res.status >= 200 && res.status < 300) {
+            .then((res) => {
+                if (!(res.status >= 200 && res.status < 300)) {
+                    throw new Error('Try Again Later');
+                } else {
                     dispatch(transactionsIsLoading(false));
                     return res.json();
                 }
-                else {
-                    throw new Error('Try Again Later');
-                }
             })
-            .then(jsonData => {
-                for (let i = 0; i < jsonData.length; i++) {
+            .then((jsonData) => {
+                for (let i = 0; i < jsonData.length; i += 1) {
                     jsonData[i]._id;
                     jsonData[i].amount = parseFloat(jsonData[i].amount).toFixed(2);
                     jsonData[i].transactionDate = moment(new Date(jsonData[i].transactionDate)).format('MMM DD, YYYY');
-                    jsonData[i].category = jsonData[i].category['name'];
+                    jsonData[i].category = jsonData[i].category.name;
                 }
                 console.log(jsonData);
 
                 return jsonData;
             })
-            .then((transactions) => 
+            .then(transactions =>
             dispatch(retrieveTransactions(transactions, page)))
             .catch(() => dispatch(transactionsHasErrored(true)));
     };
 }
-
-
-
 

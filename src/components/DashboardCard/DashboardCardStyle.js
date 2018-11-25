@@ -3,7 +3,7 @@ export const DASHBOARD_CARD = {
     width: '90%',
     paddingTop: '90%',
     display: 'inline-block',
-}
+};
 
 
 export const DASHBOARD_CIRCLE = {
@@ -14,10 +14,10 @@ export const DASHBOARD_CIRCLE = {
     height: 120,
     textAlign: 'Center',
     display: 'inline-block',
-    color:'white',
+    color: 'white',
     
     
-}
+};
 export const DASHBOARD_CARD_TITLE = {
     display: 'block',
     textTransform: 'uppercase',
@@ -26,8 +26,8 @@ export const DASHBOARD_CARD_TITLE = {
     height: 60,
     padding: '10px 0 0px 25px',
     fontFamily: 'Gibson',
-    textAlign: 'Center'
-}
+    textAlign: 'Center',
+};
 
 export const DASHBOARD_CARD_DAY_COUNTER = {
     display: 'block',
@@ -39,16 +39,16 @@ export const DASHBOARD_CARD_DAY_COUNTER = {
     fontFamily: 'Gibson',
     textAlign: 'Center',
     background: 'transparent',
-}
+};
 
 export const DASHBOARD_CARD_DROPDOWN_HEADER = {
     background: 'Transparent',
     textAlign: 'Right',
     
-}
+};
 
 export const DASHBOARD_CARD_DROPDOWN = {
     background: 'Transparent',
     textAlign: 'Right',
     border: '0px',
-}
+};

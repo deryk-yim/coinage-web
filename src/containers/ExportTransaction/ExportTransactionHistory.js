@@ -11,8 +11,6 @@ const exportColumns = [
 const hasRecords = this.props.exportedFiles.length > 0;
 
 
-
-
 const mapStateToProps = (state) => {
     return {
         transactions: state.transactions,
@@ -27,10 +25,5 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExportTransactionHistoryPage);
-
-
-
-
-
 
 */

@@ -11,7 +11,7 @@ export function createImportRecord(importType, fileName, recordsAdded, pid, erro
             "recordsAdded": recordsAdded,
             "_pid": pid,
             "errorMessage": errorMessage,
-            "errorContent": errorContent
+            "errorContent": errorContent,
         };
         return jsonData;
     }

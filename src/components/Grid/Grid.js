@@ -42,7 +42,6 @@ Grid.defaultProps = {
     children: undefined,
 };
 
-
 export const Row = (props) => {
     const {
         style, className, center,

@@ -14,6 +14,7 @@ export const COINAGE_LOGO = {
     textAlign: 'center',
     fontSize: 26,
 };
+
 export const COINAGE_TITLE = {
     display: 'block',
     textTransform: 'uppercase',

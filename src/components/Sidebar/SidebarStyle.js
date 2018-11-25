@@ -1,7 +1,7 @@
 export const CONTAINER = {
     background: 'linear-gradient(180deg,#F82279, #934CDB)',
     minHeight: '100vh',
-}
+};
 
 export const SIDEBAR_TITLE = {
     display: 'block',
@@ -12,8 +12,7 @@ export const SIDEBAR_TITLE = {
     padding: '50px 0 50px 25px',
     fontFamily: 'Gibson',
     textAlign: 'left',
-
-}
+};
 
 export const SIDEBAR_BUTTON = {
     display: 'block',
@@ -25,5 +24,4 @@ export const SIDEBAR_BUTTON = {
     backgroundColor: 'transparent',
     border: 'none',
     textAlign: 'left',
- 
-    }
+};

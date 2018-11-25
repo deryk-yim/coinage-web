@@ -1,9 +1,7 @@
 export const CONTAINER = {
     background: 'linear-gradient(119deg, #F82279, #934CDB)',
     minHeight: '100vh',
-
-    
-}
+};
 
 export const COINAGE_TITLE = {
     display: 'block',
@@ -15,7 +13,7 @@ export const COINAGE_TITLE = {
     fontFamily: 'Gibson',
     textAlign: 'left',
     fontSize: 26,
-}
+};
 
 export const SIGNUP_TITLE = {
     display: 'block',
@@ -27,7 +25,7 @@ export const SIGNUP_TITLE = {
     fontFamily: 'Gibson',
     textAlign: 'left',
     fontSize: 34,
-}
+};
 
 
 export const SIGNUP_BUTTON = {
@@ -41,7 +39,7 @@ export const SIGNUP_BUTTON = {
     textAlign: 'Center',
     fontSize: 17,
     background: '#FFFFFF',
-}
+};
 
 export const LOGIN_LINK = {
     display: 'inline-block',
@@ -54,17 +52,16 @@ export const LOGIN_LINK = {
     border: 'none',
     textAlign: 'center',
     fontSize: 18,
-}
+};
 
 export const TERMS_AND_COND = {
     display: 'block',
     color: 'white',
     width: '100%',
     height: 18,
-    marginLeft: '10px', 
+    marginLeft: '10px',
     padding: '0px 0 0px px',
     fontFamily: 'Gibson',
     textAlign: 'left',
     fontSize: 18,
-}
-
+};

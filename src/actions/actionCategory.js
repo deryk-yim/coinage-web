@@ -1,21 +1,21 @@
 export function categoriesHasErrored(bool) {
     return {
         type: 'CATEGORIES_HAS_ERRORED',
-        hasErrored: bool
-    }
+        hasErrored: bool,
+    };
 }
 
 export function categoriesIsLoading(bool) {
     return {
         type: 'CATEGORIES_IS_LOADING',
-        isLoading: bool
+        isLoading: bool,
     };
 }
 
 export function categoriesFetchDataSuccess(categories) {
     return {
         type: 'CATEGORIES_FETCH_DATA_SUCCESS',
-        categories
+        categories,
     };
 }
 
@@ -23,22 +23,22 @@ export function categoriesFetchData(url) {
     return (dispatch) => {
         dispatch(categoriesIsLoading(true));
         fetch(url, {
-            method: 'get'
+            method: 'get',
         })
-            .then(res => {
-                if (res.status >= 200 && res.status < 300) {
+            .then((res) => {
+                if (!(res.status >= 200 && res.status < 300)) {
+                    throw new Error('Try Again Later');
+                }
+                else {
                     dispatch(categoriesIsLoading(false));
                     return res.json();
                 }
-                else {
-                    throw new Error('Try Again Later');
-                }
             })
-            .then((categories => {
+            .then(((categories) => {
                 console.log(categories);
                 return categories;
             }))
-            .then((categories) => dispatch(categoriesFetchDataSuccess(categories)))
+            .then(categories => dispatch(categoriesFetchDataSuccess(categories)))
             .catch(() => dispatch(categoriesHasErrored(true)));
     };
 }

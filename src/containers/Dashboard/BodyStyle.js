@@ -1,4 +1,4 @@
-export const BODY_TITLE = {
+const BODY_TITLE = {
     display: 'inline-block',
     width: '100%',
     height: 40,
@@ -9,4 +9,5 @@ export const BODY_TITLE = {
     border: 'none',
     textAlign: 'left',
     fontSize: 34,
-}
+};
+export default BODY_TITLE;
