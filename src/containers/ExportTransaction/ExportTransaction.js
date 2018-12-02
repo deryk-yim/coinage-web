@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const Json2csvParser = require('json2csv').Parser;
 const moment = require('moment');
 
@@ -15,13 +17,7 @@ export function createExportRecord(exportType, fileName, recordsExported, pid) {
 }
 
 export function addExportFileToServer(exportRecord, endpoint) {
-    fetch(endpoint, {
-        method: 'POST',
-        body: JSON.stringify(exportRecord),
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
+    axios.post(endpoint, exportRecord)
         .then((res) => {
             if (res.status === 201) {
                 console.log('Success');
@@ -29,8 +25,8 @@ export function addExportFileToServer(exportRecord, endpoint) {
             return res.json();
         })
         .catch(error => console.error('Error:', error))
-        .then(response => console.log('Success: ', response))
-};
+        .then(response => console.log('Success: ', response));
+}
 
 export function exportCSV(data) {
     const json2csvParser = new Json2csvParser({ fields });

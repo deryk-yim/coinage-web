@@ -1,61 +1,50 @@
 import { Modal } from 'antd';
+import axios from 'axios';
+
 const moment = require('moment');
 
-
-export function createImportRecord(importType, fileName, recordsAdded, pid, errorMessage, errorContent) {
-    if (document.getElementById("dataInput").value != "") {
+export function createImportRecord(importType,
+    fileName, recordsAdded, pid, errorMessage, errorContent) {
+    if (this.refs.value !== '') {
         const jsonData = {
-            "importType": importType,
-            "importFileName": fileName,
-            "createdDate": moment().format(),
-            "recordsAdded": recordsAdded,
-            "_pid": pid,
-            "errorMessage": errorMessage,
-            "errorContent": errorContent,
+            importType,
+            importFileName: fileName,
+            createdDate: moment().format(),
+            recordsAdded,
+            pid,
+            errorMessage,
+            errorContent,
         };
         return jsonData;
     }
+    return undefined;
 }
 
-export function addImportFileToServer(importRecords, endpoint) {
-    fetch(endpoint, {
-        method: 'POST',
-        body: JSON.stringify(importRecords),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(
-            res => {
-                if (res.status === 201) {
-                    console.log('Success');
-                }
-                return res.json();
+export function addImportFileToServer(importRecord, endpoint) {
+    axios.post(endpoint, importRecord)
+        .then((res) => {
+            if (res.status === 201) {
+                console.log('Success');
             }
-        )
-        .catch(error => console.error('Error:', error))
-        .then(response => console.log('Success: ', response))
-};
+            return res.json();
+        })
+        .catch(errorMsg => console.error('Error:', errorMsg))
+        .then(response => console.log('Success: ', response));
+}
 
 export function addTransactionToServer(transactions, endpoint) {
-    fetch(endpoint, {
-        method: 'POST',
-        body: JSON.stringify(transactions),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(
-            res => {
+    axios(endpoint, transactions)
+    .then(
+            (res) => {
                 if (res.status === 201) {
                     console.log('Success');
                 }
                 return res.json();
-            }
+            },
         )
-        .catch(error => console.error('Error:', error))
-        .then(response => console.log('Success: ', response))
-};
+        .catch(errorMsg => console.error('Error:', errorMsg))
+        .then(response => console.log('Success: ', response));
+}
 
 export function error() {
     Modal.error({
@@ -67,6 +56,7 @@ export function error() {
 export function showImportErrors(errorReasons) {
     Modal.error({
         title: 'Import Failed!',
-        content: errorReasons
+        content: errorReasons,
     });
 }
+

@@ -1,31 +1,26 @@
 const moment = require('moment');
+const axios = require('axios');
 
 export function createJSONTransaction(formInputs, categorySelected, pid) {
-    const jsonData = {
-        transactionDate: moment(new Date(formInputs['date-picker'])).format('MMM DD, YYYY'),
-        category: categorySelected,
-        amount: parseFloat(formInputs['amount-InputNumber']).toFixed(2),
-        description: formInputs['description-textarea'],
-        _pid: pid,
-    };
-    return jsonData;
+  const jsonData = {
+    transactionDate: moment(new Date(formInputs['date-picker'])).format('MMM DD, YYYY'),
+    category: categorySelected,
+    amount: parseFloat(formInputs['amount-InputNumber']).toFixed(2),
+    description: formInputs['description-textarea'],
+    _pid: pid,
+  };
+  return jsonData;
 }
 
-export function addTransactionToServer(transaction, createTransactionEndpoint) {
-    fetch(createTransactionEndpoint, {
-        method: 'POST',
-        body: JSON.stringify(transaction),
-        headers: {
-            'Content-Type': 'application/json',
-        }
+export function addTransactionToServer(transaction, createTransaction) {
+  axios.post(createTransaction, transaction)
+    .then((res) => {
+      if (res.status === 201) {
+        res.status(201).send('Success');
+      }
+      return res.json();
     })
-        .then((res) => {
-                if (res.status === 201) {
-                    res.status(201).send('Success');
-                }
-                return res.json();
-            },
-        )
-        .catch(error => console.error('Error:', error))
-        .then(response => console.log('Success: ', response));
+    .catch(error => console.error(error))
+    .then(response => console.log(response),
+    );
 }

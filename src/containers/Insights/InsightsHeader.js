@@ -1,16 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Menu, Icon, Button, Col, Dropdown } from 'antd';
 import { CONTAINER, HEADER_BUTTON } from './InsightsHeaderStyle';
 
-function handleButtonClick(e) {
-
-    console.log('click left button', e);
-}
-
-function handleMenuClick(e) {
-
+const handleMenuClick = (e) => {
     console.log('click', e);
-}
+};
 
 const menu = (
     <Menu onClick={handleMenuClick} style={HEADER_BUTTON} >
@@ -30,8 +24,8 @@ const filter = (
 );
 
 const InsightsHeader = () => (
-    <div classname="header-custom" style={CONTAINER}>
-        <Col span={1}></Col>
+    <div className="header-custom" style={CONTAINER}>
+        <Col span={1} />
         <Col span={3}>
             <Dropdown overlay={menu}>
                 <Button style={HEADER_BUTTON}>
@@ -46,14 +40,14 @@ const InsightsHeader = () => (
                 </Button>
             </Dropdown>
         </Col>
-        <Col span={12}></Col>
+        <Col span={12} />
         <Col span={2}>
             <Button style={HEADER_BUTTON}><Icon type="search" /> Search</Button>
         </Col>
         <Col span={2}>
             <Button style={HEADER_BUTTON}><Icon type="user" /> Profile</Button>
         </Col>
-        <Col span={1}></Col>
+        <Col span={1} />
     </div>
 );
 
