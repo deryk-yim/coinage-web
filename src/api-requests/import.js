@@ -8,5 +8,5 @@ switch (env) {
         break;
 }
 
-export const getTransactions = `${baseUrl}transaction/`;
-export const addTransactionEndpoint = `${baseUrl}transaction/create/2/`;
+// eslint-disable-next-line import/prefer-default-export
+export const addImportedFile = `${baseUrl}import/create/1`;

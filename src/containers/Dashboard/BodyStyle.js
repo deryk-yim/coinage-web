@@ -1,4 +1,4 @@
-const BODY_TITLE = {
+export const BODY_TITLE = {
     display: 'inline-block',
     width: '100%',
     height: 40,

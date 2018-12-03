@@ -1,8 +1,10 @@
+import axios from 'axios';
+
 export function countAllTransactionsHasErrored(bool) {
     return {
         type: 'COUNT_ALL_TRANSACTION_HAS_ERRORED',
         hasErrored: bool,
-    }
+    };
 }
 
 export function countAllTransactionsIsLoading(bool) {
@@ -22,9 +24,7 @@ export function countAllTransactionsFetchDataSuccess(count) {
 export function countAllTransactionsFetchData(url) {
     return (dispatch) => {
         dispatch(countAllTransactionsIsLoading(true));
-        fetch(url, {
-            method: 'post',
-        })
+        axios.get(url)
             .then((res) => {
                 if (!(res.status >= 200 && res.status < 300)) {
                     throw new Error('Try Again Later');

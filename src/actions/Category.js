@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export function categoriesHasErrored(bool) {
     return {
         type: 'CATEGORIES_HAS_ERRORED',
@@ -22,14 +24,11 @@ export function categoriesFetchDataSuccess(categories) {
 export function categoriesFetchData(url) {
     return (dispatch) => {
         dispatch(categoriesIsLoading(true));
-        fetch(url, {
-            method: 'get',
-        })
+        axios.get(url)
             .then((res) => {
                 if (!(res.status >= 200 && res.status < 300)) {
                     throw new Error('Try Again Later');
-                }
-                else {
+                } else {
                     dispatch(categoriesIsLoading(false));
                     return res.json();
                 }
@@ -42,3 +41,4 @@ export function categoriesFetchData(url) {
             .catch(() => dispatch(categoriesHasErrored(true)));
     };
 }
+

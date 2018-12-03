@@ -3,16 +3,13 @@ import { Button, Icon, Progress, Dropdown, Menu, DatePicker } from 'antd';
 import { CSVLink } from 'react-csv';
 import { connect } from 'react-redux';
 import '../Transaction/Transaction.css';
-import { exportedFilesFetchData, addExportHistory } from '../../actions/actionExportHistory';
+import { addExportFile } from '../../api-requests/export';
+import { getTransactions } from '../../api-requests/transaction';
+import { exportedFilesFetchData, addExportHistory } from '../../actions/ExportHistory';
 import { createExportRecord, addExportFileToServer, exportCSV } from '../ExportTransaction/ExportTransaction';
-import { transactionsFetchData } from '../../actions/actionTransaction';
+import { transactionsFetchData } from '../../actions/Transaction';
 
 const { RangePicker } = DatePicker;
-// const getExportedFilesHistory = 'http://localhost:3000/export/5aa43585955a2561e0935cdb';
-const addExportedFile = 'http://localhost:3000/export/create/1/5aa43585955a2561e0935cdb';
-const getTransactionsEndpoint = 'http://localhost:3000/transaction/5aa43585955a2561e0935cdb';
-
-const pid = '5aa43585955a2561e0935cdb';
 
 class ExportTransactionPage extends React.Component {
   constructor(props) {
@@ -21,22 +18,24 @@ class ExportTransactionPage extends React.Component {
       data: [],
       percent: 0,
       importProgressFlag: false,
-      exportData: []
+      exportData: [],
     };
   }
 
   componentWillMount() {
-    this.props.fetchTransactionsData(getTransactionsEndpoint);
+    // eslint-disable-next-line react/prop-types
+    this.props.fetchTransactionsData(getTransactions);
   }
 
   onExport = () => {
     const exportSuccessRecord = createExportRecord(
       'Transactions',
       'Export Name',
-      this.props.transactions.length,
-      pid);
-    addExportFileToServer(exportSuccessRecord, addExportedFile);
-    this.props.addExportedFile(exportSuccessRecord);
+      // eslint-disable-next-line react/prop-types
+      this.props.transactions.length);
+    addExportFileToServer(exportSuccessRecord, addExportFile);
+    // eslint-disable-next-line react/prop-types
+    this.props.addExportingFile(exportSuccessRecord);
   }
 
   onDateChange = (date, dateString) => {
@@ -46,14 +45,14 @@ class ExportTransactionPage extends React.Component {
   handleMenuClick = (e) => {
     if (e.key === '1') {
       this.setState({
-        exportData: exportCSV(this.props.transactions)
+        exportData: exportCSV(this.props.transactions),
       });
-    }
-    else if (e.key === '2') {
+    } else if (e.key === '2') {
       const fromDate = new Date();
       fromDate.setDate(fromDate.getDate() - 30);
       const today = new Date();
       this.setState({
+        // eslint-disable-next-line react/prop-types
         exportData: exportCSV(this.props.transactions.filter((item) => {
           console.log(item.transactionDate);
           return item.transactionDate >= fromDate &&
@@ -64,6 +63,7 @@ class ExportTransactionPage extends React.Component {
   }
 
   exportHistory = () => {
+    // eslint-disable-next-line react/prop-types
     this.props.history.push('/transaction/export/history');
   }
 
@@ -82,7 +82,8 @@ class ExportTransactionPage extends React.Component {
 
     return (
       <div>
-        <p> <a onClick={this.backToTransactionComponent}>Transactions</a> Export Transactions </p>
+        <p> <div> <a> onClick={this.backToTransactionComponent}
+        Transactions</a> </div>  Export Transactions </p>
         <h1>Export Transactions </h1>
         <Button onClick={this.onExport} disabled={this.state.exportData.length === 0} >
           <Icon type="download" />
@@ -108,25 +109,23 @@ class ExportTransactionPage extends React.Component {
         {this.state.importProgressFlag === true ? (
           <Progress percent={this.state.percent} />
         ) : (
-            <p></p>
+            <p />
           )}
       </div>
-    )
+    );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
+const mapStateToProps = state => ({
     transactions: state.transactions,
     exportedFiles: state.exportedFiles,
-  };
-};
+  });
 
 const mapDispatchToProps = dispatch => (
   {
     fetchTransactionsData: url => dispatch(transactionsFetchData(url)),
     fetchExportedFiles: url => dispatch(exportedFilesFetchData(url)),
-    addExportedFile: exportedFile => dispatch(addExportHistory(exportedFile)),
+    addExportingFile: exportedFile => dispatch(addExportHistory(exportedFile)),
   }
 );
 

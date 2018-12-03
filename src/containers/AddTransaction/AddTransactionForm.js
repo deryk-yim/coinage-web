@@ -9,24 +9,29 @@ const { TextArea } = Input;
 const AddTransactionForm = Form.create()(
   class extends React.Component {
     handleCategoryChange = (value) => {
+      // eslint-disable-next-line react/prop-types
       this.props.addTransactionOption(value);
     }
 
     render() {
+      // eslint-disable-next-line react/prop-types
       const { visible, onCancel, onCreate } = this.props;
+      // eslint-disable-next-line react/prop-types
       const { getFieldDecorator } = this.props.form;
 
       const dateConfig = {
-        rules: [{ required: true, message: 'Please select a date!' },]
+        rules: [{ required: true, message: 'Please select a date!' } ],
       };
       const descConfig = {
-        rules: [{ required: true, message: 'Describe Transaction!' },]
+        rules: [{ required: true, message: 'Describe Transaction!' } ],
       };
       const amountConfig = {
-        rules: [{ required: true, message: 'Please input amount!' },]
+        rules: [{ required: true, message: 'Please input amount!' } ],
       };
-      const optionItems = this.props.categories.map((item) =>
-        <Option value={item._id}>{item['name']}</Option>
+      // eslint-disable-next-line react/prop-types
+      const optionItems = this.props.categories.map(item =>
+        // eslint-disable-next-line no-underscore-dangle
+        <Option value={item._id}>{item.name}</Option>,
       );
 
       return (
@@ -72,17 +77,13 @@ const AddTransactionForm = Form.create()(
   },
 );
 
-const mapStateToProps = (state) => {
-  return {
+const mapStateToProps = state => ({
     categories: state.categories,
     categorySelected: state.postAddTransactionCategory.postCategory,
-  };
-};
+  });
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addTransactionOption: (option) => dispatch(addTransactionCategory(option))
-  };
-};
+const mapDispatchToProps = dispatch => ({
+    addTransactionOption: option => dispatch(addTransactionCategory(option))
+  });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddTransactionForm);

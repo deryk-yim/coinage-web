@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export function importedFilesHasErrored(bool) {
     return {
         type: 'IMPORTED_FILES_HAS_ERRORED',
@@ -22,9 +24,7 @@ export function importedFilesFetchDataSuccess(importedRecords) {
 export function importedFilesFetchData(url) {
     return (dispatch) => {
         dispatch(importedFilesHasErrored(true));
-        fetch(url, {
-            method: 'post',
-        })
+        axios.get(url)
             .then((res) => {
                 if (!(res.status >= 200 && res.status < 300)) {
                     throw new Error('Try Again Later');

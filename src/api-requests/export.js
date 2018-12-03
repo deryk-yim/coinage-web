@@ -8,5 +8,6 @@ switch (env) {
         break;
 }
 
+export const addExportFile = `${baseUrl}export/create/1/`;
 export const getTransactions = `${baseUrl}transaction/`;
-export const addTransactionEndpoint = `${baseUrl}transaction/create/2/`;
+

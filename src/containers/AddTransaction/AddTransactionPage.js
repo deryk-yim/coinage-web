@@ -4,11 +4,7 @@ import { connect } from 'react-redux';
 import AddTransactionForm from '../AddTransaction/AddTransactionForm';
 import { createJSONTransaction, addTransactionToServer } from './AddTransaction';
 import { addTransactionCategory, addTransaction } from '../../actions/actionsAddTransaction';
-
-const addTransactionEndpoint = 'http://localhost:3000/transaction/create/1/5aa43585955a2561e0935cdb';
-// const Option = Select.Option;
-// const { TextArea } = Input;
-// const moment = require('moment');
+import { addTransactionEndpoint } from '../../api-requests/transaction';
 
 class AddTransactionPage extends React.Component {
   constructor(props) {
@@ -36,9 +32,11 @@ class AddTransactionPage extends React.Component {
       }
       const newRecord = createJSONTransaction(
         values,
+        // eslint-disable-next-line react/prop-types
         this.props.categorySelected.key,
         '5aa43585955a2561e0935cdb',
       );
+      // eslint-disable-next-line react/prop-types
       this.props.transaction(newRecord);
       addTransactionToServer(newRecord, addTransactionEndpoint);
       form.resetFields();

@@ -16,5 +16,8 @@
         "linebreak-style": 0,
         "indent": "off",
         "no-trailing-spaces": [2, { "skipBlankLines": true }]
+    },
+    "env": {
+        "browser": true
     }
 }

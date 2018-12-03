@@ -33,7 +33,7 @@ const transactionSchema = {
     required: ['transactionDate', 'category', 'description', 'amount'],
 };
 
-export default (data) => {
+export function doValidate(data) {
     const v = new Validator();
     v.addSchema(transactionSchema, '/Transaction');
     const validateFails = [];
@@ -43,5 +43,7 @@ export default (data) => {
         }
     });
     return validateFails;
-};
+}
+
+export default doValidate;
 

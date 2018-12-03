@@ -1,88 +1,84 @@
 import React from 'react';
+import CsvParse from '@vtex/react-csv-parse';
+import { connect } from 'react-redux';
 import { Button, Table, Icon, Spin, Progress } from 'antd';
 import '../Transaction/Transaction.css';
-import CsvParse from '@vtex/react-csv-parse';
-import { error, createImportRecord, addTransactionToServer, addImportFileToServer, showImportErrors} from '../ImportTransaction/ImportTransaction';
-import { doValidate } from '../ImportTransaction/ImportTransactionValidator';
-import { connect } from 'react-redux';
-import { importedFilesFetchData, addImportHistory } from '../../actions/actionImportHistory';
+import { addTransactionEndpoint } from '../../api-requests/transaction';
 
-const addTransactionEndpoint = 'http://localhost:3000/transaction/create/2/5aa43585955a2561e0935cdb';
+import { createImportRecord, addTransactionToServer, addImportFileToServer, showImportErrors } from '../ImportTransaction/ImportTransaction';
+import { doValidate } from '../ImportTransaction/ImportTransactionValidator';
+import { importedFilesFetchData, addImportHistory } from '../../actions/ImportHistory';
+import { addImportedFile } from '../../api-requests/import';
 
 const columns = [
     { title: 'Transaction Date', dataIndex: 'transactionDate', key: 'transactionDate' },
     { title: 'Category', dataIndex: 'category', key: 'category' },
     { title: 'Description', dataIndex: 'description', key: 'description' },
-    { title: 'Amount', dataIndex: 'amount', key: 'amount' }
+    { title: 'Amount', dataIndex: 'amount', key: 'amount' },
 ];
-
-const Json2csvParser = require('json2csv').Parser;
-const fields = ['Transaction Date', 'Category', 'Description', 'Amount'];
-const moment = require('moment');
-const getImportedFilesHistory = 'http://localhost:3000/import/5aa43585955a2561e0935cdb';
-const addImportedFile = 'http://localhost:3000/import/create/1/5aa43585955a2561e0935cdb';
 
 const pid = '5aa43585955a2561e0935cdb';
 
 class ImportTransactionPage extends React.Component {
-
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             selectedRows: [],
             selectedRowKeys: [],
             data: [],
             percent: 0,
             importProgressFlag: false,
-            filePresent: false
+            filePresent: false,
         };
     }
 
-    backToTransactionComponent = () => {
-        this.props.history.push('/transaction');
+    componentWillMount() {
+        // eslint-disable-next-line react/prop-types
+        // this.props.fetchImportedFiles(getImportedFilesHistory);
     }
 
-    componentWillMount() {
-        this.props.fetchImportedFiles(getImportedFilesHistory);
-    }
+    // eslint-disable-next-line react/sort-comp
+    backToTransactionComponent = () => {
+        // eslint-disable-next-line react/prop-types
+        this.props.history.push('/transaction');
+    };
 
     handleData = (data) => {
         this.setState({
-            data: data,
-            filePresent: true
+            data,
+            filePresent: true,
         });
     }
 
     onImport = () => {
-       if (document.getElementById("dataInput").value != "") {
+        if (this.ref.dataInput.value !== '') {
             this.setState({
-                importProgressFlag: true
-            })
+                importProgressFlag: true,
+            });
             if (this.state.data.length > 0) {
                 if (doValidate(this.state.data).length < 1) {
                     const importSuccessRecord = createImportRecord(
-                        "Transactions",
-                        document.getElementById("dataInput").files[0].name,
+                        'Transactions',
+                        this.ref.files[0].name,
                         this.state.data.length,
                         pid);
-                    addImportFileToServer(importSuccessRecord, addImportedFile
+                    addImportFileToServer(importSuccessRecord, addImportedFile,
                     );
+                    // eslint-disable-next-line react/prop-types
                     this.props.addImportedFile(importSuccessRecord);
 
                     addTransactionToServer(this.state.data,
                         addTransactionEndpoint);
-                }
-
-                else {
+                } else {
                     const importFailedRecord = createImportRecord(
-                        "Transactions",
-                        document.getElementById("dataInput").files[0].name,
+                        'Transactions',
+                        this.ref.files[0].name,
                         0,
                         pid,
-                        "FAILED",
-                        doValidate(this.state.data).join()
+                        'FAILED',
+                        doValidate(this.state.data).join(),
                     );
-                    addImportFileToServer(importFailedRecord, addImportedFile
+                    addImportFileToServer(importFailedRecord, addImportedFile,
                     );
                     this.props.addImportedFile(importFailedRecord);
                 }
@@ -90,18 +86,15 @@ class ImportTransactionPage extends React.Component {
         }
         this.setState({
             data: [],
-            filePresent: false
+            filePresent: false,
         });
-
-        document.getElementById("dataInput").value = "";
     }
 
     clearAll = () => {
         this.setState({
             data: [],
-            filePresent: false
-        })
-        document.getElementById("dataInput").value == "";
+            filePresent: false,
+        });
     }
 
     increase = () => {
@@ -117,61 +110,69 @@ class ImportTransactionPage extends React.Component {
         const records = [...this.state.data];
         const removeRecords = [...this.state.selectedRows];
         const newSet = records.filter(
+            // eslint-disable-next-line func-names
             function (e) {
                 return this.indexOf(e) < 0;
             }, removeRecords);
         this.setState({
             data: newSet,
             selectedRows: [],
-            selectedRowKeys: []
-        })
+            selectedRowKeys: [],
+        });
     }
 
-    onSelectChange = (selectedRowKeys, selectedRows, key) => {
+    onSelectChange = (selectedRowKeys, selectedRows) => {
         console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({ selectedRowKeys });
         console.log(selectedRows);
         this.setState({
-            selectedRows: selectedRows
-        })
+            selectedRows,
+        });
     }
 
     render() {
         const keys = [
-            "transactionDate",
-            "category",
-            "description",
-            "amount",
-            "errorMessage"
-        ]
+            'transactionDate',
+            'category',
+            'description',
+            'amount',
+            'errorMessage',
+        ];
         const importColumns = [
             { title: 'Import Date', dataIndex: 'createdDate', key: 'createdDate' },
             { title: 'File Name', dataIndex: 'importFileName', key: 'importFileName' },
             { title: 'Records Added', dataIndex: 'recordsAdded', key: 'recordsAdded' },
-            {title: 'Errors and Alerts', dataIndex: 'errorMessage', key: 'errorMessage',
-                render: (text, record) => {
+            {
+                title: 'Errors and Alerts',
+                dataIndex: 'errorMessage',
+                key: 'errorMessage',
+                // eslint-disable-next-line consistent-return
+                render: (_text, record) => {
+                    // eslint-disable-next-line react/prop-types
                     if (this.props.importedFiles.length > 0) {
-                        if (record.errorMessage === "FAILED") {
-                            return (<Button onClick= {() => showImportErrors(record.errorContent)}> {record.errorMessage} </Button>);
+                        if (record.errorMessage === 'FAILED') {
+                            return (<Button onClick={() => showImportErrors(record.errorContent)}>
+                            {record.errorMessage} </Button>);
                         }
                     }
-                }
+                },
 
-            }
+            },
 
-        ]
+        ];
 
         const { selectedRowKeys } = this.state;
         const hasSelected = this.state.selectedRowKeys.length > 0;
         const hasRecords = this.props.importedFiles.length > 0;
         const rowSelection = {
             selectedRowKeys,
-            onChange: this.onSelectChange
+            onChange: this.onSelectChange,
         };
 
         return (
             <div>
-                <p> <a onClick={this.backToTransactionComponent}>Transactions </a> > Import Transactions </p>
+                <p> <div> <a> onClick={this.backToTransactionComponent}
+                Transactions </a> </div>  Import Transactions </p>
                 <h1>Import Transactions </h1>
                 <Button onClick={this.onImport} disabled={!this.state.filePresent}>
                     <Icon type="upload" /> Import
@@ -185,37 +186,38 @@ class ImportTransactionPage extends React.Component {
                 <Button onClick={this.clearAll} disabled={this.state.data.length < 1}>
                     Clear All
                 </Button>
-                <CsvParse keys={keys} onDataUploaded={this.handleData}
-                    render={
-                        onChange => <input
-                            type="file" id="dataInput"
-                            onChange={onChange}
-                        />}>
-                </CsvParse>
+                <CsvParse
+                  keys={keys} onDataUploaded={this.handleData}
+                  render={
+                        onChange => (<input
+                          type="file" id="dataInput"
+                          onChange={onChange}
+                        />)}
+                />
                 <Spin spinning={!hasRecords} />
                 {this.state.importProgressFlag === true ? (
                     <Progress percent={this.state.percent} />
                 ) : (
-                        <p> </p>
+                        <p />
                     )}
                 {this.state.data.length > 0 ?
-                    (<Table rowSelection={rowSelection} dataSource={this.state.data} columns={columns} />) : (<Table dataSource={this.props.importedFiles} columns={importColumns} />)}
+                    (<Table
+                      rowSelection={rowSelection}
+                      dataSource={this.state.data} columns={columns}
+                    />) :
+                    (<Table dataSource={this.props.importedFiles} columns={importColumns} />)}
             </div>
-        )
+        );
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        importedFiles: state.importedFiles
-    };
-};
+const mapStateToProps = state => ({
+    importedFiles: state.importedFiles,
+});
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchImportedFiles: (url) => dispatch(importedFilesFetchData(url)),
-        addImportedFile: (importedFile) => dispatch(addImportHistory(importedFile))
-    };
-};
+const mapDispatchToProps = dispatch => ({
+    fetchImportedFiles: url => dispatch(importedFilesFetchData(url)),
+    addImportedFile: importedFile => dispatch(addImportHistory(importedFile)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ImportTransactionPage);

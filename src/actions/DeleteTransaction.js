@@ -1,6 +1,9 @@
-export default function removeTransactions(transactionId) {
+export function removeTransactions(transactionId) {
     return {
         type: 'DELETE_TRANSACTIONS_FROM_STORE',
         transactionId,
     };
 }
+
+export default removeTransactions;
+

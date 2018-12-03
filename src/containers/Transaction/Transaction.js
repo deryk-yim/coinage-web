@@ -2,18 +2,19 @@ import React from 'react';
 import { Button, Icon, Select } from 'antd';
 import { connect } from 'react-redux';
 import '../Transaction/Transaction.css';
-import { transactionsFetchData } from '../../actions/actionTransaction';
-import { categoriesFetchData } from '../../actions/actionCategory';
-import { removeTransactions } from '../../actions/actionDeleteTransaction';
-import { countAllTransactionsFetchData } from '../../actions/actionCountTransactions';
+import { transactionsFetchData } from '../../actions/Transaction';
+import { categoriesFetchData } from '../../actions/Category';
+import { removeTransactions } from '../../actions/DeleteTransaction';
+import { countAllTransactionsFetchData } from '../../actions/CountTransactions';
 import EditableTransactionTable from '../Transaction/EditableTransactionTable';
+
 const getTransactionsEndpoint = 'http://localhost:3000/transaction/5aa43585955a2561e0935cdb/';
 const getTransactionCount = 'http://localhost:3000/transaction/count/1/5aa43585955a2561e0935cdb';
 const getCategoriesEndpoint = 'http://localhost:3000/category/5aa43585955a2561e0935cdb';
 
 class Transaction extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       selectedRows: [],
       selectedRowKeys: [],
@@ -21,11 +22,13 @@ class Transaction extends React.Component {
       uploadData: {},
       data: [],
       importRecords: [],
-      count: 0
+      count: 0,
     };
   }
 
+  // eslint-disable-next-line react/sort-comp
   onImportClick = () => {
+    // eslint-disable-next-line react/prop-types
     this.props.history.push('/transaction/import');
   }
   onExportClick = () => {
@@ -33,8 +36,11 @@ class Transaction extends React.Component {
   }
 
   componentDidMount() {
+    // eslint-disable-next-line react/prop-types
     this.props.fetchCategories(getCategoriesEndpoint);
+    // eslint-disable-next-line react/prop-types
     this.props.fetchTransactionsData(getTransactionsEndpoint, 1);
+    // eslint-disable-next-line react/prop-types
     this.props.fetchAllTransactionCount(getTransactionCount);
   }
 
@@ -55,25 +61,14 @@ class Transaction extends React.Component {
 
 
   render() {
-    const keys = [
-      '_id',
-      'transactionDate',
-      'category',
-      'description',
-      'amount',
-    ];
-
-    let {
-      sortedInfo
-    } = this.state;
-
-    sortedInfo = sortedInfo || {};
     const { selectedRowKeys } = this.state;
     const hasSelected = this.state.selectedRowKeys.length > 0;
     const hasRecords = true;
     const Option = Select.Option;
-    const optionItems = this.props.categories.map((item) =>
-      <Option value={item['_id']}>{item['name']}</Option>
+    // eslint-disable-next-line react/prop-types
+    const optionItems = this.props.categories.map(item =>
+      // eslint-disable-next-line no-underscore-dangle
+      <Option value={item._id}>{item.name}</Option>,
     );
 
     return (
@@ -106,20 +101,17 @@ class Transaction extends React.Component {
         <span style={{ marginLeft: 8 }}>
           {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
         </span>
-        <span> {this.props.count} </span>
         <EditableTransactionTable />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
+const mapStateToProps = state => ({
     transactions: state.transactions,
     categories: state.categories,
     count: state.countAllTransactions,
-  };
-};
+  });
 
 const mapDispatchToProps = dispatch => ({
   fetchTransactionsData: (url, page) => dispatch(transactionsFetchData(url, page)),

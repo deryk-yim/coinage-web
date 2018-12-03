@@ -26,8 +26,8 @@ export function transactions(state = initialState, action) {
         return [
             action.newItem, ...state,
         ];
-        
         case 'DELETE_TRANSACTIONS_FROM_STORE':
+        /* eslint no-underscore-dangle: 0 */
         return state.filter(transaction => transaction._id !== action.transactionId);
         default:
             return state;
@@ -47,7 +47,7 @@ export function transactionKeysDelete(state = [], action) {
 
 export function postAddTransactionCategory(state = {}, action) {
     switch (action.type) {
-        case 'ADD_TRANSACTION_OPTION_SELECTED': 
+        case 'ADD_TRANSACTION_OPTION_SELECTED':
             return {
                 ...state,
                 postCategory: action.data,

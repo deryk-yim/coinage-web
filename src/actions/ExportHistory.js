@@ -1,11 +1,13 @@
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 
+const axios = require('axios');
+
 export function exportedFilesHasErrored(bool) {
     return {
         type: 'EXPORTED_FILES_HAS_ERRORED',
         hasErrored: bool,
-    }
+    };
 }
 
 export function exportedFilesIsLoading(bool) {
@@ -25,20 +27,16 @@ export function exportedFilesFetchDataSuccess(exportedRecords) {
 export function exportedFilesFetchData(url) {
     return (dispatch) => {
         dispatch(exportedFilesHasErrored(true));
-        fetch(url, {
-            method: 'post',
-        })
+        axios.get(url)
             .then((res) => {
                 if (!(res.status >= 200 && res.status < 300)) {
                     throw new Error('Try Again Later');
                 } else {
                     dispatch(exportedFilesIsLoading(false));
-                    return res.json()
+                    return res.json();
                 }
             })
-            .then((jsonData) => {
-                return jsonData;
-            })
+            .then(jsonData => jsonData)
             .then(records => dispatch(exportedFilesFetchDataSuccess(records)))
             .catch(() => dispatch(exportedFilesHasErrored(true)));
     };
@@ -48,6 +46,6 @@ export function addExportHistory(exportRecord) {
     return {
         type: 'ADD_EXPORT_RECORD_TO_STORE',
         newItem: exportRecord,
-    }
+    };
 }
 

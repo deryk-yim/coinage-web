@@ -1,5 +1,7 @@
 import moment from 'moment';
 
+const axios = require('axios');
+
 export function retrieveTransactions(transactions, page) {
     return {
         type: 'RETRIEVE_TRANSACTIONS',
@@ -28,9 +30,7 @@ export function transactionsFetchData(url, page) {
     return (dispatch) => {
         dispatch(transactionsIsLoading(true));
         console.log(url + page);
-        fetch(url + page, {
-            method: 'post',
-        })
+        axios.get(url + page)
             .then((res) => {
                 if (!(res.status >= 200 && res.status < 300)) {
                     throw new Error('Try Again Later');
@@ -41,9 +41,11 @@ export function transactionsFetchData(url, page) {
             })
             .then((jsonData) => {
                 for (let i = 0; i < jsonData.length; i += 1) {
-                    jsonData[i]._id;
+                    // eslint-disable-next-line no-param-reassign
                     jsonData[i].amount = parseFloat(jsonData[i].amount).toFixed(2);
+                    // eslint-disable-next-line no-param-reassign
                     jsonData[i].transactionDate = moment(new Date(jsonData[i].transactionDate)).format('MMM DD, YYYY');
+                    // eslint-disable-next-line no-param-reassign
                     jsonData[i].category = jsonData[i].category.name;
                 }
                 console.log(jsonData);

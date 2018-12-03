@@ -1,10 +1,12 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { connect } from 'react-redux';
+import { Button, Table, Form, Select, Input, InputNumber, DatePicker } from 'antd';
 import { addTransactionCategory, addTransaction } from '../../actions/actionsAddTransaction';
 import { addTransactionToServer } from '../AddTransaction/AddTransaction';
-import { removeTransactions } from '../../actions/actionDeleteTransaction';
-import { transactionsFetchData } from '../../actions/actionTransaction';
-import { Button, Table, Icon, Spin, Form, Select, Input, InputNumber, Popconfirm, DatePicker } from 'antd';
+import { removeTransactions } from '../../actions/DeleteTransaction';
+import { transactionsFetchData } from '../../actions/Transaction';
+
 import { deleteTransactionFromServer } from '../DeleteTransaction/DeleteTransaction';
 import { editTransactionFromServer } from '../EditTransaction/EditTransaction';
 import '../Transaction/EditableTransactionTable.css';
@@ -14,18 +16,20 @@ const getTransactionsEndpoint = 'http://localhost:3000/transaction/5aa43585955a2
 const deleteTransactionsEndpoint = 'http://localhost:3000/transaction/delete/5aa43585955a2561e0935cdb';
 const updateTransactionEndpoint = 'http://localhost:3000/transaction/update/5aa43585955a2561e0935cdb';
 const moment = require('moment');
+
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
-const EditableRow = ({ form, index, ...props }) => (
-  <EditableContext.Provider value={form}>
-    <tr {...props} />
-  </EditableContext.Provider>
-);
+
+const EditableRow = ({ form, ...props }) => (<EditableContext.Provider value={form}>
+  <tr {...props} />
+</EditableContext.Provider>);
 const EditableFormRow = Form.create()(EditableRow);
 const Option = Select.Option;
 
 class EditableCell extends React.Component {
+  // eslint-disable-next-line consistent-return
   getInput = () => {
+    // eslint-disable-next-line react/prop-types
     if (this.props.inputType === 'number') {
       return <InputNumber />;
     }
@@ -33,8 +37,10 @@ class EditableCell extends React.Component {
       return <Input />;
     }
     if (this.props.inputType === 'dropdown') {
-      const options = this.props.categories.map((item) =>
-        <Option value={item['_id']}>{item['name']}</Option>);
+      // eslint-disable-next-line react/prop-types
+      const options = this.props.categories.map(item =>
+        // eslint-disable-next-line no-underscore-dangle
+        <Option value={item._id}>{item.name}</Option>);
       return (
         <Select showSearch style={{ width: 200 }} placeholder="Select a category" optionFilterProp="children">
           {options}
@@ -42,7 +48,7 @@ class EditableCell extends React.Component {
       );
     }
     if (this.props.inputType === 'date') {
-      return <DatePicker />
+      return <DatePicker />;
     }
   };
   render() {
@@ -50,9 +56,7 @@ class EditableCell extends React.Component {
       editing,
       dataIndex,
       title,
-      inputType,
       record,
-      index,
       ...restProps
     } = this.props;
 
@@ -69,8 +73,8 @@ class EditableCell extends React.Component {
                       required: true,
                       message: `Please Input ${title}!`,
                     }],
-                    initialValue: dataIndex === 'transactionDate' ? moment(record[dataIndex]) : record[dataIndex]
-                  }
+                    initialValue: dataIndex === 'transactionDate' ? moment(record[dataIndex]) : record[dataIndex],
+                  },
                   )(this.getInput())}
                 </FormItem>
               ) : restProps.children}
@@ -82,6 +86,7 @@ class EditableCell extends React.Component {
   }
 }
 
+// eslint-disable-next-line react/no-multi-comp
 class EditableTransactionTable extends React.Component {
   constructor(props) {
     super(props);
@@ -94,44 +99,47 @@ class EditableTransactionTable extends React.Component {
       loading: false,
       selectedRowKeys: [],
       addFlag: false,
-      page: 1
+      page: 1,
     };
 
     this.columns = [
       {
         title: 'Id',
-        dataIndex: '_id'
+        dataIndex: '_id',
       },
       {
         title: 'Transaction Date',
         dataIndex: 'transactionDate',
-        editable: true
+        editable: true,
       },
       {
         title: 'Category',
         dataIndex: 'category',
         sorter: (a, b) => {
           if (a.category < b.category) {
-            return -1
+            return -1;
           }
           if (a.category > b.category) {
             return 1;
           }
           return 0;
         },
-        editable: true
+        editable: true,
       },
       {
         title: 'Description',
         dataIndex: 'description',
-        editable: true
+        editable: true,
       },
       {
-        title: 'Amount', dataIndex: 'amount', key: 'amount',
+        title: 'Amount',
+dataIndex: 'amount',
+key: 'amount',
         sorter: (a, b) => a.amount - b.amount,
-        editable: true
+        editable: true,
       },
       {
+        // eslint-disable-next-line no-underscore-dangle
         title: 'Edit',
         dataIndex: 'edit',
         render: (text, record) => {
@@ -144,19 +152,25 @@ class EditableTransactionTable extends React.Component {
                   <EditableContext.Consumer>
                     {form => (
                       <a
-                        href="javascript:;"
+                        href="javascript;"
+                        // eslint-disable-next-line no-underscore-dangle
                         onClick={() => this.save(form, record._id)}
-                        style={{ marginRight: 8 }}>
+                        style={{ marginRight: 8 }}
+                      >
                         Save
                         </a>
                     )}
                   </EditableContext.Consumer>
-                  <Popconfirm title="Sure to cancel?" onConfirm={() => this.cancel(record._id)}>
-                    <a>Cancel</a>
-                  </Popconfirm>
+                  {// eslint-disable-next-line no-underscore-dangle
+                  }
+                  {// eslint-disable-next-line dot-notation
+                  }
+
                 </span>
               ) : (
-                  <a onClick={() => this.edit(record._id)}><Icon type='edit' /></a>
+                 {// eslint-disable-next-line no-underscore-dangle
+                 }
+                  // <a onClick={() => this.edit(record._id)}> <Icon type="edit" /> </a>
                 )}
             </div>
           );
@@ -167,20 +181,17 @@ class EditableTransactionTable extends React.Component {
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({
-      selectedRowKeys: selectedRowKeys,
-      selectedRows: selectedRows
-    })
+      selectedRowKeys,
+      selectedRows,
+    });
   }
 
-  isEditing = (record) => {
-    return record._id === this.state.editingKey;
-  };
-
+  // eslint-disable-next-line react/sort-comp
   edit(_id) {
     this.setState({ editingKey: _id });
   }
 
-  onRow = ({ _id }) => this.state.pendingKeys.includes(_id) && { className: "pending-transaction" };
+  onRow = ({ _id }) => this.state.pendingKeys.includes(_id) && { className: 'pending-transaction' };
 
   onhandleChangePage = (e) => {
     this.setState({
@@ -189,18 +200,20 @@ class EditableTransactionTable extends React.Component {
       count: 0,
       page: e.current,
       selectedRows: [],
-      selectedRowKeys: []
+      selectedRowKeys: [],
 
-    })
+    });
     this.props.fetchTransactionsData(getTransactionsEndpoint, e.current);
   }
 
   onDeleteRecord = () => {
-    console.log('Delete: selectedRows:' + this.state.selectedRows);
-    console.log('Delete: selectedRowKeys:' + this.state.selectedRowKeys);
+    console.log(`Delete: selectedRows:${this.state.selectedRows}`);
+    console.log(`Delete: selectedRowKeys:${this.state.selectedRowKeys}`);
+    // eslint-disable-next-line no-plusplus
     for (let i = 0; i < this.state.selectedRows.length; i++) {
-      if (this.state.selectedRows[i].hasOwnProperty('_id')) {
-        this.props.deleteIds(this.state.selectedRows[i]['_id']); // deletes the record from the redux store
+      if (this.state.selectedRows[i].prototype.hasOwnProperty.call('_id')) {
+        // eslint-disable-next-line no-underscore-dangle
+        this.props.deleteIds(this.state.selectedRows[i]._id);
       }
     }
     if (this.state.selectedRows.length > 0) {
@@ -208,51 +221,61 @@ class EditableTransactionTable extends React.Component {
     }
     this.setState({
       selectedRows: [],
-      selectedRowKeys: []
-    })
+      selectedRowKeys: [],
+    });
   }
 
+  // eslint-disable-next-line no-underscore-dangle
+  isEditing = record => record._id === this.state.editingKey;
+
   createGuid = () => {
-    function _p8(s) {  
-        var p = (Math.random().toString(16)+"000000000").substr(2,8);  
-        return s ? "-" + p.substr(0,4) + "-" + p.substr(4,4) : p ;  
-     }  
-     return _p8() + _p8(true) + _p8(true) + _p8();  
+    // eslint-disable-next-line no-underscore-dangle
+    function _p8(s) {
+        const p = (`${Math.random().toString(16)}000000000`).substr(2, 8);
+        return s ? `-${p.substr(0, 4)}-${p.substr(4, 4)}` : p;
+     }
+     return _p8() + _p8(true) + _p8(true) + _p8();
   }
 
   handleAdd = () => {
-
-    
-
-    console.log("addFlag state: " + this.state.addFlag);
+    console.log(`addFlag state: ${this.state.addFlag}`);
     const newData = {
       _id: this.createGuid(),
       transactionDate: moment().format('YYYY-MM-DD'),
       category: '',
       description: '',
-      amount: ''
+      amount: '',
     };
+    // eslint-disable-next-line no-underscore-dangle
     this.edit(newData._id);
     this.props.transaction(newData);
     this.setState({
-      addFlag: true
-    })
+      addFlag: true,
+    });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   convertToCategory(string, list) {
+    // eslint-disable-next-line no-plusplus
     for (let i = 0; i < list.length; i++) {
-      if (list[i]['name'] === string) {
+      if (list[i].name === string) {
+        // eslint-disable-next-line no-underscore-dangle
         return list[i]._id;
       }
     }
+    return undefined;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   convertToCategoryName(id, list) {
+        // eslint-disable-next-line no-plusplus
     for (let i = 0; i < list.length; i++) {
-      if (list[i]['_id'] === id) {
+      // eslint-disable-next-line no-underscore-dangle
+      if (list[i]._id === id) {
         return list[i].name;
       }
     }
+    return undefined;
   }
 
 
@@ -261,67 +284,55 @@ class EditableTransactionTable extends React.Component {
       if (error) {
         return;
       }
+      // eslint-disable-next-line no-underscore-dangle
       const index = this.props.transactions.findIndex(item => _id === item._id);
       if (this.state.addFlag) {
-        alert('This is the newly added record');
         if (index > -1) {
           const item = this.props.transactions[index];
-          row['transactionDate'] = moment(row['transactionDate']);
+          // eslint-disable-next-line no-param-reassign
+          row.transactionDate = moment(row.transactionDate);
           this.props.transactions.splice(index, 1, {
-            _id: item['_id'],
-            transactionDate: moment(row['transactionDate']).format('MMM DD, YYYY'), // cannot be string 
-            category: item['category'] != row['category'] ? this.convertToCategoryName(row['category'], this.props.categories) : row['category'],
-            description: row['description'],
-            amount: row['amount']
+            // eslint-disable-next-line no-underscore-dangle
+            _id: item._id,
+            transactionDate: moment(row.transactionDate).format('MMM DD, YYYY'), // cannot be string
+            category: item.category !== row.category ?
+            this.convertToCategoryName(row.category, this.props.categories) : row.category,
+            description: row.description,
+            amount: row.amount,
           });
           addTransactionToServer(row, addTransactionEndpoint);
           this.setState(
             {
               addFlag: false,
               count: 0,
-              editingKey: ''
-            }
+              editingKey: '',
+            },
           );
         }
-      }
-      else {
-        if (index > -1) {
-          alert("Existing Record");
+      } else if (index > -1) {
           const item = this.props.transactions[index];
           this.props.transactions.splice(index, 1, {
-            _id: item['_id'],
-            transactionDate: moment(row['transactionDate']).format('MMM DD, YYYY'), // cannot be string 
-            category: item['category'] != row['category'] ? this.convertToCategoryName(row['category'], this.props.categories) : row['category'],
-            description: row['description'],
-            amount: row['amount']
+            // eslint-disable-next-line no-underscore-dangle
+            _id: item._id,
+            transactionDate: moment(row.transactionDate).format('MMM DD, YYYY'), // cannot be string
+            category: item.category !== row.category ?
+            this.convertToCategoryName(row.category, this.props.categories) : row.category,
+            description: row.description,
+            amount: row.amount,
           });
-          console.log("Editing Existing Record");
-          console.log('--------------ITEM --------------------');
-          console.log('Item Key: ' + item['_id']);
-          console.log('Item date: ' + item['transactionDate']);
-          console.log('Item category: ' + item['category']);
-          console.log('Item description : ' + item['description']);
-          console.log('item amount : ' + item['amount']);
-          console.log('--------------Row --------------------');
-          console.log('Row Key: ' + row['_id']);
-          console.log('Row date: ' + row['transactionDate']);
-          console.log('Row category: ' + row['category']);
-          console.log('Row description: ' + row['description']);
-          console.log('Row amount: ' + row['amount']);
-
-          console.log("Category: " + row['category']);
-          if (item['category'] === row['category']) {
-            row['category'] = this.convertToCategory(row['category'], this.props.categories);
+         
+          if (item.category === row.category) {
+            // eslint-disable-next-line no-param-reassign
+            row.category = this.convertToCategory(row.category, this.props.categories);
           }
           editTransactionFromServer(row, updateTransactionEndpoint, _id);
         }
-      }
       this.setState(
         {
-          editingKey: ''
-        }
+          editingKey: '',
+        },
       );
-    }
+    },
     );
   }
 
@@ -331,7 +342,7 @@ class EditableTransactionTable extends React.Component {
     }
     this.setState({
       addFlag: false,
-      editingKey: ''
+      editingKey: '',
     });
   };
 
@@ -340,15 +351,15 @@ class EditableTransactionTable extends React.Component {
     const components = {
       body: {
         row: EditableFormRow,
+        // eslint-disable-next-line no-use-before-define
         cell: connect(mapStateToProps)(EditableCell),
       },
     };
 
     const rowSelection = {
       selectedRowKeys,
-      onChange: this.onSelectChange
+      onChange: this.onSelectChange,
     };
-    const hasSelected = selectedRowKeys.length > 0;
     const columns = this.columns.map((col) => {
       if (!col.editable) {
         return col;
@@ -358,6 +369,7 @@ class EditableTransactionTable extends React.Component {
         onCell: record => (
           {
             record,
+            // eslint-disable-next-line no-nested-ternary
             inputType: col.dataIndex === 'amount' ? 'number' : (col.dataIndex === 'description' ? 'text' : (col.dataIndex === 'transactionDate' ? 'date' : 'dropdown')),
             dataIndex: col.dataIndex,
             title: col.title,
@@ -372,10 +384,13 @@ class EditableTransactionTable extends React.Component {
           Add a Transaction
         </Button>
 
-        <Button disabled={
+        <Button
+          disabled={
+          // eslint-disable-next-line react/prop-types
           (this.props.count < 1 && this.state.selectedRowKeys.length < 1) ||
           (this.props.count > 0 && this.state.selectedRowKeys.length < 1)
-        } onClick={this.onDeleteRecord} type="primary" style={{ marginBottom: 16, marginLeft: 20, marginRight: 30 }}>
+        } onClick={this.onDeleteRecord} type="primary" style={{ marginBottom: 16, marginLeft: 20, marginRight: 30 }}
+        >
           Delete
 
         </Button>
@@ -391,7 +406,7 @@ class EditableTransactionTable extends React.Component {
           pagination={
             {
               pageSize: 10,
-              total: this.props.count
+              total: this.props.count,
             }
           }
         />
@@ -400,22 +415,18 @@ class EditableTransactionTable extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
+const mapStateToProps = state => ({
     transactions: state.transactions,
     categories: state.categories,
-    count: state.countAllTransactions
-  };
-};
+    count: state.countAllTransactions,
+  });
 
-const mapDispatchToProps = (dispatch) => {
-  return {
+const mapDispatchToProps = dispatch => ({
     fetchTransactionsData: (url, page) => dispatch(transactionsFetchData(url, page)),
-    addTransactionOption: (option) => dispatch(addTransactionCategory(option)),
-    transaction: (transaction) => dispatch(addTransaction(transaction)),
-    deleteIds: (ids) => dispatch(removeTransactions(ids))
+    addTransactionOption: option => dispatch(addTransactionCategory(option)),
+    transaction: transaction => dispatch(addTransaction(transaction)),
+    deleteIds: ids => dispatch(removeTransactions(ids)),
 
-  };
-};
+  });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditableTransactionTable);
