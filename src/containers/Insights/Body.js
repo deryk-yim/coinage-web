@@ -1,9 +1,9 @@
 import React from 'react';
-import { BODY_TITLE, GRAPH, BODY_TEXT, CATEGORY_VALUE, CATEGORY } from '../Insights/BodyStyle';
+import { BODY_TITLE, GRAPH, BODY_TEXT, CATEGORY_VALUE, CATEGORY, CONTAINER } from '../Insights/BodyStyle';
 import { Grid, Row, Col } from '../../components/Grid/Grid';
 
 const Body = () => (
-    <div>
+    <div style={CONTAINER}>
         <Grid>
             <Row style={{ justifyContent: 'flex-start' }}>
                 <Col size={{ xs: 12, sm: 6 }}>

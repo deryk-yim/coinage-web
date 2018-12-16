@@ -1,12 +1,12 @@
 export const CONTAINER = {
-    background: 'linear-gradient(119deg, #F82279, #934CDB)',
+    background: 'white',
     minHeight: '100vh',
 };
 
 export const COINAGE_LOGO = {
     display: 'block',
     textTransform: 'uppercase',
-    color: 'white',
+    color: 'black',
     width: '100%',
     height: 29,
     padding: '0px 0 0px 0px',
@@ -17,8 +17,7 @@ export const COINAGE_LOGO = {
 
 export const COINAGE_TITLE = {
     display: 'block',
-    textTransform: 'uppercase',
-    color: 'white',
+    color: 'black',
     width: '100%',
     height: 29,
     padding: '0px 0 0px 0px',
@@ -31,15 +30,14 @@ export const INPUT = {
     background: 'transparent',
     width: '100%',
     height: '59px',
-    borderWidth: '1.5px',
     borderRadius: '11px 11px 11px 11px',
     beforeColor: 'transparent',
-
+    border: '1px solid #6666FF',
 };
 
 export const REMEMBER_ME = {
     display: 'flex',
-    color: 'white',
+    color: '#6666FF',
     width: '100%',
     height: 18,
     marginLeft: '10px',
@@ -55,7 +53,7 @@ export const FORGET_PASSWORD = {
     width: '100%',
     height: 18,
     padding: '0px 0px 0px 0px',
-    color: 'white',
+    color: '#6666FF',
     fontFamily: 'Gibson',
     backgroundColor: 'transparent',
     border: 'none',
@@ -68,7 +66,7 @@ export const REGISTER = {
     width: '100%',
     height: 18,
     padding: '0px 0px 0px 0px',
-    color: 'white',
+    color: 'black',
     fontFamily: 'Gibson',
     backgroundColor: 'transparent',
     border: 'none',
@@ -79,12 +77,12 @@ export const REGISTER = {
 export const LOGIN_BUTTON = {
     display: 'block',
     textTransform: 'uppercase',
-    color: '#C038AD',
+    color: 'white',
     width: '100%',
     height: 55.2,
     padding: '0px 0 0px 0px',
     fontFamily: 'Gibson',
     textAlign: 'Center',
     fontSize: 17,
-    background: '#FFFFFF',
+    background: '#6666FF',
 };

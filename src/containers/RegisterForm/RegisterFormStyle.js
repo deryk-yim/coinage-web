@@ -1,12 +1,11 @@
 export const CONTAINER = {
-    background: 'linear-gradient(119deg, #F82279, #934CDB)',
+    background: 'white',
     minHeight: '100vh',
 };
 
 export const COINAGE_TITLE = {
     display: 'block',
-    textTransform: 'uppercase',
-    color: 'white',
+    color: 'black',
     width: '100%',
     height: 29,
     padding: '25px 0 50px 10px',
@@ -18,7 +17,7 @@ export const COINAGE_TITLE = {
 export const SIGNUP_TITLE = {
     display: 'block',
     textTransform: 'uppercase',
-    color: 'white',
+    color: 'black',
     width: '100%',
     height: 38,
     padding: '0px 0 0px 0px',
@@ -31,14 +30,14 @@ export const SIGNUP_TITLE = {
 export const SIGNUP_BUTTON = {
     display: 'block',
     textTransform: 'uppercase',
-    color: '#C038AD',
+    color: 'white',
     width: '100%',
     height: 55.2,
     padding: '0px 0 0px 0px',
     fontFamily: 'Gibson',
     textAlign: 'Center',
     fontSize: 17,
-    background: '#FFFFFF',
+    background: '#6666FF',
 };
 
 export const LOGIN_LINK = {
@@ -46,7 +45,7 @@ export const LOGIN_LINK = {
     width: '100%',
     height: 18,
     padding: '0px 0px 0px 0px',
-    color: 'white',
+    color: 'black',
     fontFamily: 'Gibson',
     backgroundColor: 'transparent',
     border: 'none',
@@ -56,7 +55,7 @@ export const LOGIN_LINK = {
 
 export const TERMS_AND_COND = {
     display: 'block',
-    color: 'white',
+    color: 'black',
     width: '100%',
     height: 18,
     marginLeft: '10px',

@@ -6,7 +6,7 @@ import { CONTAINER, SIDEBAR_TITLE, SIDEBAR_BUTTON } from '../Sidebar/SidebarStyl
 
 const Sidebar = () => (
     <div style={CONTAINER}>
-        <h2 style={SIDEBAR_TITLE}> <Icon type="copyright" /> Coinage </h2>
+        <h2 style={SIDEBAR_TITLE}>  Koinij </h2>
         <Link to="/dashboard" style={SIDEBAR_BUTTON}>
             <Icon type="dashboard" style={{ marginRight: '10px' }} />
             Dashboard
@@ -23,9 +23,9 @@ const Sidebar = () => (
             <Icon type="eye" style={{ marginRight: '10px' }} />
             Insight
                 </Link>
-        <Link to="/setting" style={SIDEBAR_BUTTON}>
+        <Link to="/settings" style={SIDEBAR_BUTTON}>
             <Icon type="setting" style={{ marginRight: '10px' }} />
-            Setting
+            Settings
                 </Link>
     </div>
 );

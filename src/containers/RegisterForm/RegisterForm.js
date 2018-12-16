@@ -30,7 +30,7 @@ export default class RegisterForm extends Component {
                     <Row left>
 
                         <Col size={{ xs: 12, sm: 6 }}>
-                            <h2 style={COINAGE_TITLE}> <Icon type="copyright" /> Koinij </h2>
+                            <h2 style={COINAGE_TITLE}> Koinij </h2>
                         </Col>
                     </Row>
                 </Grid>

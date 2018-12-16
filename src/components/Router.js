@@ -8,8 +8,7 @@ import RegisterForm from '../containers/RegisterForm/RegisterForm';
 import Dashboard from '../containers/Dashboard/Dashboard';
 import Profile from '../containers/Profile/Profile';
 import Insights from '../containers/Insights/Insights';
-
-
+import Settings from '../containers/Settings/Settings';
 import ImportTransactionPage from '../containers/ImportTransaction/ImportTransactionPage';
 import ExportTransactionPage from '../containers/ExportTransaction/ExportTransactionPage';
 import ExportTransactionHistory from '../containers/ExportTransaction/ExportTransactionHistory';
@@ -31,6 +30,7 @@ const Router = () => (
         <Route exact path="/register" component={RegisterForm} />
         <Route exact path="/profile" component={Profile} />
         <Route exact path="/insights" component={Insights} />
+        <Route exact path="/settings" component={Settings} />
    </Switch>
     </BrowserRouter>
     </Provider>

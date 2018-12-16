@@ -1,9 +1,14 @@
+export const CONTAINER = {
+    background: 'white',
+    minHeight: '100vh',
+};
+
 export const BODY_TITLE = {
     display: 'inline-block',
     width: '100%',
     height: 40,
     padding: '20px 0px 20px 0px',
-    color: 'white',
+    color: 'black',
     fontFamily: 'Gibson',
     backgroundColor: 'transparent',
     border: 'none',
@@ -16,7 +21,7 @@ export const BODY_TEXT = {
     width: '100%',
     height: 24,
     padding: '0px 0px 0px 0px',
-    color: 'white',
+    color: 'black',
     fontFamily: 'Gibson',
     backgroundColor: 'transparent',
     border: 'none',

@@ -1,7 +1,7 @@
 export const CONTAINER = {
-    background: 'white',
     width: '100%',
     padding: '0px 0px 0px 0px',
+    background: 'white',
 };
 
 export const HEADER_BUTTON = {
@@ -9,7 +9,7 @@ export const HEADER_BUTTON = {
     width: '100%',
     height: 40,
     padding: '20px 0px 20px 25px',
-    color: 'white',
+    color: '#6666FF',
     fontFamily: 'Gibson',
     backgroundColor: 'transparent',
     border: 'none',

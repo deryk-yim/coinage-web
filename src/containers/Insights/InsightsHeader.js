@@ -1,6 +1,7 @@
 import React from 'react';
-import { Menu, Icon, Button, Col, Dropdown } from 'antd';
+import { Menu, Icon, Button, Dropdown } from 'antd';
 import { CONTAINER, HEADER_BUTTON } from './InsightsHeaderStyle';
+import { Grid, Row, Col } from '../../components/Grid/Grid';
 
 const handleMenuClick = (e) => {
     console.log('click', e);
@@ -25,29 +26,35 @@ const filter = (
 
 const InsightsHeader = () => (
     <div className="header-custom" style={CONTAINER}>
-        <Col span={1} />
-        <Col span={3}>
-            <Dropdown overlay={menu}>
-                <Button style={HEADER_BUTTON}>
-                    Past 6 Months <Icon type="down" />
-                </Button>
-            </Dropdown>
-        </Col>
-        <Col span={3}>
-            <Dropdown overlay={filter}>
-                <Button style={HEADER_BUTTON}>
-                    Filter <Icon type="down" />
-                </Button>
-            </Dropdown>
-        </Col>
-        <Col span={12} />
-        <Col span={2}>
-            <Button style={HEADER_BUTTON}><Icon type="search" /> Search</Button>
-        </Col>
-        <Col span={2}>
-            <Button style={HEADER_BUTTON}><Icon type="user" /> Profile</Button>
-        </Col>
-        <Col span={1} />
+        <Grid>
+            <Row >
+                <Col size={{ xs: 12, sm: 6 }} style={{ padding: '0px 10px' }}>
+                    <Col>
+                        <Dropdown overlay={menu}>
+                            <Button style={HEADER_BUTTON}>
+                                Past 6 Months <Icon type="down" />
+                            </Button>
+                        </Dropdown>
+                    </Col>
+                    <Col>
+                        <Dropdown overlay={filter}>
+                            <Button style={HEADER_BUTTON}>
+                                Filter <Icon type="down" />
+                            </Button>
+                        </Dropdown>
+                    </Col>
+                </Col>
+                <Col size={{ xs: 12, sm: 6 }} style={{ padding: '0px 10px', textAlign: 'right' }}>
+                    <Col>
+                        <Button style={HEADER_BUTTON}><Icon type="search" /> Search</Button>
+                    </Col>
+                    <Col>
+                    <Button style={HEADER_BUTTON}><Icon type="user" /> Profile</Button>
+                    </Col>
+                </Col>
+            </Row>
+        </Grid>
+        
     </div>
 );
 

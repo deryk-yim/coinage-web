@@ -1,11 +1,11 @@
 import React from 'react';
 import { Icon, Input, Switch } from 'antd';
-import { BODY_TITLE, PROFILE_SETTING, SWITCH } from '../Profile/BodyStyle';
+import { BODY_TITLE, PROFILE_SETTING, SWITCH, CONTAINER } from '../Profile/BodyStyle';
 // import { Form, Icon, Input, Button, Row, Col, Switch} from 'antd';
 import { Grid, Row, Col } from '../../components/Grid/Grid';
 
 const Body = () => (
-    <div>
+    <div style={CONTAINER}>
         <Grid>
             <Row style={{ paddingLeft: '2vh' }}>
                 <h2 style={BODY_TITLE}>Profile</h2>

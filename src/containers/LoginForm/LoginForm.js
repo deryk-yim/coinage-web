@@ -30,16 +30,11 @@ class LoginForm extends React.Component {
             <Row center>
               <Col size={{ xs: 12, sm: 8, md: 6, lg: 4 }}>
                 <Row>
-                  <Col size={{ xs: 12 }}>
-                    <h2 style={COINAGE_LOGO}> <Icon type="copyright" /> </h2>
-                  </Col>
-                </Row>
-                <Row>
-                  <h2 style={COINAGE_LOGO}> KOINIJ </h2>
+                  <h2 style={COINAGE_LOGO}> Koinij </h2>
                 </Row>
                 <Row>
                   <Col size={{ xs: 12, sm: 12 }}>
-                    <Input style={INPUT} prefix={<Icon type="user" />} placeholder="USERNAME" />
+                    <Input style={INPUT} prefix={<Icon type="user" />} placeholder="USERNAME" className="login" />
                   </Col>
                 </Row>
                 <Row>

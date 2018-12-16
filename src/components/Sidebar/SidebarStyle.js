@@ -1,11 +1,10 @@
 export const CONTAINER = {
-    background: 'linear-gradient(180deg,#F82279, #934CDB)',
+    background: '#6666FF',
     minHeight: '100vh',
 };
 
 export const SIDEBAR_TITLE = {
     display: 'block',
-    textTransform: 'uppercase',
     color: 'white',
     width: '100%',
     height: 35,
